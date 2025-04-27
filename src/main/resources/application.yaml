@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: License System Information
+  profiles:
+    active: dev

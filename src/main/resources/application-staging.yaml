@@ -1,0 +1,73 @@
+server:
+  http2:
+    enabled: true
+  compression:
+    enabled: true
+    mime-types: text/html,text/plain,text/css,application/javascript,application/json
+    min-response-size: 1024
+  port: 8081
+
+spring:
+  security:
+    user:
+      name: administrator
+      password: administrator
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/master.yaml
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://mci-postgresql-tbu02f:5432/lis_dbms
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        check_nullability: true
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  data:
+    redis:
+      host: mci-redis-w4we8n
+      port: 6379
+      password: P@ssw0rd
+    rest:
+      default-page-size: 100000
+
+javers:
+  sqlSchema: audit
+  sql:
+    dialect: hibernate # Use hibernate for other database
+  commitIdGenerator: SYNCHRONIZED_SEQUENCE
+  snapshotsCacheSize: 1000
+
+jwt:
+  secret: aOPQaAa8NY5tY8mvQve7xkVn06bSn9/3kkjSUh8mD37UdhRBULQydMwmqRqLcMxOoiqVBOq4VxIo9mQptcPeUA==
+
+
+frontend:
+  url: http://localhost:4200
+logging:
+  level:
+    tl.bctl.cris: DEBUG
+    org.springframework: ERROR
+    org:
+      springframework:
+        ldap: DEBUG
+
+management:
+  endpoints:
+    web:
+      base-path: /follow
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+      access: read_only

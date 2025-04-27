@@ -1,0 +1,33 @@
+# ============================
+# 🏗️ BUILD STAGE
+# ============================
+FROM maven:3.9.4-eclipse-temurin-21 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline --fail-never=false
+
+COPY . .
+RUN mvn clean package -DskipTests && rm -rf ~/.m2/repository
+
+# ============================
+# 🚀 DEPLOY STAGE
+# ============================
+FROM openjdk:21-jdk-slim
+
+ENV TZ=Asia/Tokyo
+
+# Create a directory for Logback logs
+RUN mkdir -p /var/log/spring
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+# Configure the container's system timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Expose the port the app runs on
+EXPOSE 80
+
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Dspring.profiles.active=staging", "-Duser.timezone=Asia/Tokyo", "-jar", "/app/app.jar"]
