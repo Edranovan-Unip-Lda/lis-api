@@ -52,7 +52,7 @@ jwt:
 
 
 frontend:
-  url: http://localhost:4200
+  url: https://mcitradelicense.netlify.app
 logging:
   level:
     tl.gov.mci.lis: DEBUG

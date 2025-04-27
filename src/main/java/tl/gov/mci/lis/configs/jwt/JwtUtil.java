@@ -1,5 +1,7 @@
 package tl.gov.mci.lis.configs.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -41,12 +43,18 @@ public class JwtUtil {
      * @return the username extracted from the token
      */
     public String extractUsername(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith((SecretKey) key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw e; // Let caller handle expired tokens separately
+        } catch (JwtException e) {
+            throw new IllegalArgumentException("Invalid JWT token", e);
+        }
     }
 
     public String extractRole(String token) {

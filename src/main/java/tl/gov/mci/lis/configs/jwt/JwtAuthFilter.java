@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.configs.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,11 +30,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final JwtSessionService jwtSessionService;
+    private static final List<RequestMatcher> publicEndpoints = List.of(
+            new AntPathRequestMatcher("/api/v1/users", "POST"),
+            new AntPathRequestMatcher("/api/v1/users/authenticate", "POST"),
+            new AntPathRequestMatcher("/api/v1/users/otp/**", "POST"),
+            new AntPathRequestMatcher("/api/v1/users/otp/**", "PUT"),
+            new AntPathRequestMatcher("/api/v1/users/activate/**", "POST"),
+            new AntPathRequestMatcher("/roles", "GET")
+    );
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
+        logger.info("Requested Path : {}", request.getServletPath());
+
+        if (isPublic(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
@@ -41,7 +58,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String jwtToken = authHeader.substring(7);
-        String username = jwtUtil.extractUsername(jwtToken);
+        String username = null;
+
+        try {
+            username = jwtUtil.extractUsername(jwtToken);
+        } catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired. Please login again.");
+            logger.warn("Token expired. Please login again.");
+            return;
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token. Please login again.");
+            logger.warn("Invalid token. Please login again.");
+            return;
+        }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -49,6 +80,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (!jwtSessionService.isValidSession(username, jwtToken)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Session expired. Please login again.");
+                logger.warn("Session expired. Please login again.");
                 return;
             }
 
@@ -66,5 +98,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublic(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        return (
+                (method.equals("POST") && (path.equals("/api/v1/users/authenticate") ||
+                        path.equals("/api/v1/users/logout") ||
+                        path.equals("/api/v1/users") ||
+                        path.startsWith("/api/v1/users/otp/") ||
+                        path.startsWith("/api/v1/users/activate/"))) ||
+                        (method.equals("PUT") && path.startsWith("/api/v1/users/otp/")) ||
+                        (method.equals("GET") && path.equals("/roles"))
+        );
     }
 }
