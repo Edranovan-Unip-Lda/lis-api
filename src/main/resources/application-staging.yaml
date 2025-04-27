@@ -55,7 +55,7 @@ frontend:
   url: http://localhost:4200
 logging:
   level:
-    tl.bctl.cris: DEBUG
+    tl.gov.mci.lis: DEBUG
     org.springframework: ERROR
     org:
       springframework:
@@ -71,3 +71,4 @@ management:
     health:
       show-details: always
       access: read_only
+debug: true
