@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.configs.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,73 +46,61 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         logger.info("Requested Path : {}", request.getServletPath());
 
-        if (isPublic(request)) {
+        // 1) Skip any public endpoint
+        if (publicEndpoints.stream().anyMatch(matcher -> matcher.matches(request))) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // 2) Look for Bearer token
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String jwtToken = authHeader.substring(7);
-        String username = null;
-
+        String username;
         try {
             username = jwtUtil.extractUsername(jwtToken);
         } catch (ExpiredJwtException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token expired. Please login again.");
-            logger.warn("Token expired. Please login again.");
+            reject(response, "Token expired. Please login again.", e);
             return;
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid token. Please login again.");
-            logger.warn("Invalid token. Please login again.");
+        } catch (JwtException | IllegalArgumentException e) {
+            reject(response, "Invalid token. Please login again.", e);
             return;
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            // Check if the token is still valid using Redis
-            if (!jwtSessionService.isValidSession(username, jwtToken)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Session expired. Please login again.");
-                logger.warn("Session expired. Please login again.");
-                return;
-            }
-
-//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-            if (jwtUtil.validateToken(jwtToken, username)) {
-                // Instead of loading from DB, manually create a simple UserDetails object
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(jwtUtil.extractRole(jwtToken));
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+        // 3) Double-check server-side session (logout/invalidation)
+        if (!jwtSessionService.isValidSession(username, jwtToken)) {
+            reject(response, "Session expired. Please login again.", null);
+            return;
         }
+
+        // 4) Validate the token and populate SecurityContext
+        if (SecurityContextHolder.getContext().getAuthentication() == null
+                && jwtUtil.validateToken(jwtToken, username)) {
+
+            String role = jwtUtil.extractRole(jwtToken);
+            var authority = new SimpleGrantedAuthority(role);
+            var auth = new UsernamePasswordAuthenticationToken(
+                    username, null, List.of(authority)
+            );
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            logger.debug("Authenticated user {}", username);
+        }
+
         filterChain.doFilter(request, response);
     }
 
-    private boolean isPublic(HttpServletRequest request) {
-        String path = request.getServletPath();
-        String method = request.getMethod();
-
-        return (
-                (method.equals("POST") && (path.equals("/api/v1/users/authenticate") ||
-                        path.equals("/api/v1/users/logout") ||
-                        path.equals("/api/v1/users") ||
-                        path.startsWith("/api/v1/users/otp/") ||
-                        path.startsWith("/api/v1/users/activate/"))) ||
-                        (method.equals("PUT") && path.startsWith("/api/v1/users/otp/")) ||
-                        (method.equals("GET") && path.equals("/roles"))
-        );
+    private void reject(HttpServletResponse response, String message, Exception ex)
+            throws IOException {
+        if (ex != null) logger.warn(message, ex);
+        else logger.warn(message);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(message);
     }
 }
