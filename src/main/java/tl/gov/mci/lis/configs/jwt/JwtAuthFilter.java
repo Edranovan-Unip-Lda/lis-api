@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -13,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -29,7 +28,6 @@ import java.util.List;
 public class JwtAuthFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
     private final JwtSessionService jwtSessionService;
     private static final List<RequestMatcher> publicEndpoints = List.of(
             new AntPathRequestMatcher("/api/v1/users", "POST"),
@@ -52,14 +50,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 2) Look for Bearer token
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // 2) Extract JWT from HttpOnly cookie
+        String jwtToken = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    jwtToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (jwtToken == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwtToken = authHeader.substring(7);
+        // 3) Validate token structure
         String username;
         try {
             username = jwtUtil.extractUsername(jwtToken);
@@ -72,13 +80,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
 
-        // 3) Double-check server-side session (logout/invalidation)
+        // 4) Check session validity
         if (!jwtSessionService.isValidSession(username, jwtToken)) {
             reject(response, "Session expired. Please login again.", null);
             return;
         }
 
-        // 4) Validate the token and populate SecurityContext
+        // 5) Validate the token and populate SecurityContext
         if (SecurityContextHolder.getContext().getAuthentication() == null
                 && jwtUtil.validateToken(jwtToken, username)) {
 

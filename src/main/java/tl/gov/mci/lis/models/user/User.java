@@ -9,6 +9,8 @@ import lombok.ToString;
 import tl.gov.mci.lis.models.datamaster.Role;
 import tl.gov.mci.lis.models.EntityDB;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "lis_user")
 @Getter
@@ -65,7 +67,7 @@ public class User extends EntityDB {
         this.status = status;
     }
 
-    public User(Long id, String firstName, String lastName, String username, String email, Long roleId, String roleName, String jwtSession, String status) {
+    public User(Long id, String firstName, String lastName, String username, String email, Long roleId, String roleName, String jwtSession, String status, Instant createdDate, String createdBy) {
         this.setId(id);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -74,6 +76,8 @@ public class User extends EntityDB {
         this.setRole(new Role(roleId, roleName));
         this.jwtSession = jwtSession;
         this.status = status;
+        this.setCreatedAt(createdDate);
+        this.setCreatedBy(createdBy);
     }
 
     public boolean isAdmin() {

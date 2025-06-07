@@ -20,6 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "role")
     Optional<User> findUserByUsername(String username);
 
-    @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.role.id, u.role.name, u.jwtSession, u.status) FROM User u")
+    @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.role.id, u.role.name, u.jwtSession, u.status, u.createdAt, u.createdBy) FROM User u")
     Page<User> getPageBy(Pageable pageable);
 }

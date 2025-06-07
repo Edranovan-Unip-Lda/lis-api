@@ -1,10 +1,13 @@
 package tl.gov.mci.lis.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
@@ -15,6 +18,7 @@ import tl.gov.mci.lis.dtos.user.UserLoginDto;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.services.user.UserServices;
 
+import java.time.Duration;
 import java.util.Map;
 
 @RestController
@@ -48,7 +52,17 @@ public class UserController {
 
     @PostMapping("/otp/{otp}")
     public ResponseEntity<UserLoginDto> validateOTP(@PathVariable String otp, @RequestBody User user, HttpServletRequest request) {
-        return new ResponseEntity<>(userMapper.toLoginDto(userServices.getJWTByOTP(user.getUsername(), otp, request)), HttpStatus.OK);
+        UserLoginDto loginDto = userMapper.toLoginDto(userServices.getJWTByOTP(user.getUsername(), otp, request));
+        ResponseCookie jwtCookie = ResponseCookie.from("jwt", loginDto.getJwtSession())
+                .httpOnly(true)
+                .secure(true) // Set to true in production (HTTPS)
+                .path("/")
+                .sameSite("None") // If frontend is on different origin
+                .maxAge(Duration.ofHours(5))
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(loginDto);
     }
 
     @PutMapping("/otp/{username}")
@@ -63,15 +77,26 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logOut(@RequestBody String token) {
+    public ResponseEntity<String> logOut(@CookieValue(name = "jwt", required = false) String token, HttpServletResponse response) {
         if (token == null || token.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            return ResponseEntity.badRequest().body("Session expired. Please log in again.");
         }
 
         String username = jwtUtil.extractUsername(token);
 
         // Invalidate session
         jwtSessionService.invalidateSession(username);
+
+        // Clear cookie
+        ResponseCookie clearedCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+
+        response.setHeader(HttpHeaders.SET_COOKIE, clearedCookie.toString());
 
         return ResponseEntity.ok("Logged out successfully");
     }
