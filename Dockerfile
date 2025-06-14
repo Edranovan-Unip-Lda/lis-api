@@ -5,29 +5,45 @@ FROM maven:3.9.4-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
+# Copy only the POM to leverage Docker layer cache for dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline --fail-never=false
 
-COPY . .
-RUN mvn clean package -DskipTests && rm -rf ~/.m2/repository
+# Download all dependencies into the cache
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
+
+# Copy source code
+COPY src ./src
+
+# Build application, using the same cache mount
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn clean package -DskipTests -B
 
 # ============================
 # 🚀 DEPLOY STAGE
 # ============================
 FROM openjdk:21-jdk-slim
 
+# Set timezone
 ENV TZ=Asia/Tokyo
 
-# Create a directory for Logback logs
+# Create directory for Logback logs
 RUN mkdir -p /var/log/spring
 
 WORKDIR /app
+
+# Copy the packaged JAR from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Configure the container's system timezone
+# Configure container timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Expose the port the app runs on
-EXPOSE 80
+# Expose application port
+EXPOSE 8000
 
-ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Duser.timezone=Asia/Tokyo", "-jar", "/app/app.jar"]
+# Start the application
+ENTRYPOINT ["java", \
+            "-XX:+UseContainerSupport", \
+            "-XX:MaxRAMPercentage=75.0", \
+            "-Dspring.profiles.active=staging", \
+            "-Duser.timezone=Asia/Tokyo", \
+            "-jar", "/app/app.jar"]
