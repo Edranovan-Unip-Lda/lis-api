@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -30,12 +31,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final JwtSessionService jwtSessionService;
     private static final List<RequestMatcher> publicEndpoints = List.of(
-            new AntPathRequestMatcher("/api/v1/users", "POST"),
             new AntPathRequestMatcher("/api/v1/users/authenticate", "POST"),
             new AntPathRequestMatcher("/api/v1/users/otp/**", "POST"),
             new AntPathRequestMatcher("/api/v1/users/otp/**", "PUT"),
-            new AntPathRequestMatcher("/api/v1/users/activate/**", "POST"),
-            new AntPathRequestMatcher("/roles", "GET")
+            new AntPathRequestMatcher("/api/v1/users/activate/**", "POST")
     );
 
 
@@ -86,20 +85,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 5) Validate the token and populate SecurityContext
-        if (SecurityContextHolder.getContext().getAuthentication() == null
-                && jwtUtil.validateToken(jwtToken, username)) {
-
-            String role = jwtUtil.extractRole(jwtToken);
-            var authority = new SimpleGrantedAuthority(role);
-            var auth = new UsernamePasswordAuthenticationToken(
-                    username, null, List.of(authority)
-            );
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            logger.debug("Authenticated user {}", username);
+        UserDetails userDetails = jwtSessionService.getUserDetails(username);
+        if (userDetails == null) {
+            reject(response, "Session expired or user info not found. Please login again.", null);
+            return;
         }
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        logger.debug("Authenticated user {}", username);
 
         filterChain.doFilter(request, response);
     }

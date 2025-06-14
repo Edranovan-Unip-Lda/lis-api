@@ -1,5 +1,5 @@
 package tl.gov.mci.lis.enums;
 
-public enum Status {
+public enum AccountStatus {
     active, pending, disabled
 }

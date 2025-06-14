@@ -1,36 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Verificação de OTP Necessária</title>
+    <title>OTP Verification Required</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-light">
 <div class="container my-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white text-center">
-            <h2>Verificação de OTP Necessária</h2>
+            <h2>OTP Verification Required</h2>
         </div>
         <div class="card-body text-center">
-            <p class="fs-5">Olá, <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></p>
+            <p class="fs-5">Hello, <strong th:text="${user.firstName + ' ' + user.lastName}"></strong></p>
             <p>
-                A sua palavra-passe de uso único (OTP) para aceder à sua conta no
-                <strong>Sistema de Informação de Licenciamento Comercial - Ministério do Comércio e Indústria</strong>
-                é:
+                Your one-time password (OTP) to access your account in the
+                <strong>Commercial Licensing Information System – Ministério do Comércio e Indústria</strong>
+                is:
             </p>
             <h1 class="display-4 text-primary" th:text="${user.oneTimePassword}"></h1>
-            <p>Este código é válido por <strong>3 minutos</strong>. Por favor, introduza este OTP na sua aplicação para
-                concluir
-                o processo de verificação.</p>
-            <p>Se não solicitou esta operação, por favor ignore este e-mail ou entre em contacto com a nossa equipa de
-                suporte.</p>
+            <p>This code is valid for <strong>3 minutes</strong>. Please enter this OTP in your application to complete the verification process.</p>
+            <p>If you did not request this operation, please ignore this email or contact our support team.</p>
         </div>
         <div class="card-footer text-center text-muted">
-            <p>Esta é uma mensagem automática. Por favor, não responda.</p>
-            <p th:text="${'© ' + T(java.time.LocalDate).now().year + ' Sistema de Informação de Licenciamento Comercial - Ministério do Comércio e Indústria. Todos os direitos reservados.'}">
-                © 2025 Sistema de Informação de Licenciamento Comercial - Ministério do Comércio e Indústria. Todos os
-                direitos reservados.
+            <p>This is an automated message. Please do not reply.</p>
+            <p th:text="${'© ' + T(java.time.LocalDate).now().year + ' Commercial Licensing Information System – Ministério do Comércio e Indústria. All rights reserved.'}">
+                © 2025 Commercial Licensing Information System – Ministério do Comércio e Indústria. All rights reserved.
             </p>
         </div>
     </div>

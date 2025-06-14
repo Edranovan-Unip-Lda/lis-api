@@ -14,6 +14,7 @@ import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return new CustomUserDetails(
                 user.getUsername(),
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()))
+                List.of(user.getRole().getName())
         );
 
     }

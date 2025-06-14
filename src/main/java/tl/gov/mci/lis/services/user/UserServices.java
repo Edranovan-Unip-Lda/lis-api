@@ -8,16 +8,18 @@ import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
+import tl.gov.mci.lis.enums.AccountStatus;
 import tl.gov.mci.lis.enums.EmailTemplate;
-import tl.gov.mci.lis.enums.Status;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.datamaster.RoleRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
@@ -40,6 +42,7 @@ public class UserServices {
     private final JwtUtil jwtUtil;
     private final JwtSessionService jwtSessionService;
     private final EmailService emailService;
+    private final UserDetailServiceImpl userDetailService;
 
     public User register(User obj) {
         logger.info("Registering user: {}", obj);
@@ -52,8 +55,8 @@ public class UserServices {
                 roleRepository.findById(obj.getRole().getId()).orElseThrow(() -> new ResourceNotFoundException("Role " + obj.getRole().getName() + " not found"))
         );
 
-        obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
-        obj.setStatus(Status.pending.toString());
+        obj.setPassword(bcryptEncoder.encode(obj.getUsername()));
+        obj.setStatus(AccountStatus.pending.toString());
 
         User savedUser = userRepository.save(obj);
         emailService.sendEmail(
@@ -85,13 +88,13 @@ public class UserServices {
                         return new ForbiddenException("Invalid username or password");
                     });
         }
-        if (user.getStatus().equals(Status.disabled.toString())) {
+        if (user.getStatus().equals(AccountStatus.disabled.toString())) {
 //            auditService.saveLogin(username, request, false);
             logger.error("Your account has been disabled. Please contact your administrator for assistance.");
             throw new ForbiddenException("Your account has been disabled. Please contact your administrator for assistance.");
         }
 
-        if (user.getStatus().equals(Status.pending.toString())) {
+        if (user.getStatus().equals(AccountStatus.pending.toString())) {
 //            auditService.saveLogin(username, request, false);
             logger.error("Account activation required. Check your email or contact admin.");
             throw new ForbiddenException("Account activation required. Check your email or contact admin.");
@@ -105,7 +108,7 @@ public class UserServices {
         }
 
         user.setOneTimePassword(oneTimePasswordService.generateOTP(username));
-        emailService.sendEmail(user, EmailTemplate.OTP);
+//        emailService.sendEmail(user, EmailTemplate.OTP);
 
         logger.info("Successfully login with credential: {}", username);
         return user;
@@ -117,17 +120,19 @@ public class UserServices {
                 .orElseThrow(() -> {
 //                    auditService.saveLogin(username, request, false);
                     logger.error("The provided code is not valid or has expired.");
-                    return new ForbiddenException("The provided code is not valid or has expired.");
+                    return new ResourceNotFoundException("The provided code is not valid or has expired.");
                 });
 
         if (!oneTimePasswordService.validateOTP(username, otp)) {
             //        auditService.saveLogin(username, request, false);
             logger.error("The provided code is not valid or has expired.");
-            throw new ForbiddenException("The provided code is not valid or has expired.");
+            throw new ResourceNotFoundException("The provided code is not valid or has expired.");
         }
 
         user.setJwtSession(jwtUtil.generateToken(username, user.getRole()));
+
         jwtSessionService.storeActiveToken(username, user.getJwtSession());
+        jwtSessionService.storeUserDetails(username, (CustomUserDetails) userDetailService.loadUserByUsername(username));
 
         logger.info("OTP validation is success: {}", username);
 //            auditService.saveLogin(username, request, true);
@@ -156,11 +161,10 @@ public class UserServices {
 
     public Map<String, String> activateFromEmail(User obj) {
         logger.info("Activate user from token {}", obj.getJwtSession());
-
-        if (!jwtUtil.isTokenExpired(obj.getJwtSession())) {
+        if (jwtUtil.isTokenExpired(obj.getJwtSession())) {
             String username = jwtUtil.extractUsername(obj.getJwtSession());
             return userRepository.findByUsername(username).map(user -> {
-                        if (user.getStatus().equals(Status.pending.toString())) {
+                        if (user.getStatus().equals(AccountStatus.pending.toString())) {
                             user.setPassword(bcryptEncoder.encode(obj.getPassword()));
                             user.setStatus(obj.getStatus());
                             userRepository.save(user);

@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.repositories.user;
 
+import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -9,6 +10,7 @@ import tl.gov.mci.lis.models.user.User;
 
 import java.util.Optional;
 
+@JaversSpringDataAuditable
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.password, u.role.id, u.role.name, u.jwtSession, u.status) FROM User u WHERE u.username = :username")

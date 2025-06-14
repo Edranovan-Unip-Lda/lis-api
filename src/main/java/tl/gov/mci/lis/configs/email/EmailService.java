@@ -147,7 +147,7 @@ public class EmailService {
      */
     private MimeMessage prepareMimeMessage(JavaMailSender mailSender, String from, User user, String subject, String emailContent) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(from);
         helper.setTo(user.getEmail());
         helper.setSubject(subject);
@@ -199,7 +199,7 @@ public class EmailService {
     private String generateEmailContent(EmailTemplate templateName, User user) {
         Context context = new Context();
         context.setVariable("user", user);
-        context.setVariable("activationLink", frontEndURL + "/activate?t=" + this.jwtUtil.generateToken(user.getUsername(), user.getRole()));
+        context.setVariable("activationLink", frontEndURL + "/auth/activation?t=" + this.jwtUtil.generateToken(user.getUsername(), user.getRole()));
         context.setVariable("loginLink", frontEndURL);
         return templateEngine.process(templateName.toString(), context);
     }

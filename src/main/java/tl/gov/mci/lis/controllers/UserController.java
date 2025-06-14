@@ -40,6 +40,11 @@ public class UserController {
         return new ResponseEntity<>(userServices.getPage(page, size), HttpStatus.OK);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(userServices.getByUsername(username), HttpStatus.OK);
+    }
+
     @PutMapping("/{username}")
     public ResponseEntity<UserDto> update(@PathVariable String username, @RequestBody User user) {
         return new ResponseEntity<>(userMapper.toDto(userServices.updateByUsername(username, user)), HttpStatus.OK);
