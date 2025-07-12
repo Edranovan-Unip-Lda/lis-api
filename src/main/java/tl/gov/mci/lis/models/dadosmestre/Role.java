@@ -1,4 +1,4 @@
-package tl.gov.mci.lis.models.datamaster;
+package tl.gov.mci.lis.models.dadosmestre;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;

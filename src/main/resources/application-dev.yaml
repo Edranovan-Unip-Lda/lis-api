@@ -39,6 +39,7 @@ spring:
       password: P@ssw0rd
     rest:
       default-page-size: 100000
+      base-path: /data
 
 javers:
   sqlSchema: audit

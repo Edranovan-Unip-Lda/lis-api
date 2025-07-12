@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-import tl.gov.mci.lis.models.datamaster.Role;
+import tl.gov.mci.lis.models.dadosmestre.Role;
 
 import javax.crypto.SecretKey;
 import java.security.Key;

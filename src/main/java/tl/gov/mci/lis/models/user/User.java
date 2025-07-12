@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import tl.gov.mci.lis.models.datamaster.Role;
+import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.EntityDB;
 
 import java.time.Instant;
@@ -78,6 +78,14 @@ public class User extends EntityDB {
         this.status = status;
         this.setCreatedAt(createdDate);
         this.setCreatedBy(createdBy);
+    }
+
+    public User(Long id, String firstName, String lastName, String username, String email) {
+        this.setId(id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
     }
 
     public boolean isAdmin() {

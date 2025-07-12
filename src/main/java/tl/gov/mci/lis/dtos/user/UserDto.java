@@ -2,7 +2,7 @@ package tl.gov.mci.lis.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
-import tl.gov.mci.lis.models.datamaster.Role;
+import tl.gov.mci.lis.models.dadosmestre.Role;
 
 import java.io.Serializable;
 import java.time.Instant;

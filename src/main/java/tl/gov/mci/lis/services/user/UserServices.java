@@ -8,7 +8,6 @@ import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tl.gov.mci.lis.configs.email.EmailService;
@@ -21,7 +20,7 @@ import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
-import tl.gov.mci.lis.repositories.datamaster.RoleRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 
 import java.util.HashMap;
