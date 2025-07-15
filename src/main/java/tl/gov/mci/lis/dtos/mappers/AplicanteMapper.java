@@ -8,11 +8,6 @@ import tl.gov.mci.lis.models.aplicante.Aplicante;
 public interface AplicanteMapper {
     Aplicante toEntity(AplicanteDto aplicanteDto);
 
-    @AfterMapping
-    default void linkListaHistoricoEstadoAplicante(@MappingTarget Aplicante aplicante) {
-        aplicante.getListaHistoricoEstadoAplicante().forEach(listaHistoricoEstadoAplicante -> listaHistoricoEstadoAplicante.setAplicante(aplicante));
-    }
-
     AplicanteDto toDto(Aplicante aplicante);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

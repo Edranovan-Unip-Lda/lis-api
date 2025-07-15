@@ -1,10 +1,13 @@
 package tl.gov.mci.lis.dtos.aplicante;
 
 import lombok.Data;
+import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
+import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.FaturaStatus;
+import tl.gov.mci.lis.enums.PedidoStatus;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.aplicante.Aplicante}
@@ -20,22 +23,26 @@ public class AplicanteDto implements Serializable {
     String tipo;
     String categoria;
     String numero;
-    String estado;
-    Set<HistoricoEstadoAplicanteDto> listaHistoricoEstadoAplicante;
+    AplicanteStatus estado;
+    PedidoStatus pedidoStatus;
+    FaturaStatus faturaStatus;
+    EmpresaDto empresaDto;
 
-    /**
-     * DTO for {@link tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante}
-     */
-    @Data
-    public static class HistoricoEstadoAplicanteDto implements Serializable {
-        Long id;
-        Boolean isDeleted;
-        Instant createdAt;
-        Instant updatedAt;
-        String createdBy;
-        String updatedBy;
-        String estadoAnterior;
-        String estadoAtual;
+    public AplicanteDto() {
     }
 
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, String categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
+        this.id = id;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.tipo = tipo;
+        this.categoria = categoria;
+        this.numero = numero;
+        this.estado = estado;
+        this.pedidoStatus = pedidoStatus;
+        this.faturaStatus = faturaStatus;
+    }
 }

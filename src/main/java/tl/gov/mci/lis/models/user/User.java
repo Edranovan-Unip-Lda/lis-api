@@ -1,13 +1,15 @@
 package tl.gov.mci.lis.models.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.dadosmestre.Role;
+import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
 
@@ -15,6 +17,7 @@ import java.time.Instant;
 @Table(name = "lis_user")
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends EntityDB {
     @NotBlank(message = "Firstname is mandatory")
     private String firstName;
@@ -38,6 +41,11 @@ public class User extends EntityDB {
     private Role role;
     private String jwtSession;
     private String status;
+
+    @OneToOne(mappedBy = "utilizador")
+    @JsonIgnoreProperties({"listaAplicante", "utilizador", "hibernateLazyInitializer"})
+    private Empresa empresa;
+
     @Transient
     private String oneTimePassword;
 

@@ -15,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "lis_empresa")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Empresa extends EntityDB {
     private String nome;
     private String nif;
@@ -45,5 +46,18 @@ public class Empresa extends EntityDB {
         this.setId(id);
         this.nome = nome;
         this.nif = nif;
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "id='" + getId() + '\'' +
+                ", nome='" + nome + '\'' +
+                ", nif='" + nif + '\'' +
+                ", gerente='" + gerente + '\'' +
+                ", numeroRegistoComercial='" + numeroRegistoComercial + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", telemovel='" + telemovel + '\'' +
+                '}';
     }
 }

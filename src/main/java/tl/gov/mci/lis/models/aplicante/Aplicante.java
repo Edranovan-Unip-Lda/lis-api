@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.FaturaStatus;
+import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
@@ -18,21 +22,21 @@ public class Aplicante extends EntityDB {
     private String tipo;
     private String categoria;
     private String numero;
-    private String estado;
+    @Enumerated(EnumType.STRING)
+    private AplicanteStatus estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
     @JsonIgnoreProperties(value = "listaAplicante", allowSetters = true)
     private Empresa empresa;
 
-    @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "aplicante", allowSetters = true)
-    private Set<HistoricoEstadoAplicante> listaHistoricoEstadoAplicante;
+    @OneToOne(mappedBy = "aplicante")
+    private PedidoInscricaoCadastro pedido;
 
     public Aplicante() {
     }
 
-    public Aplicante(Long id, Long empresaId, String empresaNome, String empresaNif, String estado, String numero, String categoria, String tipo, Instant createdAt, Instant updatedAt) {
+    public Aplicante(Long id, Long empresaId, String empresaNome, String empresaNif, AplicanteStatus estado, String numero, String categoria, String tipo, Instant createdAt, Instant updatedAt) {
         this.setId(id);
         this.empresa = new Empresa(empresaId, empresaNome, empresaNif);
         this.estado = estado;
@@ -41,5 +45,27 @@ public class Aplicante extends EntityDB {
         this.tipo = tipo;
         this.setCreatedAt(createdAt);
         this.setUpdatedAt(updatedAt);
+    }
+
+    public PedidoStatus getPedidoStatus() {
+        return (pedido != null) ? pedido.getStatus() : null;
+    }
+
+    public FaturaStatus getFaturaStatus() {
+        return (pedido != null && pedido.getFatura() != null)
+                ? pedido.getFatura().getStatus()
+                : null;
+    }
+
+    @Override
+    public String toString() {
+        return "Aplicante{" +
+                "id='" + getId() + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", numero='" + numero + '\'' +
+                ", estado=" + estado +
+                ", empresaId=" + empresa.getId() +
+                '}';
     }
 }

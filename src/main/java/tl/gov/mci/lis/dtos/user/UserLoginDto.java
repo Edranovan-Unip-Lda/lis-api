@@ -19,12 +19,22 @@ public class UserLoginDto implements Serializable {
     RoleDto role;
     String jwtSession;
     String status;
+    EmpresaDto empresa;
 
     /**
      * DTO for {@link Role}
      */
     @Value
     public static class RoleDto implements Serializable {
+        Long id;
+        String name;
+    }
+
+    /**
+     * DTO for {@link tl.gov.mci.lis.models.empresa.Empresa}
+     */
+    @Value
+    public static class EmpresaDto implements Serializable {
         Long id;
         String name;
     }

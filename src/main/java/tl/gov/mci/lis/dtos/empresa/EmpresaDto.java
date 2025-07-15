@@ -65,6 +65,33 @@ public class EmpresaDto implements Serializable {
             Long id;
             @NotBlank(message = "Nome é obrigatório")
             String nome;
+            SucoDto suco;
+
+            @Value
+            public static class SucoDto implements Serializable {
+                Long id;
+                @NotBlank(message = "Nome é obrigatório")
+                String nome;
+                PostoAdministrativoDto postoAdministrativo;
+
+                @Value
+                public static class PostoAdministrativoDto implements Serializable {
+                    Long id;
+                    @NotBlank(message = "Nome é obrigatório")
+                    String nome;
+                    MunicipioDto municipio;
+
+                    @Value
+                    public static class MunicipioDto implements Serializable {
+                        Long id;
+                        @NotBlank(message = "Nome é obrigatório")
+                        String nome;
+
+                    }
+
+                }
+
+            }
         }
     }
 }

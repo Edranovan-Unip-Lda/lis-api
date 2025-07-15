@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.services.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDetailServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
     private final UserRepository userRepository;
@@ -32,11 +34,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                     return new ForbiddenException("Username not found");
                 });
 
-        return new CustomUserDetails(
-                user.getUsername(),
-                user.getPassword(),
-                List.of(user.getRole().getName())
-        );
+        return new CustomUserDetails(user);
 
     }
 

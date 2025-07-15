@@ -8,9 +8,11 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,7 +41,7 @@ public class JwtSessionService {
      * valueOps.set(username, token, Duration.ofHours(2));
      */
     public void storeActiveToken(String username, String token) {
-        valueOps.set(username, token);
+        valueOps.set(username, token, Duration.ofHours(2));
         setOps.add(ACTIVE_USER_SET, username);
     }
 
@@ -78,17 +80,30 @@ public class JwtSessionService {
      */
     public void storeUserDetails(String username, CustomUserDetails userDetails) {
         try {
-            List<String> roleNames = userDetails.getRoleNames();
+            User originalUser = userDetails.getUser();
 
-            CustomUserDetails customUser = new CustomUserDetails(
-                    userDetails.getUsername(),
-                    userDetails.getPassword(),
-                    roleNames
-            );
+            // Create a safe, lightweight copy of the User
+            User slimUser = new User();
+            slimUser.setId(originalUser.getId());
+            slimUser.setUsername(originalUser.getUsername());
+            slimUser.setPassword(originalUser.getPassword());
 
-            String userJson = objectMapper.writeValueAsString(customUser);
-            valueOps.set(USER_DETAILS_PREFIX + username, userJson);
-            System.out.println(userJson);
+            if (originalUser.getRole() != null) {
+                slimUser.setRole(originalUser.getRole()); // Only if Role is simple (id + name)
+            }
+
+            // You may include empresaId only, to avoid serializing full Empresa
+            if (originalUser.getEmpresa() != null) {
+                Empresa empresa = new Empresa();
+                empresa.setId(originalUser.getEmpresa().getId());
+                slimUser.setEmpresa(empresa);
+            }
+
+            // Wrap the safe copy into a new CustomUserDetails
+            CustomUserDetails safeUserDetails = new CustomUserDetails(slimUser);
+
+            String userJson = objectMapper.writeValueAsString(safeUserDetails);
+            valueOps.set(USER_DETAILS_PREFIX + username, userJson, Duration.ofHours(2));
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize user details", e);
         }
@@ -101,6 +116,7 @@ public class JwtSessionService {
         String userJson = valueOps.get(USER_DETAILS_PREFIX + username);
         if (userJson == null) return null;
         try {
+            System.out.println("Deserializing: " + userJson);
             // Replace YourUserDetailsImpl with your implementation class
             return objectMapper.readValue(userJson, CustomUserDetails.class);
         } catch (JsonProcessingException e) {

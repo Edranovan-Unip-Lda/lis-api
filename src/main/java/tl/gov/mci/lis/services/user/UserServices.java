@@ -15,16 +15,19 @@ import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.enums.AccountStatus;
 import tl.gov.mci.lis.enums.EmailTemplate;
+import tl.gov.mci.lis.enums.Role;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
+import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +45,7 @@ public class UserServices {
     private final JwtSessionService jwtSessionService;
     private final EmailService emailService;
     private final UserDetailServiceImpl userDetailService;
+    private final EmpresaRepository empresaRepository;
 
     public User register(User obj) {
         logger.info("Registering user: {}", obj);
@@ -54,7 +58,11 @@ public class UserServices {
                 roleRepository.findById(obj.getRole().getId()).orElseThrow(() -> new ResourceNotFoundException("Role " + obj.getRole().getName() + " not found"))
         );
 
-        obj.setPassword(bcryptEncoder.encode(obj.getUsername()));
+        if (obj.getPassword() == null) {
+            obj.setPassword(bcryptEncoder.encode(obj.getUsername()));
+        } else {
+            obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
+        }
         obj.setStatus(AccountStatus.pending.toString());
 
         User savedUser = userRepository.save(obj);
@@ -74,8 +82,8 @@ public class UserServices {
             user = userRepository.findByEmail(username)
                     .orElseThrow(() -> {
 //                        auditService.saveLogin(finalUsername, request, false);
-                        logger.error("Invalid email or password");
-                        return new ForbiddenException("Invalid email or password");
+                        logger.error("Email ou palavra-passe inválidos");
+                        return new ForbiddenException("Email ou palavra-passe inválidos");
                     });
             username = user.getUsername();
         } else {
@@ -83,27 +91,27 @@ public class UserServices {
             user = userRepository.findByUsername(username)
                     .orElseThrow(() -> {
 //                        auditService.saveLogin(finalUsername1, request, false);
-                        logger.error("Invalid username or password");
-                        return new ForbiddenException("Invalid username or password");
+                        logger.error("Nome de utilizador ou palavra-passe inválidos");
+                        return new ForbiddenException("Nome de utilizador ou palavra-passe inválidos");
                     });
         }
         if (user.getStatus().equals(AccountStatus.disabled.toString())) {
 //            auditService.saveLogin(username, request, false);
-            logger.error("Your account has been disabled. Please contact your administrator for assistance.");
-            throw new ForbiddenException("Your account has been disabled. Please contact your administrator for assistance.");
+            logger.error("A sua conta foi desativada. Por favor, contacte o administrador para obter assistência.");
+            throw new ForbiddenException("A sua conta foi desativada. Por favor, contacte o administrador para obter assistência.");
         }
 
         if (user.getStatus().equals(AccountStatus.pending.toString())) {
 //            auditService.saveLogin(username, request, false);
-            logger.error("Account activation required. Check your email or contact admin.");
-            throw new ForbiddenException("Account activation required. Check your email or contact admin.");
+            logger.error("É necessária a ativação da conta. Verifique o seu email ou contacte o administrador.");
+            throw new ForbiddenException("É necessária a ativação da conta. Verifique o seu email ou contacte o administrador.");
         }
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (Exception e) {
-            logger.error("Invalid email/username or password");
-            throw new ForbiddenException("Invalid email/username or password");
+            logger.error("Email/nome de utilizador ou palavra-passe inválidos");
+            throw new ForbiddenException("Email/nome de utilizador ou palavra-passe inválidos");
         }
 
         user.setOneTimePassword(oneTimePasswordService.generateOTP(username));
@@ -118,14 +126,14 @@ public class UserServices {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
 //                    auditService.saveLogin(username, request, false);
-                    logger.error("The provided code is not valid or has expired.");
-                    return new ResourceNotFoundException("The provided code is not valid or has expired.");
+                    logger.error("O código fornecido não é válido ou expirou.");
+                    return new ResourceNotFoundException("O código fornecido não é válido ou expirou.");
                 });
 
         if (!oneTimePasswordService.validateOTP(username, otp)) {
             //        auditService.saveLogin(username, request, false);
-            logger.error("The provided code is not valid or has expired.");
-            throw new ResourceNotFoundException("The provided code is not valid or has expired.");
+            logger.error("O código fornecido não é válido ou expirou.");
+            throw new ResourceNotFoundException("O código fornecido não é válido ou expirou.");
         }
 
         user.setJwtSession(jwtUtil.generateToken(username, user.getRole()));
@@ -133,6 +141,9 @@ public class UserServices {
         jwtSessionService.storeActiveToken(username, user.getJwtSession());
         jwtSessionService.storeUserDetails(username, (CustomUserDetails) userDetailService.loadUserByUsername(username));
 
+        if (Role.ROLE_CLIENT.name().equalsIgnoreCase(user.getRole().getName())) {
+            user.setEmpresa(empresaRepository.findByUtilizador_Id(user.getId()).orElse(null));
+        }
         logger.info("OTP validation is success: {}", username);
 //            auditService.saveLogin(username, request, true);
         return user;
@@ -142,13 +153,13 @@ public class UserServices {
         logger.info("Generating new OTP and resending it. Key: {}", username);
         if (oneTimePasswordService.isOtpExistAndValidByKey(username)) {
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new ForbiddenException("Invalid username or password"));
+                    .orElseThrow(() -> new ForbiddenException("Nome de utilizador ou palavra-passe inválidos"));
             user.setOneTimePassword(oneTimePasswordService.getOtpByKey(username));
             emailService.sendEmail(user, EmailTemplate.OTP);
             return user;
         }
-        logger.error("Your session has expired. Please log in again.");
-        throw new ForbiddenException("Your session has expired. Please log in again.");
+        logger.error("A sua sessão expirou. Por favor, inicie sessão novamente.");
+        throw new ForbiddenException("A sua sessão expirou. Por favor, inicie sessão novamente.");
     }
 
     public Page<User> getPage(int page, int size) {
@@ -164,16 +175,15 @@ public class UserServices {
             String username = jwtUtil.extractUsername(obj.getJwtSession());
             return userRepository.findByUsername(username).map(user -> {
                         if (user.getStatus().equals(AccountStatus.pending.toString())) {
-                            user.setPassword(bcryptEncoder.encode(obj.getPassword()));
                             user.setStatus(obj.getStatus());
                             userRepository.save(user);
                             Map<String, String> responseObj = new HashMap<>();
                             responseObj.put("activation", "true");
-                            responseObj.put("message", "Your account has been successfully activated!");
+                            responseObj.put("message", "O seu email foi verificado e a sua conta está agora ativa. Já pode iniciar sessão e começar a utilizar o sistema.");
                             return responseObj;
                         } else {
-                            logger.error("The account has already been activated.");
-                            throw new AlreadyExistException("The account has already been activated.");
+                            logger.error("A sua conta já se encontra ativa. Pode iniciar sessão e começar a utilizar o sistema.");
+                            throw new AlreadyExistException("A sua conta já se encontra ativa. Pode iniciar sessão e começar a utilizar o sistema.");
                         }
                     })
                     .orElseThrow(() -> {
@@ -181,8 +191,8 @@ public class UserServices {
                         return new ResourceNotFoundException("User with username " + username + " not found");
                     });
         } else {
-            logger.error("Token is invalid or expired");
-            throw new BadCredentialsException("Token is invalid or expired");
+            logger.error("O token é inválido ou expirou.");
+            throw new BadCredentialsException("O token é inválido ou expirou.");
         }
     }
 

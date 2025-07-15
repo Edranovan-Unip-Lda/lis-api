@@ -9,8 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
+import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.empresa.Empresa;
@@ -19,6 +22,8 @@ import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
+import tl.gov.mci.lis.services.aplicante.AplicanteService;
+import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
 
@@ -33,6 +38,8 @@ public class EmpresaService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EmpresaMapper empresaMapper;
+    private final AuthorizationService authorizationService;
+    private final AplicanteService aplicanteService;
 
     public Empresa create(Empresa obj) throws BadRequestException {
         logger.info("Criando empresa: {}", obj);
@@ -73,13 +80,14 @@ public class EmpresaService {
     }
 
     public Empresa getById(Long id) {
-        logger.info("Obtendo empresa by id: {}", id);
+        logger.info("Obtendo empresa pelo id: {}", id);
         return empresaRepository
                 .findById(id).orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
     }
 
     public Page<EmpresaDto> getPageByPageAndSize(int page, int size) {
-        logger.info("Obtendo page: {} and size {}", page, size);
+        logger.info("Obtendo page: {} e size {}", page, size);
+
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Empresa> empresas = empresaRepository.findAll(paging);
         return empresas.map(empresaMapper::toDto);
@@ -87,8 +95,50 @@ public class EmpresaService {
 
     public Aplicante createAplicante(Long empresaId, Aplicante obj) {
         logger.info("Criando aplicante: {}", obj);
+
+        authorizationService.assertUserOwnsEmpresa(empresaId);
         obj.setEmpresa(empresaRepository.getReferenceById(empresaId));
+        obj.setNumero(aplicanteService.generateAplicanteNumber(obj.getCategoria()));
+        obj.setEstado(AplicanteStatus.EM_CURSO);
         return aplicanteRepository.save(obj);
+    }
+
+    public Page<AplicanteDto> getAplicantePage(Long empresaId, int page, int size) {
+        logger.info("Obtendo aplicante page pelo empresa id: {}", empresaId);
+
+        authorizationService.assertUserOwnsEmpresa(empresaId);
+        Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
+        return aplicanteRepository.getPageByEmpresaId(empresaId, paging);
+    }
+
+    public AplicanteDto getAplicanteById(Long empresaId, Long aplicanteId) {
+        logger.info("Obtendo aplicante by id: {}", aplicanteId);
+
+        authorizationService.assertUserOwnsEmpresa(empresaId);
+        return aplicanteRepository.getFromIdAndEmpresaId(aplicanteId, empresaId)
+                .map(aplicanteDto -> {
+                    aplicanteDto.setEmpresaDto(empresaMapper.toDto(getById(empresaId)));
+                    return aplicanteDto;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+    }
+
+    public boolean deleteAplicante(Long empresaId, Long aplicanteId) {
+        logger.info("Deletando aplicante: {}", aplicanteId);
+
+        Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante not found"));
+
+        authorizationService.assertUserOwnsEmpresa(aplicante.getEmpresa().getId());
+        int deleted = aplicanteRepository.deleteByIdAndEmpresaId(aplicanteId, empresaId);
+
+        if (deleted > 0) {
+            logger.info("Aplicante {} excluído com sucesso", aplicanteId);
+            return true;
+        } else {
+            logger.warn("Nenhuma aplicante excluída para id {} e empresa {}", aplicanteId, empresaId);
+            return false;
+        }
     }
 
 }

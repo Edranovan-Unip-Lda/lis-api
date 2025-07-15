@@ -1,22 +1,22 @@
 package tl.gov.mci.lis.models.cadastro;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.pagamento.Fatura;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "lis_pedido_inscricao_cadastro")
 public class PedidoInscricaoCadastro extends EntityDB {
-
+    @Enumerated(EnumType.STRING)
+    private PedidoStatus status;
     private String tipoPedido;
 
     private String nomeEmpresa;
@@ -66,9 +66,13 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
     private Aplicante aplicante;
 
-    public PedidoInscricaoCadastro() {}
+    @OneToOne(mappedBy = "pedidoInscricaoCadastro")
+    private Fatura fatura;
 
-    public PedidoInscricaoCadastro(Long id,String tipoPedido, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, String tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, String tipoEstabelecimento, String caraterizacaoEstabelecimento, String risco, String ato, String tipoAtividade, String tipoAtividadeCodigo, String atividadePrincipal, String atividadePrincipalCodigo, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
+    public PedidoInscricaoCadastro() {
+    }
+
+    public PedidoInscricaoCadastro(Long id, String tipoPedido, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, String tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, String tipoEstabelecimento, String caraterizacaoEstabelecimento, String risco, String ato, String tipoAtividade, String tipoAtividadeCodigo, String atividadePrincipal, String atividadePrincipalCodigo, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
         this.setId(id);
         this.tipoPedido = tipoPedido;
         this.nomeEmpresa = nomeEmpresa;

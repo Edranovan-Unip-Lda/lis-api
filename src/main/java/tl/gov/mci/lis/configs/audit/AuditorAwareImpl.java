@@ -4,7 +4,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import tl.gov.mci.lis.models.user.User;
 
 import java.util.Objects;
 import java.util.Optional;
