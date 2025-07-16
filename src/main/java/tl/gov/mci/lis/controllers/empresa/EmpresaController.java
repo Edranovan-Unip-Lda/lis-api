@@ -23,8 +23,11 @@ public class EmpresaController {
     private final AplicanteMapper aplicanteMapper;
 
     @PostMapping("")
-    ResponseEntity<EmpresaDto> createEmpresa(@RequestBody Empresa obj) throws BadRequestException {
-        return new ResponseEntity<>(empresaMapper.toDto(empresaService.create(obj)), HttpStatus.CREATED);
+    ResponseEntity<EmpresaDto> createEmpresa(@RequestBody EmpresaDto obj) throws BadRequestException {
+        return new ResponseEntity<>(
+                empresaMapper.toDto(empresaService.create(
+                        empresaMapper.toEntity(obj)
+                )), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
