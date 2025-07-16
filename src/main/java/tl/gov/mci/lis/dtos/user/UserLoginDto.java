@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Value
 public class UserLoginDto implements Serializable {
     Long id;
+    String firstName;
+    String lastName;
     @NotBlank(message = "Username is mandatory")
     String username;
     @NotBlank(message = "Email is mandatory")

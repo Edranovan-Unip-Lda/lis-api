@@ -32,6 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtSessionService jwtSessionService;
     private static final List<RequestMatcher> publicEndpoints = List.of(
             new AntPathRequestMatcher("/api/v1/users/authenticate", "POST"),
+            new AntPathRequestMatcher("/api/v1/users/logout", "POST"),
             new AntPathRequestMatcher("/api/v1/users/otp/**", "POST"),
             new AntPathRequestMatcher("/api/v1/users/otp/**", "PUT"),
             new AntPathRequestMatcher("/api/v1/users/activate/**", "POST"),
