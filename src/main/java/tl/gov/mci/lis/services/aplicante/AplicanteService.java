@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import tl.gov.mci.lis.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
@@ -31,11 +32,11 @@ public class AplicanteService {
     private final AplicanteNumberRepository repository;
 
 
-    public Page<AplicanteDto> getPage(int page, int size) {
+    public Page<AplicantePageDto> getPage(int page, int size) {
         logger.info("Getting page: {} and size {}", page, size);
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Aplicante> aplicantes = aplicanteRepository.findAll(paging);
-        return aplicantes.map(aplicanteMapper::toDto);
+        return aplicantes.map(aplicanteMapper::toDto1);
     }
 
     public AplicanteDto getById(Long id) {
