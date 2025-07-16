@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
@@ -42,7 +44,8 @@ public class AplicanteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
     }
 
-    public String generateAplicanteNumber(String categoriaCode) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized String generateAplicanteNumber(String categoriaCode) {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         int year = now.getYear();
