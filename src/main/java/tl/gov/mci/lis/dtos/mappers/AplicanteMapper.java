@@ -1,7 +1,7 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
-import tl.gov.mci.lis.AplicantePageDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 

@@ -1,7 +1,7 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
-import tl.gov.mci.lis.EmpresaCreateDto;
+import tl.gov.mci.lis.dtos.empresa.EmpresaCreateDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.models.empresa.Empresa;
 

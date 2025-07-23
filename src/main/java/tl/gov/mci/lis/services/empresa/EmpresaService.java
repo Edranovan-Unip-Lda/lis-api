@@ -13,7 +13,6 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.empresa.Empresa;

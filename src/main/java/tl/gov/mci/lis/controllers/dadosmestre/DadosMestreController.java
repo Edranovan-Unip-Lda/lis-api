@@ -2,25 +2,35 @@ package tl.gov.mci.lis.controllers.dadosmestre;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import tl.gov.mci.lis.dtos.AtividadeEconomicaDto;
 import tl.gov.mci.lis.dtos.endereco.AldeiaDto;
 import tl.gov.mci.lis.dtos.endereco.PostoAdministrativoDto;
 import tl.gov.mci.lis.dtos.endereco.SucoDto;
 import tl.gov.mci.lis.dtos.mappers.AldeiaMapper;
+import tl.gov.mci.lis.dtos.mappers.AtividadeEconomicaMapper;
 import tl.gov.mci.lis.dtos.mappers.PostoAdministrativoMapper;
 import tl.gov.mci.lis.dtos.mappers.SucoMapper;
+import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.cadastro.NivelRisco;
+import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 import tl.gov.mci.lis.models.endereco.Suco;
+import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
 import tl.gov.mci.lis.repositories.endereco.AldeiaRepository;
 import tl.gov.mci.lis.repositories.endereco.MunicipioRepository;
 import tl.gov.mci.lis.repositories.endereco.PostoAdministrativoRepository;
 import tl.gov.mci.lis.repositories.endereco.SucoRepository;
+import tl.gov.mci.lis.repositories.specification.AtividadeEconomicaSpecification;
+import tl.gov.mci.lis.services.dadosmestre.DadosMestreService;
+
+import java.util.List;
 
 @RepositoryRestController
 @RequiredArgsConstructor
@@ -32,6 +42,9 @@ public class DadosMestreController {
     private final PostoAdministrativoMapper postoAdministrativoMapper;
     private final SucoMapper sucoMapper;
     private final AldeiaMapper aldeiaMapper;
+    private final AtividadeEconomicaRepository atividadeEconomicaRepository;
+    private final AtividadeEconomicaMapper atividadeEconomicaMapper;
+    private final DadosMestreService dadosMestreService;
 
     @PostMapping("/postos")
     public ResponseEntity<PostoAdministrativoDto> registoPostoAdministrativo(@Valid @RequestBody PostoAdministrativo obj) {
@@ -67,6 +80,29 @@ public class DadosMestreController {
                         .orElseThrow(() -> new ResourceNotFoundException("Suco com id " + obj.getSuco().getId() + " não encontrado"))
         );
         return new ResponseEntity<>(aldeiaMapper.toDto(aldeiaRepository.save(obj)), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/atividade-economica/search")
+    public ResponseEntity<List<AtividadeEconomicaDto>> search(
+            @RequestParam(required = false) String codigo,
+            @RequestParam(required = false) Categoria tipo,
+            @RequestParam(required = false) NivelRisco tipoRisco
+    ) {
+        Specification<AtividadeEconomica> spec = AtividadeEconomicaSpecification.matchesFilters(codigo, tipo, tipoRisco);
+        List<AtividadeEconomica> result = atividadeEconomicaRepository.findAll(spec);
+        return new ResponseEntity<>(result.stream().map(atividadeEconomicaMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/atividade-economica/{id}")
+    public ResponseEntity<?> deleteAtividadeEconomica(@PathVariable Long id) {
+        try {
+            dadosMestreService.deleteAtividadeEconomicaById(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

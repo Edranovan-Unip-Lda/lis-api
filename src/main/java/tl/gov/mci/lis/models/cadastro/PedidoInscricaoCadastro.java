@@ -5,8 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.enums.cadastro.CaraterizacaoEstabelecimento;
+import tl.gov.mci.lis.enums.cadastro.NivelRisco;
+import tl.gov.mci.lis.enums.cadastro.TipoAto;
+import tl.gov.mci.lis.enums.cadastro.TipoEstabelecimento;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
@@ -29,7 +34,7 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     @OneToOne
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = "sede")
+    @JsonIgnoreProperties(value = "aplicante")
     private Endereco sede;
 
     private String categoria;
@@ -40,21 +45,28 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     private String localEstabelecimento;
 
-    private String tipoEstabelecimento;
+    @Enumerated(EnumType.STRING)
+    private TipoEstabelecimento tipoEstabelecimento;
 
-    private String caraterizacaoEstabelecimento;
+    @Enumerated(EnumType.STRING)
+    private CaraterizacaoEstabelecimento caraterizacaoEstabelecimento;
 
-    private String risco;
+    @Enumerated(EnumType.STRING)
+    private NivelRisco risco;
 
-    private String ato;
+    @Enumerated(EnumType.STRING)
+    private TipoAto ato;
 
-    private String tipoAtividade;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_atividade_id", nullable = false)
+    @JsonIgnoreProperties(value = "listaPedidoInscricaoCadastro", allowSetters = true)
+    private AtividadeEconomica tipoAtividade;
 
-    private String tipoAtividadeCodigo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atividade_principal_id", nullable = false)
+    @JsonIgnoreProperties(value = "listaPedidoInscricaoCadastroAtividadePrincipal", allowSetters = true)
+    private AtividadeEconomica atividadePrincipal;
 
-    private String atividadePrincipal;
-
-    private String atividadePrincipalCodigo;
 
     private String alteracoes;
 
@@ -72,7 +84,7 @@ public class PedidoInscricaoCadastro extends EntityDB {
     public PedidoInscricaoCadastro() {
     }
 
-    public PedidoInscricaoCadastro(Long id, String tipoPedido, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, String tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, String tipoEstabelecimento, String caraterizacaoEstabelecimento, String risco, String ato, String tipoAtividade, String tipoAtividadeCodigo, String atividadePrincipal, String atividadePrincipalCodigo, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
+    public PedidoInscricaoCadastro(Long id, String tipoPedido, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, String tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, TipoEstabelecimento tipoEstabelecimento, CaraterizacaoEstabelecimento caraterizacaoEstabelecimento, NivelRisco risco, TipoAto ato, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
         this.setId(id);
         this.tipoPedido = tipoPedido;
         this.nomeEmpresa = nomeEmpresa;
@@ -92,10 +104,6 @@ public class PedidoInscricaoCadastro extends EntityDB {
         this.caraterizacaoEstabelecimento = caraterizacaoEstabelecimento;
         this.risco = risco;
         this.ato = ato;
-        this.tipoAtividade = tipoAtividade;
-        this.tipoAtividadeCodigo = tipoAtividadeCodigo;
-        this.atividadePrincipal = atividadePrincipal;
-        this.atividadePrincipalCodigo = atividadePrincipalCodigo;
         this.alteracoes = alteracoes;
         this.dataEmissaoCertAnterior = dataEmissaoCertAnterior;
         this.observacao = observacao;
@@ -121,10 +129,6 @@ public class PedidoInscricaoCadastro extends EntityDB {
                 ", caraterizacaoEstabelecimento='" + caraterizacaoEstabelecimento + '\'' +
                 ", risco='" + risco + '\'' +
                 ", ato='" + ato + '\'' +
-                ", tipoAtividade='" + tipoAtividade + '\'' +
-                ", tipoAtividadeCodigo='" + tipoAtividadeCodigo + '\'' +
-                ", atividadePrincipal='" + atividadePrincipal + '\'' +
-                ", atividadePrincipalCodigo='" + atividadePrincipalCodigo + '\'' +
                 ", alteracoes='" + alteracoes + '\'' +
                 ", dataEmissaoCertAnterior='" + dataEmissaoCertAnterior + '\'' +
                 ", observacao='" + observacao + '\'' +

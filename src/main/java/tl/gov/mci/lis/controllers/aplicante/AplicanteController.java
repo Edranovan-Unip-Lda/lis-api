@@ -5,8 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tl.gov.mci.lis.AplicantePageDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.enums.AplicanteType;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 
 @RestController
@@ -26,5 +29,18 @@ public class AplicanteController {
     @GetMapping("/{id}")
     ResponseEntity<AplicanteDto> getAplicante(@PathVariable Long id) {
         return new ResponseEntity<>(aplicanteService.getById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/{aplicanteId}/pedidos")
+    ResponseEntity<PedidoInscricaoCadastroDto> createPedidoInscricaoCadastro(
+            @RequestParam(name = "tipo") AplicanteType tipo,
+            @PathVariable Long aplicanteId,
+            @RequestBody PedidoInscricaoCadastro obj
+    ) {
+        if (tipo == AplicanteType.CADASTRO) {
+            return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
+        } else {
+            return null;
+        }
     }
 }

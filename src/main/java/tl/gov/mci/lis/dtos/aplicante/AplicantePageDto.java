@@ -1,4 +1,4 @@
-package tl.gov.mci.lis;
+package tl.gov.mci.lis.dtos.aplicante;
 
 import lombok.Value;
 import tl.gov.mci.lis.enums.AplicanteStatus;

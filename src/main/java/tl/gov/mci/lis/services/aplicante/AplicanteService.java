@@ -10,14 +10,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.AplicantePageDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
+import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
+import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 
 import java.time.LocalDate;
 
@@ -30,6 +36,9 @@ public class AplicanteService {
     private final AplicanteRepository aplicanteRepository;
     private final AplicanteMapper aplicanteMapper;
     private final AplicanteNumberRepository repository;
+    private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
+    private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
+    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
 
 
     public Page<AplicantePageDto> getPage(int page, int size) {
@@ -42,6 +51,10 @@ public class AplicanteService {
     public AplicanteDto getById(Long id) {
         logger.info("Obtendo aplicante pelo id: {}", id);
         return aplicanteRepository.getFromId(id)
+                .map(aplicanteDto -> {
+                    aplicanteDto.setPedidoInscricaoCadastroDto(pedidoInscricaoCadastroService.getByAplicanteId(id));
+                    return aplicanteDto;
+                })
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
     }
 
@@ -69,6 +82,20 @@ public class AplicanteService {
         repository.save(record);
 
         return finalCode;
+    }
+
+    /**
+     * Create a new PedidoInscricaoCadastro
+     *
+     * @param aplicanteId aplicante id
+     * @param obj         PedidoInscricaoCadastro
+     * @return PedidoInscricaoCadastro dto
+     */
+    public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) {
+        logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {}", aplicanteId);
+        obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
+        obj.setStatus(PedidoStatus.SUBMETIDO);
+        return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(obj));
     }
 
 }

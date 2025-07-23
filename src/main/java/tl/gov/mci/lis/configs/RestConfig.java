@@ -4,11 +4,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 import tl.gov.mci.lis.models.endereco.Municipio;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 import tl.gov.mci.lis.models.endereco.Suco;
+import tl.gov.mci.lis.models.pagamento.Taxa;
 
 @Configuration
 public class RestConfig implements RepositoryRestConfigurer {
@@ -20,7 +22,9 @@ public class RestConfig implements RepositoryRestConfigurer {
                 Municipio.class,
                 PostoAdministrativo.class,
                 Suco.class,
-                Aldeia.class
+                Aldeia.class,
+                Taxa.class,
+                AtividadeEconomica.class
         );
     }
 }

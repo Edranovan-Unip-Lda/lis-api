@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.dtos.aplicante;
 
 import lombok.Data;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.FaturaStatus;
@@ -27,6 +28,7 @@ public class AplicanteDto implements Serializable {
     PedidoStatus pedidoStatus;
     FaturaStatus faturaStatus;
     EmpresaDto empresaDto;
+    PedidoInscricaoCadastroDto pedidoInscricaoCadastroDto;
 
     public AplicanteDto() {
     }

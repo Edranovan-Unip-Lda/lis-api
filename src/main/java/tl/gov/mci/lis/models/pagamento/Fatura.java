@@ -15,6 +15,7 @@ public class Fatura extends EntityDB {
 
     @Enumerated(EnumType.STRING)
     private FaturaStatus status;
+
     private double atoFatura;
 
     private String nomeEmpresa;

@@ -1,0 +1,39 @@
+package tl.gov.mci.lis.models.dadosmestre;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.cadastro.NivelRisco;
+import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+
+import java.util.Set;
+
+@Entity
+@Table(name = "lis_dm_atividade_economica")
+@Getter
+@Setter
+public class AtividadeEconomica extends EntityDB {
+    private String codigo;
+
+    @Lob
+    @Column(nullable = false)
+    private String descricao;
+
+    @Enumerated(EnumType.STRING)
+    private Categoria tipo;
+
+    @Enumerated(EnumType.STRING)
+    private NivelRisco tipoRisco;
+
+    @OneToMany(mappedBy = "tipoAtividade")
+    @JsonIgnoreProperties(value = "tipoAtividade", allowSetters = true)
+    private Set<PedidoInscricaoCadastro> listaPedidoInscricaoCadastro;
+
+    @OneToMany(mappedBy = "atividadePrincipal")
+    @JsonIgnoreProperties(value = "atividadePrincipal", allowSetters = true)
+    private Set<PedidoInscricaoCadastro> listaPedidoInscricaoCadastroAtividadePrincipal;
+
+}

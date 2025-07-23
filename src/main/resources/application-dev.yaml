@@ -62,6 +62,13 @@ logging:
       springframework:
         ldap: DEBUG
 
+minio:
+  url: https://s3-api.minio.apps.gov.tl/
+  accessKey: 3Lg5yNGElnTNerWDn8Jo
+  secretKey: xbPUvoaMSp8f83XLABkza35f5FSheJD4ySo4Nr2V
+  bucket: mci-lis
+  region: tls-dili-01
+
 management:
   endpoints:
     web:

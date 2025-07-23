@@ -1,4 +1,4 @@
-package tl.gov.mci.lis;
+package tl.gov.mci.lis.dtos.empresa;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
