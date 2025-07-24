@@ -41,6 +41,9 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @Enumerated(EnumType.STRING)
     private TipoEmpresa tipoEmpresa;
 
+    @Enumerated(EnumType.STRING)
+    private QuantoAtividade quantoAtividade;
+
     private String nomeEstabelecimento;
 
     private String localEstabelecimento;

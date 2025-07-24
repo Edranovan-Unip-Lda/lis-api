@@ -6,6 +6,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 
 @Entity
 @Getter
@@ -22,7 +23,9 @@ public class Fatura extends EntityDB {
 
     private String sociedadeComercial;
 
-    private String atividadeDeclarada;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atividade_declarada_id", referencedColumnName = "id")
+    private AtividadeEconomica atividadeDeclarada;
 
     private String atividadeDeclaradaCodigo;
 

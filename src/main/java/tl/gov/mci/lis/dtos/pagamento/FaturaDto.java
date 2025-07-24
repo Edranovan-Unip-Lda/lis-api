@@ -21,9 +21,16 @@ public class FaturaDto implements Serializable {
     double atoFatura;
     String nomeEmpresa;
     String sociedadeComercial;
-    String atividadeDeclarada;
+    AtividadeDeclaradaDto atividadeDeclarada;
     String atividadeDeclaradaCodigo;
     TaxaDto taxa;
+
+    @Value
+    public static class AtividadeDeclaradaDto implements Serializable {
+        Long id;
+        String codigo;
+        String descricao;
+    }
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.pagamento.Taxa}

@@ -127,6 +127,8 @@ public class AplicanteService {
                     pedidoInscricaoCadastro.setCaraterizacaoEstabelecimento(obj.getCaraterizacaoEstabelecimento());
                     pedidoInscricaoCadastro.setRisco(obj.getRisco());
                     pedidoInscricaoCadastro.setAto(obj.getAto());
+                    pedidoInscricaoCadastro.setTipoEmpresa(obj.getTipoEmpresa());
+                    pedidoInscricaoCadastro.setQuantoAtividade(obj.getQuantoAtividade());
                     pedidoInscricaoCadastro.setAlteracoes(obj.getAlteracoes());
                     pedidoInscricaoCadastro.setDataEmissaoCertAnterior(obj.getDataEmissaoCertAnterior());
                     pedidoInscricaoCadastro.setObservacao(obj.getObservacao());

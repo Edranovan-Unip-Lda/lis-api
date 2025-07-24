@@ -31,7 +31,8 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     String telemovel;
     EnderecoDto sede;
     String categoria;
-    String tipoEmpresa;
+    TipoEmpresa tipoEmpresa;
+    QuantoAtividade quantoAtividade;
     String nomeEstabelecimento;
     String localEstabelecimento;
     TipoEstabelecimento tipoEstabelecimento;
@@ -74,7 +75,8 @@ public class PedidoInscricaoCadastroDto implements Serializable {
             String telemovel,
             EnderecoDto sede,
             String categoria,
-            String tipoEmpresa,
+            TipoEmpresa tipoEmpresa,
+            QuantoAtividade quantoAtividade,
             String nomeEstabelecimento,
             String localEstabelecimento,
             TipoEstabelecimento tipoEstabelecimento,
@@ -104,6 +106,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
         this.sede = sede;
         this.categoria = categoria;
         this.tipoEmpresa = tipoEmpresa;
+        this.quantoAtividade = quantoAtividade;
         this.nomeEstabelecimento = nomeEstabelecimento;
         this.localEstabelecimento = localEstabelecimento;
         this.tipoEstabelecimento = tipoEstabelecimento;
