@@ -28,10 +28,14 @@ public class PedidoInscricaoCadastroService {
     }
 
     public PedidoInscricaoCadastroDto getByAplicanteId(Long aplicanteId) {
-        logger.info("Obtendo pedido de inscricao pelo Aplicante id: {}", aplicanteId);
-        PedidoInscricaoCadastro obj = pedidoInscricaoCadastroRepository
-                .findByAplicante_Id(aplicanteId).orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
-        obj.setSede(enderecoRepository.getFromId(obj.getSede().getId()));
-        return pedidoInscricaoCadastroMapper.toDto(obj);
+        logger.info("Getting Inscrição for Aplicante id: {}", aplicanteId);
+
+        return pedidoInscricaoCadastroRepository
+                .findByAplicante_Id(aplicanteId)
+                .map(obj -> {
+                    obj.setSede(enderecoRepository.getFromId(obj.getSede().getId()));
+                    return pedidoInscricaoCadastroMapper.toDto(obj);
+                })
+                .orElse(null);  // ← return null when no record exists
     }
 }

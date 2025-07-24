@@ -1,5 +1,5 @@
 package tl.gov.mci.lis.enums.cadastro;
 
-public enum TipoPedido {
+public enum TipoPedidoCadastro {
     INICIAL, ALTERACAO, ANUAL
 }

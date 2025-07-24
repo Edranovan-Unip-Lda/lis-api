@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.PedidoStatus;
-import tl.gov.mci.lis.enums.cadastro.CaraterizacaoEstabelecimento;
-import tl.gov.mci.lis.enums.cadastro.NivelRisco;
-import tl.gov.mci.lis.enums.cadastro.TipoAto;
-import tl.gov.mci.lis.enums.cadastro.TipoEstabelecimento;
+import tl.gov.mci.lis.enums.cadastro.*;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
@@ -22,7 +19,9 @@ import tl.gov.mci.lis.models.pagamento.Fatura;
 public class PedidoInscricaoCadastro extends EntityDB {
     @Enumerated(EnumType.STRING)
     private PedidoStatus status;
-    private String tipoPedido;
+
+    @Enumerated(EnumType.STRING)
+    private TipoPedidoCadastro tipoPedidoCadastro;
 
     private String nomeEmpresa;
     private String nif;
@@ -39,7 +38,8 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     private String categoria;
 
-    private String tipoEmpresa;
+    @Enumerated(EnumType.STRING)
+    private TipoEmpresa tipoEmpresa;
 
     private String nomeEstabelecimento;
 
@@ -84,9 +84,9 @@ public class PedidoInscricaoCadastro extends EntityDB {
     public PedidoInscricaoCadastro() {
     }
 
-    public PedidoInscricaoCadastro(Long id, String tipoPedido, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, String tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, TipoEstabelecimento tipoEstabelecimento, CaraterizacaoEstabelecimento caraterizacaoEstabelecimento, NivelRisco risco, TipoAto ato, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
+    public PedidoInscricaoCadastro(Long id, TipoPedidoCadastro tipoPedidoCadastro, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, TipoEmpresa tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, TipoEstabelecimento tipoEstabelecimento, CaraterizacaoEstabelecimento caraterizacaoEstabelecimento, NivelRisco risco, TipoAto ato, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
         this.setId(id);
-        this.tipoPedido = tipoPedido;
+        this.tipoPedidoCadastro = tipoPedidoCadastro;
         this.nomeEmpresa = nomeEmpresa;
         this.nif = nif;
         this.gerente = gerente;
@@ -113,7 +113,7 @@ public class PedidoInscricaoCadastro extends EntityDB {
     public String toString() {
         return "PedidoInscricaoCadastro{" +
                 "id=" + this.getId() +
-                "tipoPedido='" + tipoPedido + '\'' +
+                "tipoPedido='" + tipoPedidoCadastro + '\'' +
                 ", nomeEmpresa='" + nomeEmpresa + '\'' +
                 ", nif='" + nif + '\'' +
                 ", gerente='" + gerente + '\'' +

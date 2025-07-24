@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.services.aplicante;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,9 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
+import tl.gov.mci.lis.services.endereco.EnderecoService;
 
 import java.time.LocalDate;
 
@@ -39,6 +42,8 @@ public class AplicanteService {
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
+    private final AtividadeEconomicaRepository atividadeEconomicaRepository;
+    private final EnderecoService enderecoService;
 
 
     public Page<AplicantePageDto> getPage(int page, int size) {
@@ -91,11 +96,43 @@ public class AplicanteService {
      * @param obj         PedidoInscricaoCadastro
      * @return PedidoInscricaoCadastro dto
      */
-    public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) {
-        logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {}", aplicanteId);
+    public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) throws BadRequestException {
+        logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {} e PedidoInscricaoCadastro: {}", aplicanteId, obj);
         obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
+        obj.setSede(enderecoService.create(obj.getSede()));
+        obj.setTipoAtividade(atividadeEconomicaRepository.getReferenceById(obj.getTipoAtividade().getId()));
+        obj.setAtividadePrincipal(atividadeEconomicaRepository.getReferenceById(obj.getAtividadePrincipal().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
         return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(obj));
+    }
+
+    public PedidoInscricaoCadastroDto updatePedidoInscricaoCadastro(Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro obj) throws BadRequestException {
+        logger.info("Atualizando PedidoInscricaoCadastro pelo id: {} e PedidoInscricaoCadastro: {}", pedidoId, obj);
+        obj.setSede(enderecoService.update(obj.getSede()));
+
+        return pedidoInscricaoCadastroRepository.findByIdAndAplicante_Id(pedidoId, aplicanteId)
+                .map(pedidoInscricaoCadastro -> {
+                    pedidoInscricaoCadastro.setTipoAtividade(atividadeEconomicaRepository.getReferenceById(obj.getTipoAtividade().getId()));
+                    pedidoInscricaoCadastro.setAtividadePrincipal(atividadeEconomicaRepository.getReferenceById(obj.getAtividadePrincipal().getId()));
+                    pedidoInscricaoCadastro.setTipoPedidoCadastro(obj.getTipoPedidoCadastro());
+                    pedidoInscricaoCadastro.setNomeEmpresa(obj.getNomeEmpresa());
+                    pedidoInscricaoCadastro.setNif(obj.getNif());
+                    pedidoInscricaoCadastro.setNumeroRegistoComercial(obj.getNumeroRegistoComercial());
+                    pedidoInscricaoCadastro.setTelefone(obj.getTelefone());
+                    pedidoInscricaoCadastro.setTelemovel(obj.getTelemovel());
+                    pedidoInscricaoCadastro.setGerente(obj.getGerente());
+                    pedidoInscricaoCadastro.setNomeEstabelecimento(obj.getNomeEstabelecimento());
+                    pedidoInscricaoCadastro.setLocalEstabelecimento(obj.getLocalEstabelecimento());
+                    pedidoInscricaoCadastro.setTipoEstabelecimento(obj.getTipoEstabelecimento());
+                    pedidoInscricaoCadastro.setCaraterizacaoEstabelecimento(obj.getCaraterizacaoEstabelecimento());
+                    pedidoInscricaoCadastro.setRisco(obj.getRisco());
+                    pedidoInscricaoCadastro.setAto(obj.getAto());
+                    pedidoInscricaoCadastro.setAlteracoes(obj.getAlteracoes());
+                    pedidoInscricaoCadastro.setDataEmissaoCertAnterior(obj.getDataEmissaoCertAnterior());
+                    pedidoInscricaoCadastro.setObservacao(obj.getObservacao());
+
+                    return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(pedidoInscricaoCadastro));
+                }).orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
     }
 
 }

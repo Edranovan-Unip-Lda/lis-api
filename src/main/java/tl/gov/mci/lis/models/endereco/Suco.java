@@ -36,6 +36,7 @@ public class Suco extends EntityDB {
     }
 
     public Suco(Long id, String nome, Long postoAdministrativoId, String postoAdministrativoNome, Long municipioId, String municipioNome) {
+        this.setId(id);
         this.nome = nome;
         this.postoAdministrativo = new PostoAdministrativo(postoAdministrativoId, postoAdministrativoNome, municipioId, municipioNome);
     }

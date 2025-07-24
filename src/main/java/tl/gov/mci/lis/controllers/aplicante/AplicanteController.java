@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.controllers.aplicante;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,23 @@ public class AplicanteController {
             @RequestParam(name = "tipo") AplicanteType tipo,
             @PathVariable Long aplicanteId,
             @RequestBody PedidoInscricaoCadastro obj
-    ) {
+    ) throws BadRequestException {
         if (tipo == AplicanteType.CADASTRO) {
             return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
+        } else {
+            return null;
+        }
+    }
+
+    @PutMapping("/{aplicanteId}/pedidos/{pedidoId}")
+    ResponseEntity<PedidoInscricaoCadastroDto> updatePedidoInscricaoCadastro(
+            @RequestParam(name = "tipo") AplicanteType tipo,
+            @PathVariable Long aplicanteId,
+            @PathVariable Long pedidoId,
+            @RequestBody PedidoInscricaoCadastro obj
+    ) throws BadRequestException {
+        if (tipo == AplicanteType.CADASTRO) {
+            return new ResponseEntity<>(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj), HttpStatus.CREATED);
         } else {
             return null;
         }

@@ -6,6 +6,7 @@ import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 
 import java.io.Serializable;
 import java.time.Instant;

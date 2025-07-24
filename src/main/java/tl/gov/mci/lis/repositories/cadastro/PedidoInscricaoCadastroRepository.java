@@ -17,6 +17,8 @@ public interface PedidoInscricaoCadastroRepository extends JpaRepository<PedidoI
 
     Optional<PedidoInscricaoCadastro> findByAplicante_Id(Long applicanteId);
 
+    Optional<PedidoInscricaoCadastro> findByIdAndAplicante_Id(Long id, Long applicanteId);
+
     int countByTipoAtividade_Id(Long id);
 
     int countByAtividadePrincipal_Id(Long id);

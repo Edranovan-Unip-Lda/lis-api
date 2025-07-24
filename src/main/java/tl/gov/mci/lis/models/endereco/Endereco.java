@@ -1,9 +1,6 @@
 package tl.gov.mci.lis.models.endereco;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
@@ -16,7 +13,7 @@ public class Endereco extends EntityDB {
 
     private String local;
 
-    @OneToOne
+    @ManyToOne(optional = false)  // multiple Endereco per Aldeia
     @JoinColumn(name = "aldeia_id", referencedColumnName = "id")
     private Aldeia aldeia;
 

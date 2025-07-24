@@ -5,10 +5,7 @@ import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
 import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
-import tl.gov.mci.lis.enums.cadastro.CaraterizacaoEstabelecimento;
-import tl.gov.mci.lis.enums.cadastro.NivelRisco;
-import tl.gov.mci.lis.enums.cadastro.TipoAto;
-import tl.gov.mci.lis.enums.cadastro.TipoEstabelecimento;
+import tl.gov.mci.lis.enums.cadastro.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -24,7 +21,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     String createdBy;
     String updatedBy;
     PedidoStatus status;
-    String tipoPedido;
+    TipoPedidoCadastro tipoPedidoCadastro;
     String nomeEmpresa;
     String nif;
     String gerente;
@@ -67,7 +64,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
             String createdBy,
             String updatedBy,
             PedidoStatus status,
-            String tipoPedido,
+            TipoPedidoCadastro tipoPedidoCadastro,
             String nomeEmpresa,
             String nif,
             String gerente,
@@ -96,7 +93,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.status = status;
-        this.tipoPedido = tipoPedido;
+        this.tipoPedidoCadastro = tipoPedidoCadastro;
         this.nomeEmpresa = nomeEmpresa;
         this.nif = nif;
         this.gerente = gerente;

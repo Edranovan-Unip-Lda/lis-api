@@ -18,8 +18,7 @@ import java.util.Set;
 public class AtividadeEconomica extends EntityDB {
     private String codigo;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String descricao;
 
     @Enumerated(EnumType.STRING)

@@ -23,6 +23,7 @@ import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
+import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
 
@@ -39,6 +40,7 @@ public class EmpresaService {
     private final EmpresaMapper empresaMapper;
     private final AuthorizationService authorizationService;
     private final AplicanteService aplicanteService;
+    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
 
     public Empresa create(Empresa obj) throws BadRequestException {
         logger.info("Criando empresa: {}", obj);
@@ -117,6 +119,7 @@ public class EmpresaService {
         return aplicanteRepository.getFromIdAndEmpresaId(aplicanteId, empresaId)
                 .map(aplicanteDto -> {
                     aplicanteDto.setEmpresaDto(empresaMapper.toDto(getById(empresaId)));
+                    aplicanteDto.setPedidoInscricaoCadastroDto(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
                     return aplicanteDto;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
