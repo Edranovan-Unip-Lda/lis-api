@@ -26,7 +26,7 @@ public class Fatura extends EntityDB {
 
     private String atividadeDeclaradaCodigo;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taxa_id", referencedColumnName = "id")
     private Taxa taxa;
 

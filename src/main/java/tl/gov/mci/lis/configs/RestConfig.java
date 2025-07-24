@@ -24,7 +24,8 @@ public class RestConfig implements RepositoryRestConfigurer {
                 Suco.class,
                 Aldeia.class,
                 Taxa.class,
-                AtividadeEconomica.class
+                AtividadeEconomica.class,
+                Taxa.class
         );
     }
 }

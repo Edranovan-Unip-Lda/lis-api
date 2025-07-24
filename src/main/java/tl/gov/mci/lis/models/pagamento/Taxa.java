@@ -1,11 +1,12 @@
 package tl.gov.mci.lis.models.pagamento;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
+
+import java.util.Set;
 
 @Entity
 @Getter
@@ -17,8 +18,9 @@ public class Taxa extends EntityDB {
     private double montante;
     private String categoria;
 
-    @OneToOne(mappedBy = "taxa")
-    private Fatura fatura;
+    @OneToMany(mappedBy = "taxa")
+    @JsonIgnoreProperties(value = "taxa", allowSetters = true)
+    private Set<Fatura> fatura;
 
     @Override
     public String toString() {
