@@ -103,4 +103,15 @@ public class User extends EntityDB {
     public boolean isStaff() {
         return getRole().getName().equals("ROLE_STAFF");
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

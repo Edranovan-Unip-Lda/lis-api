@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.services.user;
 
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
@@ -46,31 +48,42 @@ public class UserServices {
     private final EmailService emailService;
     private final UserDetailServiceImpl userDetailService;
     private final EmpresaRepository empresaRepository;
+    private final EntityManager entityManager;
 
+    @Transactional
     public User register(User obj) {
         logger.info("Registering user: {}", obj);
 
-        if (userRepository.findByUsername(obj.getUsername()).isPresent() || userRepository.findByEmail(obj.getEmail()).isPresent()) {
+        if (userRepository.findByUsernameOrEmail(obj.getUsername(), obj.getEmail()).isPresent()) {
             throw new AlreadyExistException("User with username " + obj.getUsername() + " or email " + obj.getEmail() + " already exists");
         }
 
         obj.setRole(
-                roleRepository.findById(obj.getRole().getId()).orElseThrow(() -> new ResourceNotFoundException("Role " + obj.getRole().getName() + " not found"))
+                roleRepository.getReferenceById(obj.getRole().getId())
         );
 
-        if (obj.getPassword() == null) {
-            obj.setPassword(bcryptEncoder.encode(obj.getUsername()));
-        } else {
-            obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
+        String raw = (obj.getPassword() == null) ? obj.getUsername() : obj.getPassword();
+        String oriPassword = (obj.getPassword() == null) ? obj.getUsername() : obj.getPassword();
+        String encoded = bcryptEncoder.encode(raw);
+        obj.setPassword(encoded);
+
+
+        if (!bcryptEncoder.matches(oriPassword, obj.getPassword())) {
+            logger.error("Password does not match: {} and hash {}", oriPassword, obj.getPassword());
+            throw new BadCredentialsException("Password does not match");
         }
+
         obj.setStatus(AccountStatus.pending.toString());
 
-        User savedUser = userRepository.save(obj);
-        emailService.sendEmail(
-                savedUser,
-                EmailTemplate.ACTIVATION
-        );
-        return savedUser;
+
+//        User savedUser = userRepository.save(obj);
+//        emailService.sendEmail(
+//                savedUser,
+//                EmailTemplate.ACTIVATION
+//        );
+        entityManager.persist(obj);
+        entityManager.flush();
+        return obj;
     }
 
     public User authenticate(String username, String password, HttpServletRequest request) {

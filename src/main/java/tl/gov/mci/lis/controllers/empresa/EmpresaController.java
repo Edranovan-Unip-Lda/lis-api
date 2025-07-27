@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.controllers.empresa;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
@@ -24,11 +25,9 @@ public class EmpresaController {
     private final AplicanteMapper aplicanteMapper;
 
     @PostMapping("")
-    ResponseEntity<EmpresaDto> createEmpresa(@RequestBody EmpresaCreateDto obj) throws BadRequestException {
+    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody Empresa obj) throws BadRequestException {
         return new ResponseEntity<>(
-                empresaMapper.toDto(empresaService.create(
-                        empresaMapper.toEntity(obj)
-                )), HttpStatus.CREATED);
+                empresaMapper.toDto(empresaService.create(obj)), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

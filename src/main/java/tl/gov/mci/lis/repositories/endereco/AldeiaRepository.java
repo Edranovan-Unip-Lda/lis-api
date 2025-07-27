@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 
+import java.util.List;
+
 @JaversSpringDataAuditable
 @RepositoryRestResource(collectionResourceRel = "aldeias", path = "aldeias")
 public interface AldeiaRepository extends JpaRepository<Aldeia, Long> {
+    List<Aldeia> findByNomeContainingIgnoreCase(String nome);
 }

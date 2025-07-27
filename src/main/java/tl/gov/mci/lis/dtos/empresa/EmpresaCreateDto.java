@@ -2,6 +2,7 @@ package tl.gov.mci.lis.dtos.empresa;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
+import tl.gov.mci.lis.enums.TipoPropriedade;
 
 import java.io.Serializable;
 
@@ -19,6 +20,9 @@ public class EmpresaCreateDto implements Serializable {
     String telefone;
     String telemovel;
     EnderecoDto sede;
+    String capitalSocial;
+    String dataRegisto;
+    TipoPropriedade tipoPropriedade;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}

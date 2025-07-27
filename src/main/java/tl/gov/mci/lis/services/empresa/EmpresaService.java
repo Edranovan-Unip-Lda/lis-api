@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.services.empresa;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
@@ -41,14 +43,18 @@ public class EmpresaService {
     private final AuthorizationService authorizationService;
     private final AplicanteService aplicanteService;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
+    private final EntityManager entityManager;
 
+    @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
         logger.info("Criando empresa: {}", obj);
         // Register the account first
         obj.getUtilizador().setRole(roleRepository.getReferenceById(3L)); // 3 = empresa
         obj.setUtilizador(userServices.register(obj.getUtilizador()));
         obj.setSede(enderecoService.create(obj.getSede()));
-        return empresaRepository.save(obj);
+        obj.getAcionistas().forEach(obj::addAcionista);
+        entityManager.persist(obj);
+        return obj;
     }
 
     public Empresa update(Empresa obj) throws BadRequestException {
@@ -142,5 +148,4 @@ public class EmpresaService {
             return false;
         }
     }
-
 }

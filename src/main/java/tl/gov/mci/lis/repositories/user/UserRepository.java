@@ -19,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.password, u.role.id, u.role.name, u.jwtSession, u.status) FROM User u WHERE u.email = :email")
     Optional<User> findByEmail(String email);
 
+    @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.password, u.role.id, u.role.name, u.jwtSession, u.status) FROM User u WHERE u.username = :username OR u.email = :email")
+    Optional<User> findByUsernameOrEmail(String username, String email);
+
 //    @EntityGraph(attributePaths = {"role", "empresa"})
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.empresa LEFT JOIN FETCH u.role WHERE u.username = :username")
     Optional<User> findUserByUsername(String username);

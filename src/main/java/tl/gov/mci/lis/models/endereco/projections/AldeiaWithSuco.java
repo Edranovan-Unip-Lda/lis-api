@@ -15,5 +15,21 @@ public interface AldeiaWithSuco {
         Long getId();
 
         String getNome();
+
+        PostoExcerpt getPostoAdministrativo();
+
+        interface PostoExcerpt {
+            Long getId();
+
+            String getNome();
+
+            MunicipioExcerpt getMunicipio();
+
+            interface MunicipioExcerpt {
+                Long getId();
+
+                String getNome();
+            }
+        }
     }
 }
