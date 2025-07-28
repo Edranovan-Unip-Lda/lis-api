@@ -75,14 +75,13 @@ public class UserServices {
 
         obj.setStatus(AccountStatus.pending.toString());
 
-
-//        User savedUser = userRepository.save(obj);
-//        emailService.sendEmail(
-//                savedUser,
-//                EmailTemplate.ACTIVATION
-//        );
         entityManager.persist(obj);
         entityManager.flush();
+
+        emailService.sendEmail(
+                obj,
+                EmailTemplate.ACTIVATION
+        );
         return obj;
     }
 
