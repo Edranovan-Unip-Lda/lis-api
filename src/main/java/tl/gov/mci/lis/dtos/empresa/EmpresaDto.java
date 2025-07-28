@@ -102,7 +102,7 @@ public class EmpresaDto implements Serializable {
     }
 
     @Value
-    public static class SociedadeComercialDto {
+    public static class SociedadeComercialDto implements Serializable {
         String nome;
         String acronimo;
     }
