@@ -49,7 +49,7 @@ public class Empresa extends EntityDB {
     private TipoPropriedade tipoPropriedade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sociedade_comercial_id", referencedColumnName = "id")
+    @JoinColumn(name = "sociedade_comercial_id", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties(value = "empresas", allowSetters = true)
     private SociedadeComercial sociedadeComercial;
 

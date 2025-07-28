@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -79,7 +80,8 @@ public class UserServices {
         entityManager.flush();
 
         emailService.sendEmail(
-                obj,
+                userRepository.findByEmail(obj.getEmail())
+                        .orElseThrow(() -> new ResourceNotFoundException("utilizador com email " + obj.getEmail() + " nao existe")),
                 EmailTemplate.ACTIVATION
         );
         return obj;

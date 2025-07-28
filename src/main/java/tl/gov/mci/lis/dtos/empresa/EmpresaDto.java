@@ -30,6 +30,7 @@ public class EmpresaDto implements Serializable {
     TipoPropriedade tipoPropriedade;
     Double capitalSocial;
     LocalDate dataRegisto;
+    SociedadeComercialDto sociedadeComercial;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}
@@ -98,5 +99,11 @@ public class EmpresaDto implements Serializable {
 
             }
         }
+    }
+
+    @Value
+    public static class SociedadeComercialDto {
+        String nome;
+        String acronimo;
     }
 }

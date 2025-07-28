@@ -5,6 +5,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Setter
 @Table(name = "lis_dm_sociedade_comercial")
 public class SociedadeComercial extends EntityDB {
+    @NotNull
     private String nome;
     private String acronimo;
 
