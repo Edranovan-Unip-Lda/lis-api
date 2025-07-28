@@ -6,6 +6,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.dadosmestre.Role;
+import tl.gov.mci.lis.models.dadosmestre.SociedadeComercial;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 import tl.gov.mci.lis.models.endereco.Municipio;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
@@ -25,7 +26,8 @@ public class RestConfig implements RepositoryRestConfigurer {
                 Aldeia.class,
                 Taxa.class,
                 AtividadeEconomica.class,
-                Taxa.class
+                Taxa.class,
+                SociedadeComercial.class
         );
     }
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.enums.TipoPropriedade;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.dadosmestre.SociedadeComercial;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.user.User;
 
@@ -46,6 +47,11 @@ public class Empresa extends EntityDB {
     @Enumerated(EnumType.STRING)
     @NotNull
     private TipoPropriedade tipoPropriedade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sociedade_comercial_id", referencedColumnName = "id")
+    @JsonIgnoreProperties(value = "empresas", allowSetters = true)
+    private SociedadeComercial sociedadeComercial;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "empresa", allowSetters = true)
