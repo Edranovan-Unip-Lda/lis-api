@@ -17,6 +17,7 @@ import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.user.User;
+import tl.gov.mci.lis.repositories.user.UserRepository;
 
 import java.time.Instant;
 import java.util.List;
@@ -56,16 +57,25 @@ public class EmailService {
     @Value("${frontend.url}")
     private String frontEndURL;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
 
     /**
      * Email the given user using the given email template.
      *
-     * @param user          the user to send the email to
+     * @param obj           the user to send the email to
      * @param emailTemplate the email template to use
      */
     @Async
-    public void sendEmail(User user, EmailTemplate emailTemplate) {
+    public void sendEmail(User obj, EmailTemplate emailTemplate) {
+        logger.info("Enviando email para: {}, {}", obj.getEmail(), obj.getId());
+
+        User user = userRepository.findByEmail(obj.getEmail())
+                .orElseThrow(() -> {
+                    logger.error("Utilizador nao existe");
+                    return new ResourceNotFoundException("Utilizador nao existe");
+                });
+
         try {
             EmailConfig emailConfig = emailConfigRepository.findTopByOrderByIdDesc();
             if (emailConfig == null) {
