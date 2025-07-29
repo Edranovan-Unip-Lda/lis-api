@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
@@ -66,16 +67,20 @@ public class AplicanteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
     }
 
-    @Transactional
-    public String generateAplicanteNumber(String categoriaCode, Long empresaId) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized String generateAplicanteNumber(String categoriaCode, Long empresaId) {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         int year = now.getYear();
 
+        // Count applications for this department, month, and year
+        int count = repository.countByCategoriaCodeAndMonthAndYear(categoriaCode, month, year);
+        int serial = count + 1; // Start from 1
+        String formattedId = String.format("%04d", serial);
         String nif = empresaRepository.getFromId(empresaId).getNif();
 
         // Format full application code
-        String finalCode = String.format("%s/%s/%02d/%d/%s", PREFIX, categoriaCode, month, year, nif);
+        String finalCode = String.format("%s/%s/%02d/%d/%s", PREFIX, categoriaCode, month, year, nif + serial);
 
         // Save new entry
         AplicanteNumber record = new AplicanteNumber();
