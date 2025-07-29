@@ -63,9 +63,9 @@ public class UserServices {
                 roleRepository.getReferenceById(obj.getRole().getId())
         );
 
-        String raw = (obj.getPassword() == null) ? obj.getUsername() : obj.getPassword();
-        String encoded = bcryptEncoder.encode(raw);
-        obj.setPassword(encoded);
+        obj.setPassword(bcryptEncoder.encode(obj.getPassword()
+
+        ));
 
         obj.setStatus(AccountStatus.pending.toString());
 
