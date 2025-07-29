@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<User>> getPage(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+    public ResponseEntity<Page<User>> getPage(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "50") int size) {
         return new ResponseEntity<>(userServices.getPage(page, size), HttpStatus.OK);
     }
 

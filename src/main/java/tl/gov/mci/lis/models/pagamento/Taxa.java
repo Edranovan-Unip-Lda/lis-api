@@ -2,10 +2,14 @@ package tl.gov.mci.lis.models.pagamento;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import tl.gov.mci.lis.enums.AplicanteType;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.EntityDB;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,20 +18,36 @@ import java.util.Set;
 @Table(name = "lis_taxa")
 public class Taxa extends EntityDB {
 
+    @NotNull
     private String ato;
-    private double montante;
-    private String categoria;
 
-    @OneToMany(mappedBy = "taxa")
-    @JsonIgnoreProperties(value = "taxa", allowSetters = true)
-    private Set<Fatura> fatura;
+    @NotNull
+    private Double montanteMinimo;
+
+    @NotNull
+    private Double montanteMaximo;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AplicanteType tipo;
+
+    @ManyToMany(mappedBy = "taxas")
+    private Set<Fatura> faturas = new HashSet<>();
+
+    public Taxa() {
+    }
 
     @Override
     public String toString() {
         return "Taxa{" +
                 "id='" + getId() + '\'' +
                 ", ato='" + ato + '\'' +
-                ", montante=" + montante +
+                ", montanteMinimo=" + montanteMinimo +
+                ", montanteMaximo=" + montanteMaximo +
                 ", categoria='" + categoria + '\'' +
                 '}';
     }

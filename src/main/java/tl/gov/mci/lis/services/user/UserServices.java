@@ -64,15 +64,8 @@ public class UserServices {
         );
 
         String raw = (obj.getPassword() == null) ? obj.getUsername() : obj.getPassword();
-        String oriPassword = (obj.getPassword() == null) ? obj.getUsername() : obj.getPassword();
         String encoded = bcryptEncoder.encode(raw);
         obj.setPassword(encoded);
-
-
-        if (!bcryptEncoder.matches(oriPassword, obj.getPassword())) {
-            logger.error("Password does not match: {} and hash {}", oriPassword, obj.getPassword());
-            throw new BadCredentialsException("Password does not match");
-        }
 
         obj.setStatus(AccountStatus.pending.toString());
 

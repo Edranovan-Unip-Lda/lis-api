@@ -1,8 +1,8 @@
 package tl.gov.mci.lis.dtos.cadastro;
 
 import lombok.Value;
+import tl.gov.mci.lis.FaturaDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
-import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.cadastro.*;
@@ -55,6 +55,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
         String codigo;
         String descricao;
         Categoria tipo;
+        NivelRisco tipoRisco;
     }
 
     public PedidoInscricaoCadastroDto(

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.TipoAtividadeEconomica;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -27,6 +28,9 @@ public class AtividadeEconomica extends EntityDB {
 
     @Enumerated(EnumType.STRING)
     private NivelRisco tipoRisco;
+
+    @Enumerated(EnumType.STRING)
+    private TipoAtividadeEconomica tipoAtividadeEconomica;
 
     @OneToMany(mappedBy = "tipoAtividade")
     @JsonIgnoreProperties(value = "tipoAtividade", allowSetters = true)

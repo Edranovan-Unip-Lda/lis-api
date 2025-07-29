@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.FaturaStatus;
+import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,39 +20,55 @@ public class Fatura extends EntityDB {
 
     @Enumerated(EnumType.STRING)
     private FaturaStatus status;
-
-    private double atoFatura;
-
     private String nomeEmpresa;
-
     private String sociedadeComercial;
+    private String nif;
+    private String sede;
+    @Enumerated(EnumType.STRING)
+    private NivelRisco nivelRisco;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atividade_declarada_id", referencedColumnName = "id")
     private AtividadeEconomica atividadeDeclarada;
 
-    private String atividadeDeclaradaCodigo;
+    private Double superficie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taxa_id", referencedColumnName = "id")
-    private Taxa taxa;
+    private Double total;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "fatura_taxa",
+            joinColumns = @JoinColumn(name = "fatura_id"),
+            inverseJoinColumns = @JoinColumn(name = "taxa_id")
+    )
+    private Set<Taxa> taxas = new HashSet<>();
+
 
     @OneToOne
     @JoinColumn(name = "pedido_inscricao_cadastro_id", referencedColumnName = "id")
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
 
+    public void addTaxa(Taxa t) {
+        taxas.add(t);
+        t.getFaturas().add(this);
+    }
+
+    public void removeTaxa(Taxa t) {
+        taxas.remove(t);
+        t.getFaturas().remove(this);
+    }
+
     @Override
     public String toString() {
         return "Fatura{" +
-                "id=" + getId() +
-                ", status=" + status +
-                ", atoFatura=" + atoFatura +
+                "status=" + status +
                 ", nomeEmpresa='" + nomeEmpresa + '\'' +
                 ", sociedadeComercial='" + sociedadeComercial + '\'' +
-                ", atividadeDeclarada='" + atividadeDeclarada + '\'' +
-                ", atividadeDeclaradaCodigo='" + atividadeDeclaradaCodigo + '\'' +
-                ", taxaId=" + taxa.getId() +
-                ", taxaMontante=" + taxa.getMontante() +
+                ", nif='" + nif + '\'' +
+                ", sede='" + sede + '\'' +
+                ", nivelRisco=" + nivelRisco +
+                ", superficie=" + superficie +
+                ", total=" + total +
                 '}';
     }
 }
