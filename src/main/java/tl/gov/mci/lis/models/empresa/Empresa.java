@@ -59,7 +59,7 @@ public class Empresa extends EntityDB {
 
     @OneToOne
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = "sede")
+    @JsonIgnoreProperties(value = "sede", allowSetters = true)
     private Endereco sede;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
