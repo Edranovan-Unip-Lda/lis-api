@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.services.aplicante;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
@@ -9,10 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
@@ -25,6 +25,7 @@ import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
+import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 
@@ -44,6 +45,8 @@ public class AplicanteService {
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final AtividadeEconomicaRepository atividadeEconomicaRepository;
     private final EnderecoService enderecoService;
+    private final EmpresaRepository empresaRepository;
+    private final EntityManager entityManager;
 
 
     public Page<AplicantePageDto> getPage(int page, int size) {
@@ -63,19 +66,16 @@ public class AplicanteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized String generateAplicanteNumber(String categoriaCode) {
+    @Transactional
+    public String generateAplicanteNumber(String categoriaCode, Long empresaId) {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         int year = now.getYear();
 
-        // Count applications for this department, month, and year
-        int count = repository.countByCategoriaCodeAndMonthAndYear(categoriaCode, month, year);
-        int serial = count + 1; // Start from 1
-        String formattedId = String.format("%04d", serial);
+        String nif = empresaRepository.getFromId(empresaId).getNif();
 
         // Format full application code
-        String finalCode = String.format("%s/%s/%02d/%d/%s", PREFIX, categoriaCode, month, year, formattedId);
+        String finalCode = String.format("%s/%s/%02d/%d/%s", PREFIX, categoriaCode, month, year, nif);
 
         // Save new entry
         AplicanteNumber record = new AplicanteNumber();
@@ -84,7 +84,7 @@ public class AplicanteService {
         record.setYear(year);
         record.setFormattedCode(finalCode);
 
-        repository.save(record);
+        entityManager.persist(record);
 
         return finalCode;
     }

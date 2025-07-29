@@ -12,4 +12,7 @@ import java.util.Optional;
 @JaversSpringDataAuditable
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
     Optional<Empresa> findByUtilizador_Id(Long id);
+
+    @Query("select new Empresa(e.id, e.nome, e.nif) from Empresa e where e.id = ?1")
+    Empresa getFromId(Long id);
 }

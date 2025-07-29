@@ -100,14 +100,16 @@ public class EmpresaService {
         return empresas.map(empresaMapper::toDto);
     }
 
+    @Transactional
     public Aplicante createAplicante(Long empresaId, Aplicante obj) {
         logger.info("Criando aplicante: {}", obj);
 
         authorizationService.assertUserOwnsEmpresa(empresaId);
         obj.setEmpresa(empresaRepository.getReferenceById(empresaId));
-        obj.setNumero(aplicanteService.generateAplicanteNumber(obj.getCategoria()));
+        obj.setNumero(aplicanteService.generateAplicanteNumber(obj.getCategoria(), empresaId));
         obj.setEstado(AplicanteStatus.EM_CURSO);
-        return aplicanteRepository.save(obj);
+        entityManager.persist(obj);
+        return obj;
     }
 
     public Page<AplicanteDto> getAplicantePage(Long empresaId, int page, int size) {
