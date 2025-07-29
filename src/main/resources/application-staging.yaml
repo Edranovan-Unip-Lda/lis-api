@@ -62,6 +62,19 @@ logging:
       springframework:
         ldap: DEBUG
 
+sentry:
+  dsn: https://78cf24ba710171f500db72b2f924b9b1@o4509671470006272.ingest.de.sentry.io/4509671477084240
+  # Add data like request headers and IP for users,
+  # see https://docs.sentry.io/platforms/java/guides/spring-boot/data-management/data-collected/ for more info
+  send-default-pii: true
+  logs:
+    enabled: true
+  logging:
+    minimum-event-level: error
+    minimum-breadcrumb-level: info
+    debug: true
+  environment: staging
+
 minio:
   url: https://s3-api.minio.apps.gov.tl/
   accessKey: 3Lg5yNGElnTNerWDn8Jo

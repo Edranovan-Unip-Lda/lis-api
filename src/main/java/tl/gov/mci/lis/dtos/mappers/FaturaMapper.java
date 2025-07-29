@@ -1,7 +1,7 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
-import tl.gov.mci.lis.FaturaDto;
+import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {AtividadeEconomicaMapper.class})

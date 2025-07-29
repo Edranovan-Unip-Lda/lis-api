@@ -63,9 +63,7 @@ public class UserServices {
                 roleRepository.getReferenceById(obj.getRole().getId())
         );
 
-        obj.setPassword(bcryptEncoder.encode(obj.getPassword()
-
-        ));
+        obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
 
         obj.setStatus(AccountStatus.pending.toString());
 
@@ -224,7 +222,8 @@ public class UserServices {
                     user.setEmail(obj.getEmail());
 
                     Optional.ofNullable(obj.getPassword())
-                            .ifPresent(password -> user.setPassword(bcryptEncoder.encode(password)));
+                            .filter(pw -> !pw.isEmpty())
+                            .ifPresent(pw -> user.setPassword(bcryptEncoder.encode(pw)));
 
                     obj.setRole(
                             roleRepository.findById(obj.getRole().getId()).orElseThrow(() -> new ResourceNotFoundException("Role " + obj.getRole().getName() + " not found"))

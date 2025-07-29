@@ -3,7 +3,7 @@ package tl.gov.mci.lis.controllers.cadastro;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tl.gov.mci.lis.FaturaDto;
+import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 

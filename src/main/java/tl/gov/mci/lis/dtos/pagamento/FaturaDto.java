@@ -1,4 +1,4 @@
-package tl.gov.mci.lis;
+package tl.gov.mci.lis.dtos.pagamento;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;

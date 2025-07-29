@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tl.gov.mci.lis.dtos.empresa.EmpresaCreateDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
+import tl.gov.mci.lis.dtos.empresa.EmpresaRequestDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
@@ -25,9 +25,11 @@ public class EmpresaController {
     private final AplicanteMapper aplicanteMapper;
 
     @PostMapping("")
-    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody Empresa obj) throws BadRequestException {
+    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody EmpresaRequestDto obj) throws BadRequestException {
         return new ResponseEntity<>(
-                empresaMapper.toDto(empresaService.create(obj)), HttpStatus.CREATED);
+                empresaMapper.toDto(empresaService.create(
+                        empresaMapper.toEntity(obj)
+                )), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

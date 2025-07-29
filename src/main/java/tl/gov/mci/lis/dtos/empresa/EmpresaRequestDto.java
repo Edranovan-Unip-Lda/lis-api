@@ -2,35 +2,48 @@ package tl.gov.mci.lis.dtos.empresa;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import tl.gov.mci.lis.enums.TipoPropriedade;
-import tl.gov.mci.lis.models.dadosmestre.SociedadeComercial;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.empresa.Empresa}
  */
 @Value
-public class EmpresaCreateDto implements Serializable {
+@Getter
+@Setter
+public class EmpresaRequestDto implements Serializable {
     Long id;
     String nome;
     String nif;
     UserDto utilizador;
+    @NotNull
     String gerente;
+    @NotNull
     String numeroRegistoComercial;
     String telefone;
     String telemovel;
-    EnderecoDto sede;
+    @NotNull
     Double capitalSocial;
-    String dataRegisto;
+    @NotNull
+    LocalDate dataRegisto;
+    @NotNull
     TipoPropriedade tipoPropriedade;
     SociedadeComercialDto sociedadeComercial;
+    Set<AcionistaDto> acionistas;
+    EnderecoDto sede;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}
      */
     @Value
+    @Getter
+    @Setter
     public static class UserDto implements Serializable {
         Long id;
         @NotBlank(message = "Firstname is mandatory")
@@ -41,15 +54,62 @@ public class EmpresaCreateDto implements Serializable {
         String username;
         @NotBlank(message = "Email is mandatory")
         String email;
-        @NotBlank(message = "Password is mandatory")
-        @NotNull(message = "Password is mandatory")
         String password;
+        RoleDto role;
+
+        /**
+         * DTO for {@link tl.gov.mci.lis.models.dadosmestre.Role}
+         */
+        @Value
+        @Getter
+        @Setter
+        public static class RoleDto implements Serializable {
+            Long id;
+            String name;
+        }
+    }
+
+    /**
+     * DTO for {@link tl.gov.mci.lis.models.dadosmestre.SociedadeComercial}
+     */
+    @Value
+    @Getter
+    @Setter
+    public static class SociedadeComercialDto implements Serializable {
+        Long id;
+        @NotNull
+        String nome;
+        String acronimo;
+    }
+
+    /**
+     * DTO for {@link tl.gov.mci.lis.models.empresa.Acionista}
+     */
+    @Value
+    @Getter
+    @Setter
+    public static class AcionistaDto implements Serializable {
+        Long id;
+        @NotNull
+        String nome;
+        @NotNull
+        String nif;
+        @NotNull
+        String tipoDocumento;
+        @NotNull
+        String numeroDocumento;
+        @NotNull
+        String email;
+        @NotNull
+        Double acoes;
     }
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.endereco.Endereco}
      */
     @Value
+    @Getter
+    @Setter
     public static class EnderecoDto implements Serializable {
         Long id;
         String local;
@@ -59,17 +119,12 @@ public class EmpresaCreateDto implements Serializable {
          * DTO for {@link tl.gov.mci.lis.models.endereco.Aldeia}
          */
         @Value
+        @Getter
+        @Setter
         public static class AldeiaDto implements Serializable {
             Long id;
             @NotBlank(message = "Nome é obrigatório")
             String nome;
         }
-    }
-
-    @Value
-    public static class SociedadeComercialDto implements Serializable {
-        Long id;
-        String nome;
-        String acronimo;
     }
 }
