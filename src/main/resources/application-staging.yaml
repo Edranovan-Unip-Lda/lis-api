@@ -64,16 +64,14 @@ logging:
 
 sentry:
   dsn: https://78cf24ba710171f500db72b2f924b9b1@o4509671470006272.ingest.de.sentry.io/4509671477084240
-  # Add data like request headers and IP for users,
-  # see https://docs.sentry.io/platforms/java/guides/spring-boot/data-management/data-collected/ for more info
   send-default-pii: true
-  logs:
-    enabled: true
+  environment: staging
+  debug: false                  # to see internal SDK logs during setup/testing
   logging:
+    enabled: false              # capture logs
     minimum-event-level: error
     minimum-breadcrumb-level: info
-    debug: true
-  environment: staging
+  exception-resolver-order: -2147483647
 
 minio:
   url: https://s3-api.minio.apps.gov.tl/

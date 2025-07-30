@@ -62,6 +62,17 @@ logging:
       springframework:
         ldap: DEBUG
 
+sentry:
+  dsn: https://78cf24ba710171f500db72b2f924b9b1@o4509671470006272.ingest.de.sentry.io/4509671477084240
+  send-default-pii: true
+  environment: production
+  debug: false                  # to see internal SDK logs during setup/testing
+  logging:
+    enabled: false              # capture logs
+    minimum-event-level: error
+    minimum-breadcrumb-level: info
+  exception-resolver-order: -2147483647
+
 management:
   endpoints:
     web:
