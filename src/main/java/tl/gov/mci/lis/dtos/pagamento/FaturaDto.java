@@ -33,6 +33,7 @@ public class FaturaDto implements Serializable {
     Double superficie;
     Double total;
     Set<TaxaDto> taxas;
+    DocumentoDto recibo;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.pagamento.Taxa}

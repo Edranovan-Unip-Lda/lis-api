@@ -1,7 +1,9 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {AtividadeEconomicaMapper.class})
@@ -12,4 +14,11 @@ public interface FaturaMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Fatura partialUpdate(FaturaDto faturaDto, @MappingTarget Fatura fatura);
+
+    Documento toEntity(DocumentoDto documentoDto);
+
+    DocumentoDto toDto(Documento documento);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Documento partialUpdate(DocumentoDto documentoDto, @MappingTarget Documento documento);
 }

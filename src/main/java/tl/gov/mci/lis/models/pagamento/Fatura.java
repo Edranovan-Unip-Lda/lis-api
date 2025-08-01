@@ -8,6 +8,7 @@ import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
+import tl.gov.mci.lis.models.documento.Documento;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +48,9 @@ public class Fatura extends EntityDB {
     @OneToOne
     @JoinColumn(name = "pedido_inscricao_cadastro_id", referencedColumnName = "id")
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
+
+    @OneToOne(mappedBy = "fatura", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Documento recibo;
 
     public void addTaxa(Taxa t) {
         taxas.add(t);
