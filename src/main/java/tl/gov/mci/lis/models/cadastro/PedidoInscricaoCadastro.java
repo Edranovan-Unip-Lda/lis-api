@@ -31,7 +31,7 @@ public class PedidoInscricaoCadastro extends EntityDB {
     private String telefone;
     private String telemovel;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "aplicante")
     private Endereco sede;
@@ -77,7 +77,7 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     private String observacao;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
     private Aplicante aplicante;
 

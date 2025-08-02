@@ -17,11 +17,16 @@ import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
+import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
@@ -44,6 +49,8 @@ public class EmpresaService {
     private final AplicanteService aplicanteService;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final EntityManager entityManager;
+    private final FaturaRepository faturaRepository;
+    private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -133,21 +140,53 @@ public class EmpresaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
     }
 
-    public boolean deleteAplicante(Long empresaId, Long aplicanteId) {
-        logger.info("Deletando aplicante: {}", aplicanteId);
+    @Transactional
+    public Aplicante deleteAplicante(Long empresaId, Long aplicanteId) {
+        logger.info("Excluindo aplicante: {}", aplicanteId);
 
         Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Aplicante not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
 
-        authorizationService.assertUserOwnsEmpresa(aplicante.getEmpresa().getId());
-        int deleted = aplicanteRepository.deleteByIdAndEmpresaId(aplicanteId, empresaId);
+        // Get Pedido
+        PedidoInscricaoCadastro pedido = aplicante.getPedido();
 
-        if (deleted > 0) {
-            logger.info("Aplicante {} excluído com sucesso", aplicanteId);
-            return true;
-        } else {
-            logger.warn("Nenhuma aplicante excluída para id {} e empresa {}", aplicanteId, empresaId);
-            return false;
+        if (pedido != null) {
+            // Get Fatura
+            Fatura fatura = pedido.getFatura();
+            if (fatura != null) {
+                // Break link to Documento recibo
+                Documento recibo = fatura.getRecibo();
+                if (recibo != null) {
+                    fatura.setRecibo(null); // orphanRemoval triggers deletion
+                }
+
+                // Clear many-to-many to avoid constraint violation
+                fatura.getTaxas().clear();
+
+                // Break link to Pedido (optional for safety)
+                fatura.setPedidoInscricaoCadastro(null);
+
+                // Delete Fatura
+                faturaRepository.delete(fatura);
+            }
+
+            // Optional: delete Endereco if you don't need it anymore
+            pedido.setSede(null);
+
+            // Break link to Aplicante
+            pedido.setAplicante(null);
+
+            // Delete Pedido
+            pedidoInscricaoCadastroRepository.delete(pedido);
         }
+
+        // Now safe to delete Aplicante
+        Empresa empresa = aplicante.getEmpresa();
+        if (empresa != null) {
+            empresa.getListaAplicante().remove(aplicante); // break bidirectional
+        }
+
+        aplicanteRepository.delete(aplicante);
+        return aplicante;
     }
 }

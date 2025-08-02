@@ -45,7 +45,7 @@ public class Fatura extends EntityDB {
     private Set<Taxa> taxas = new HashSet<>();
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_inscricao_cadastro_id", referencedColumnName = "id")
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
 

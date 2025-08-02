@@ -74,11 +74,7 @@ public class EmpresaController {
 
     @DeleteMapping("/{empresaId}/aplicantes/{aplicanteId}")
     ResponseEntity<?> deleteAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId) {
-        boolean deleted = empresaService.deleteAplicante(empresaId, aplicanteId);
-        if (deleted) {
-            return ResponseEntity.ok("Aplicante deleted successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aplicante not found or you do not have permission.");
-        }
+        return new ResponseEntity<>(
+                aplicanteMapper.toDto(empresaService.deleteAplicante(empresaId, aplicanteId)), HttpStatus.OK);
     }
 }
