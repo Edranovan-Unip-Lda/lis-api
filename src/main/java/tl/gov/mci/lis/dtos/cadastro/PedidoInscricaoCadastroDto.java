@@ -1,9 +1,9 @@
 package tl.gov.mci.lis.dtos.cadastro;
 
 import lombok.Value;
-import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
+import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
-import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.cadastro.*;
 
@@ -39,24 +39,11 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     CaraterizacaoEstabelecimento caraterizacaoEstabelecimento;
     NivelRisco risco;
     TipoAto ato;
-    AtividadeEconomicaDto tipoAtividade;
-    AtividadeEconomicaDto atividadePrincipal;
+    ClasseAtividadeDto classeAtividade;
     String alteracoes;
     String dataEmissaoCertAnterior;
     String observacao;
     FaturaDto fatura;
-
-    /**
-     * DTO for {@link tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica}
-     */
-    @Value
-    public static class AtividadeEconomicaDto implements Serializable {
-        Long id;
-        String codigo;
-        String descricao;
-        Categoria tipo;
-        NivelRisco tipoRisco;
-    }
 
     public PedidoInscricaoCadastroDto(
             Long id,
@@ -84,8 +71,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
             CaraterizacaoEstabelecimento caraterizacaoEstabelecimento,
             NivelRisco risco,
             TipoAto ato,
-            AtividadeEconomicaDto tipoAtividade,
-            AtividadeEconomicaDto atividadePrincipal,
+            ClasseAtividadeDto classeAtividade,
             String alteracoes,
             String dataEmissaoCertAnterior,
             String observacao,
@@ -114,8 +100,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
         this.caraterizacaoEstabelecimento = caraterizacaoEstabelecimento;
         this.risco = risco;
         this.ato = ato;
-        this.tipoAtividade = tipoAtividade;
-        this.atividadePrincipal = atividadePrincipal;
+        this.classeAtividade = classeAtividade;
         this.alteracoes = alteracoes;
         this.dataEmissaoCertAnterior = dataEmissaoCertAnterior;
         this.observacao = observacao;

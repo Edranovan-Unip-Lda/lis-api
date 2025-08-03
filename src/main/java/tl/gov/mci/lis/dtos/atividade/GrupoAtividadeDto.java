@@ -1,4 +1,4 @@
-package tl.gov.mci.lis;
+package tl.gov.mci.lis.dtos.atividade;
 
 import lombok.Value;
 import tl.gov.mci.lis.enums.Categoria;

@@ -7,7 +7,6 @@ import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
-import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.documento.Documento;
 
 import java.util.HashSet;
@@ -28,17 +27,13 @@ public class Fatura extends EntityDB {
     @Enumerated(EnumType.STRING)
     private NivelRisco nivelRisco;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atividade_declarada_id", referencedColumnName = "id")
-    private AtividadeEconomica atividadeDeclarada;
-
     private Double superficie;
 
     private Double total;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "fatura_taxa",
+            name = "lis_fatura_taxa",
             joinColumns = @JoinColumn(name = "fatura_id"),
             inverseJoinColumns = @JoinColumn(name = "taxa_id")
     )

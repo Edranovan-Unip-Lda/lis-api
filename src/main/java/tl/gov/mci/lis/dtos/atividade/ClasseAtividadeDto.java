@@ -1,4 +1,4 @@
-package tl.gov.mci.lis.dtos;
+package tl.gov.mci.lis.dtos.atividade;
 
 import lombok.Value;
 import tl.gov.mci.lis.enums.Categoria;
@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.time.Instant;
 
 /**
- * DTO for {@link tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica}
+ * DTO for {@link tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade}
  */
 @Value
-public class AtividadeEconomicaDto implements Serializable {
+public class ClasseAtividadeDto implements Serializable {
     Long id;
+    Boolean isDeleted;
     Instant createdAt;
     Instant updatedAt;
     String createdBy;
@@ -21,4 +22,5 @@ public class AtividadeEconomicaDto implements Serializable {
     String descricao;
     Categoria tipo;
     NivelRisco tipoRisco;
+    GrupoAtividadeDto grupoAtividade;
 }

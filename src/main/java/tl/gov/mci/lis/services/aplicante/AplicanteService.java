@@ -25,7 +25,7 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
-import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
@@ -44,7 +44,7 @@ public class AplicanteService {
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
-    private final AtividadeEconomicaRepository atividadeEconomicaRepository;
+    private final ClasseAtividadeRepository classeAtividadeRepository;
     private final EnderecoService enderecoService;
     private final EmpresaRepository empresaRepository;
     private final EntityManager entityManager;
@@ -101,14 +101,15 @@ public class AplicanteService {
      * @param obj         PedidoInscricaoCadastro
      * @return PedidoInscricaoCadastro dto
      */
+    @Transactional
     public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) throws BadRequestException {
         logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {} e PedidoInscricaoCadastro: {}", aplicanteId, obj);
         obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
         obj.setSede(enderecoService.create(obj.getSede()));
-        obj.setTipoAtividade(atividadeEconomicaRepository.getReferenceById(obj.getTipoAtividade().getId()));
-        obj.setAtividadePrincipal(atividadeEconomicaRepository.getReferenceById(obj.getAtividadePrincipal().getId()));
+        obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
-        return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(obj));
+        entityManager.persist(obj);
+        return pedidoInscricaoCadastroMapper.toDto(obj);
     }
 
     public PedidoInscricaoCadastroDto updatePedidoInscricaoCadastro(Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro obj) throws BadRequestException {
@@ -117,8 +118,7 @@ public class AplicanteService {
 
         return pedidoInscricaoCadastroRepository.findByIdAndAplicante_Id(pedidoId, aplicanteId)
                 .map(pedidoInscricaoCadastro -> {
-                    pedidoInscricaoCadastro.setTipoAtividade(atividadeEconomicaRepository.getReferenceById(obj.getTipoAtividade().getId()));
-                    pedidoInscricaoCadastro.setAtividadePrincipal(atividadeEconomicaRepository.getReferenceById(obj.getAtividadePrincipal().getId()));
+                    pedidoInscricaoCadastro.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
                     pedidoInscricaoCadastro.setTipoPedidoCadastro(obj.getTipoPedidoCadastro());
                     pedidoInscricaoCadastro.setNomeEmpresa(obj.getNomeEmpresa());
                     pedidoInscricaoCadastro.setNif(obj.getNif());

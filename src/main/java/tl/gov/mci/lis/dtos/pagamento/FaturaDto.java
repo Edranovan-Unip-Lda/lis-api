@@ -2,7 +2,6 @@ package tl.gov.mci.lis.dtos.pagamento;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
-import tl.gov.mci.lis.dtos.AtividadeEconomicaDto;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.FaturaStatus;
@@ -29,7 +28,6 @@ public class FaturaDto implements Serializable {
     String nif;
     String sede;
     NivelRisco nivelRisco;
-    AtividadeEconomicaDto atividadeDeclarada;
     Double superficie;
     Double total;
     Set<TaxaDto> taxas;

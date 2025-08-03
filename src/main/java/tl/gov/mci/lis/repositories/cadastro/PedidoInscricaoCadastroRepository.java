@@ -2,7 +2,6 @@ package tl.gov.mci.lis.repositories.cadastro;
 
 import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 
 import java.util.Optional;
@@ -19,7 +18,4 @@ public interface PedidoInscricaoCadastroRepository extends JpaRepository<PedidoI
 
     Optional<PedidoInscricaoCadastro> findByIdAndAplicante_Id(Long id, Long applicanteId);
 
-    int countByTipoAtividade_Id(Long id);
-
-    int countByAtividadePrincipal_Id(Long id);
 }

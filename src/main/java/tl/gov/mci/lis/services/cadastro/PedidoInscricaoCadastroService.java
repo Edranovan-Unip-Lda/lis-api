@@ -15,7 +15,6 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
-import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
 import tl.gov.mci.lis.repositories.endereco.EnderecoRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
@@ -33,15 +32,6 @@ public class PedidoInscricaoCadastroService {
     private final FaturaRepository faturaRepository;
     private final FaturaMapper faturaMapper;
     private final TaxaRepository taxaRepository;
-    private final AtividadeEconomicaRepository atividadeEconomicaRepository;
-
-    public PedidoInscricaoCadastro getById(Long id) {
-        logger.info("Obtendo pedido de inscricao pelo id: {}", id);
-        PedidoInscricaoCadastro obj = pedidoInscricaoCadastroRepository
-                .findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
-        obj.setSede(enderecoRepository.getFromId(obj.getSede().getId()));
-        return obj;
-    }
 
     public PedidoInscricaoCadastroDto getByAplicanteId(Long aplicanteId) {
         logger.info("Getting Inscrição for Aplicante id: {}", aplicanteId);
@@ -58,7 +48,6 @@ public class PedidoInscricaoCadastroService {
     public FaturaDto createFatura(Long pedidoInscricaoCadastroId, Fatura obj) {
         logger.info("Criando fatura: {}", obj);
         obj.setPedidoInscricaoCadastro(pedidoInscricaoCadastroRepository.getReferenceById(pedidoInscricaoCadastroId));
-        obj.setAtividadeDeclarada(atividadeEconomicaRepository.getReferenceById(obj.getAtividadeDeclarada().getId()));
         obj.setStatus(FaturaStatus.EMITIDA);
 
         // Fetch managed Taxa entities from DB
@@ -77,7 +66,6 @@ public class PedidoInscricaoCadastroService {
         return faturaRepository.findByIdAndPedidoInscricaoCadastro_Id(faturaId, pedidoInscricaoCadastroId)
                 .map(fatura -> {
                     fatura.setTaxas(obj.getTaxas());
-                    fatura.setAtividadeDeclarada(atividadeEconomicaRepository.getReferenceById(obj.getAtividadeDeclarada().getId()));
                     fatura.setNomeEmpresa(obj.getNomeEmpresa());
                     fatura.setSociedadeComercial(obj.getSociedadeComercial());
                     fatura.setSuperficie(obj.getSuperficie());

@@ -8,7 +8,6 @@ import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.cadastro.*;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
-import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
 import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
@@ -61,15 +60,6 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @Enumerated(EnumType.STRING)
     private TipoAto ato;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_atividade_id", nullable = false)
-    @JsonIgnoreProperties(value = "listaPedidoInscricaoCadastro", allowSetters = true)
-    private AtividadeEconomica tipoAtividade;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atividade_principal_id", nullable = false)
-    @JsonIgnoreProperties(value = "listaPedidoInscricaoCadastroAtividadePrincipal", allowSetters = true)
-    private AtividadeEconomica atividadePrincipal;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
