@@ -8,6 +8,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tl.gov.mci.lis.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.AtividadeEconomicaDto;
 import tl.gov.mci.lis.dtos.endereco.AldeiaDto;
 import tl.gov.mci.lis.dtos.endereco.PostoAdministrativoDto;
@@ -19,10 +20,13 @@ import tl.gov.mci.lis.dtos.mappers.SucoMapper;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.dadosmestre.AtividadeEconomica;
+import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 import tl.gov.mci.lis.models.endereco.Suco;
 import tl.gov.mci.lis.repositories.dadosmestre.AtividadeEconomicaRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.atividade.GrupoAtividadeRepository;
 import tl.gov.mci.lis.repositories.endereco.AldeiaRepository;
 import tl.gov.mci.lis.repositories.endereco.MunicipioRepository;
 import tl.gov.mci.lis.repositories.endereco.PostoAdministrativoRepository;
@@ -31,6 +35,7 @@ import tl.gov.mci.lis.repositories.specification.AtividadeEconomicaSpecification
 import tl.gov.mci.lis.services.dadosmestre.DadosMestreService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RepositoryRestController
 @RequiredArgsConstructor
@@ -45,6 +50,8 @@ public class DadosMestreController {
     private final AtividadeEconomicaRepository atividadeEconomicaRepository;
     private final AtividadeEconomicaMapper atividadeEconomicaMapper;
     private final DadosMestreService dadosMestreService;
+    private final GrupoAtividadeRepository grupoAtividadeRepository;
+    private final ClasseAtividadeRepository classeAtividadeRepository;
 
     @PostMapping("/postos")
     public ResponseEntity<PostoAdministrativoDto> registoPostoAdministrativo(@Valid @RequestBody PostoAdministrativo obj) {
@@ -80,6 +87,17 @@ public class DadosMestreController {
                         .orElseThrow(() -> new ResourceNotFoundException("Suco com id " + obj.getSuco().getId() + " não encontrado"))
         );
         return new ResponseEntity<>(aldeiaMapper.toDto(aldeiaRepository.save(obj)), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/classe-atividades")
+    public ResponseEntity<ClasseAtividadeDto> registoClasseAtividade(@Valid @RequestBody ClasseAtividade obj) {
+        if (obj.getGrupoAtividade() == null || Objects.isNull(obj.getGrupoAtividade().getId())) {
+            throw new ResourceNotFoundException("ID do Grupo Atividade é obrigatório");
+        }
+        obj.setGrupoAtividade(
+                grupoAtividadeRepository.getReferenceById(obj.getGrupoAtividade().getId())
+        );
+        return new ResponseEntity<>(atividadeEconomicaMapper.toDto(classeAtividadeRepository.save(obj)), HttpStatus.CREATED);
     }
 
     @GetMapping("/atividade-economica/search")

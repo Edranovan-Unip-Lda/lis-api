@@ -1,0 +1,23 @@
+package tl.gov.mci.lis;
+
+import lombok.Value;
+import tl.gov.mci.lis.enums.Categoria;
+
+import java.io.Serializable;
+import java.time.Instant;
+
+/**
+ * DTO for {@link tl.gov.mci.lis.models.dadosmestre.atividade.GrupoAtividade}
+ */
+@Value
+public class GrupoAtividadeDto implements Serializable {
+    Long id;
+    Boolean isDeleted;
+    Instant createdAt;
+    Instant updatedAt;
+    String createdBy;
+    String updatedBy;
+    Categoria tipo;
+    String codigo;
+    String descricao;
+}
