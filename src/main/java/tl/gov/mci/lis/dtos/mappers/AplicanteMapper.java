@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
+import tl.gov.mci.lis.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
@@ -20,4 +21,11 @@ public interface AplicanteMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Aplicante partialUpdate(AplicantePageDto aplicantePageDto, @MappingTarget Aplicante aplicante);
+
+    Aplicante toEntity(AplicanteRequestDto aplicanteRequestDto);
+
+    AplicanteRequestDto toDto2(Aplicante aplicante);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Aplicante partialUpdate(AplicanteRequestDto aplicanteRequestDto, @MappingTarget Aplicante aplicante);
 }

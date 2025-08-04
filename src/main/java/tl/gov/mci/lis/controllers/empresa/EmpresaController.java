@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tl.gov.mci.lis.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaRequestDto;
@@ -55,6 +56,14 @@ public class EmpresaController {
         return new ResponseEntity<>(
                 aplicanteMapper.toDto(empresaService.createAplicante(empresaId, obj)),
                 HttpStatus.CREATED
+        );
+    }
+
+    @PatchMapping("/{empresaId}/aplicantes/{aplicanteId}")
+    ResponseEntity<AplicanteDto> submitAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId, @RequestBody AplicanteRequestDto obj) {
+        return new ResponseEntity<>(
+                aplicanteMapper.toDto(empresaService.submitAplicante(empresaId, aplicanteId, obj)),
+                HttpStatus.ACCEPTED
         );
     }
 

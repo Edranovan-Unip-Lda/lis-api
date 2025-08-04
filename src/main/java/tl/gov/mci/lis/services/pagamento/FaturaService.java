@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.configs.minio.MinioService;
 import tl.gov.mci.lis.dtos.mappers.FaturaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
+import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
@@ -37,6 +38,7 @@ public class FaturaService {
                 .map(fatura -> {
                     Documento recibo = minioService.uploadFile(username, file);
                     recibo.setFatura(fatura);
+                    recibo.getFatura().setStatus(FaturaStatus.PAGA);
                     this.entityManager.persist(recibo);
                     return faturaMapper.toDto(recibo);
                 })
@@ -62,6 +64,7 @@ public class FaturaService {
                     }
                     Documento documento = fatura.getRecibo();
                     fatura.setRecibo(null);
+                    fatura.setStatus(FaturaStatus.EMITIDA);
                     entityManager.flush();
 
                     minioService.archiveFile(documento);

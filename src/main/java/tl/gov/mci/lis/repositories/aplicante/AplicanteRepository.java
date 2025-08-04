@@ -43,6 +43,6 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
             """)
     Page<AplicanteDto> getPageByEmpresaId(@Param("empresaId") Long empresaId, Pageable pageable);
 
-    int deleteByIdAndEmpresaId(Long aplicanteId, Long empresaId);
+    Optional<Aplicante> findByIdAndEmpresa_id(Long id, Long empresaId);
 
 }

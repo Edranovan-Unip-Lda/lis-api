@@ -12,7 +12,6 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -65,7 +64,6 @@ public class Aplicante extends EntityDB {
                 ", categoria='" + categoria + '\'' +
                 ", numero='" + numero + '\'' +
                 ", estado=" + estado +
-                ", empresaId=" + empresa.getId() +
                 '}';
     }
 }

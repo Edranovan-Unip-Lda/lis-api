@@ -11,10 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tl.gov.mci.lis.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
+import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.FaturaStatus;
+import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -51,6 +56,7 @@ public class EmpresaService {
     private final EntityManager entityManager;
     private final FaturaRepository faturaRepository;
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
+    private final AplicanteMapper aplicanteMapper;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -119,6 +125,23 @@ public class EmpresaService {
         return obj;
     }
 
+    @Transactional
+    public Aplicante submitAplicante(Long empresaId, Long aplicanteId, AplicanteRequestDto obj) {
+        logger.info("Atualizando aplicante: {}", obj);
+
+        authorizationService.assertUserOwnsEmpresa(empresaId);
+
+        return aplicanteRepository.findByIdAndEmpresa_id(aplicanteId, empresaId)
+                .map(aplicante -> {
+                    if (!isAplicanteReadyForSubmission(aplicante)) {
+                        throw new ForbiddenException("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
+                    }
+                    aplicante.setEstado(obj.getEstado());
+                    return entityManager.merge(aplicante);
+                }).orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+    }
+
     public Page<AplicanteDto> getAplicantePage(Long empresaId, int page, int size) {
         logger.info("Obtendo aplicante page pelo empresa id: {}", empresaId);
 
@@ -146,6 +169,10 @@ public class EmpresaService {
 
         Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
+
+        if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO || aplicante.getEstado() == AplicanteStatus.APROVADO) {
+            throw new ForbiddenException("Aplicante deve estar EM_CURSO para ser excluído.");
+        }
 
         // Get Pedido
         PedidoInscricaoCadastro pedido = aplicante.getPedido();
@@ -188,5 +215,11 @@ public class EmpresaService {
 
         aplicanteRepository.delete(aplicante);
         return aplicante;
+    }
+
+    private static boolean isAplicanteReadyForSubmission(Aplicante aplicante) {
+        return aplicante.getEstado() == AplicanteStatus.EM_CURSO
+                && aplicante.getPedido().getStatus() == PedidoStatus.SUBMETIDO
+                && aplicante.getPedido().getFatura().getStatus() == FaturaStatus.PAGA;
     }
 }
