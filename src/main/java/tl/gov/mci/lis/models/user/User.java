@@ -7,11 +7,15 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "lis_user")
@@ -32,6 +36,7 @@ public class User extends EntityDB {
     @NotBlank(message = "Email is mandatory")
     private String email;
 
+    @NotBlank(message = "A palavra-passe é obrigatória.")
     private String password;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,6 +50,11 @@ public class User extends EntityDB {
     @OneToOne(mappedBy = "utilizador")
     @JsonIgnoreProperties({"listaAplicante", "utilizador", "hibernateLazyInitializer"})
     private Empresa empresa;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "direcao_id")
+    @JsonIgnoreProperties("users")
+    private Direcao direcao;
 
     @Transient
     private String oneTimePassword;

@@ -23,12 +23,14 @@ import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
@@ -56,7 +58,7 @@ public class EmpresaService {
     private final EntityManager entityManager;
     private final FaturaRepository faturaRepository;
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
-    private final AplicanteMapper aplicanteMapper;
+    private final DirecaoRepository direcaoRepository;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -137,7 +139,15 @@ public class EmpresaService {
                         throw new ForbiddenException("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
                     }
                     aplicante.setEstado(obj.getEstado());
-                    return entityManager.merge(aplicante);
+                    entityManager.merge(aplicante);
+
+                    // Atribuir Aplicante ao Direção
+                    Direcao direcao = direcaoRepository.findByNome(aplicante.getCategoria())
+                            .orElseThrow(() -> new ResourceNotFoundException("Direção nao encontrada"));
+
+                    aplicanteService.atribuirDirecao(aplicanteId, direcao.getId());
+
+                    return aplicante;
                 }).orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
     }

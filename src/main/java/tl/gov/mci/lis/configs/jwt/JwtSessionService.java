@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
@@ -89,7 +90,7 @@ public class JwtSessionService {
             slimUser.setPassword(originalUser.getPassword());
 
             if (originalUser.getRole() != null) {
-                slimUser.setRole(originalUser.getRole()); // Only if Role is simple (id + name)
+                slimUser.setRole(new Role(originalUser.getRole().getId(), originalUser.getRole().getName())); // Only if Role is simple (id + name)
             }
 
             // You may include empresaId only, to avoid serializing full Empresa

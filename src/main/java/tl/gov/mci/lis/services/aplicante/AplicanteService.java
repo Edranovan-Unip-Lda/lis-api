@@ -16,15 +16,19 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
@@ -43,11 +47,13 @@ public class AplicanteService {
     private final AplicanteNumberRepository repository;
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
-    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final ClasseAtividadeRepository classeAtividadeRepository;
     private final EnderecoService enderecoService;
     private final EmpresaRepository empresaRepository;
     private final EntityManager entityManager;
+    private final DirecaoRepository direcaoRepository;
+    private final EmpresaMapper empresaMapper;
+    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
 
 
     public Page<AplicantePageDto> getPage(int page, int size) {
@@ -59,16 +65,28 @@ public class AplicanteService {
 
     public AplicanteDto getById(Long id) {
         logger.info("Obtendo aplicante pelo id: {}", id);
-        return aplicanteRepository.getFromId(id)
-                .map(aplicanteDto -> {
-                    aplicanteDto.setPedidoInscricaoCadastroDto(pedidoInscricaoCadastroService.getByAplicanteId(id));
-                    return aplicanteDto;
-                })
+        AplicanteDto aplicanteDto = aplicanteRepository.getFromId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+        // Enrich Empresa
+        if (aplicanteDto.getEmpresaDto() != null && aplicanteDto.getEmpresaDto().getId() != null) {
+            empresaRepository.findById(aplicanteDto.getEmpresaDto().getId())
+                    .map(empresaMapper::toDto)
+                    .ifPresent(aplicanteDto::setEmpresaDto);
+        }
+
+        // Enrich PedidoInscricaoCadastro
+        if (aplicanteDto.getPedidoInscricaoCadastroDto() != null && aplicanteDto.getPedidoInscricaoCadastroDto().getId() != null) {
+            PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
+                    .getByAplicanteId(aplicanteDto.getId());
+            aplicanteDto.setPedidoInscricaoCadastroDto(pedidoDto);
+        }
+
+        return aplicanteDto;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized String generateAplicanteNumber(String categoriaCode, Long empresaId) {
+    public synchronized String generateAplicanteNumber(Categoria categoriaCode, Long empresaId) {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         int year = now.getYear();
@@ -140,6 +158,18 @@ public class AplicanteService {
 
                     return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(pedidoInscricaoCadastro));
                 }).orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
+    }
+
+    @Transactional
+    public void atribuirDirecao(Long aplicanteId, Long direcaoId) {
+        Direcao direcao = direcaoRepository.findById(direcaoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Direção não encontrada"));
+
+        Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
+
+        aplicante.setDirecaoAtribuida(direcao);
+        entityManager.merge(aplicante);
     }
 
 }

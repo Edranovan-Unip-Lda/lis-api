@@ -1,6 +1,9 @@
 package tl.gov.mci.lis.dtos.empresa;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import tl.gov.mci.lis.enums.TipoPropriedade;
 
@@ -11,7 +14,9 @@ import java.time.LocalDate;
 /**
  * DTO for {@link tl.gov.mci.lis.models.empresa.Empresa}
  */
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmpresaDto implements Serializable {
     Long id;
     Boolean isDeleted;
@@ -106,5 +111,9 @@ public class EmpresaDto implements Serializable {
         Long id;
         String nome;
         String acronimo;
+    }
+
+    public EmpresaDto(Long id) {
+        this.id = id;
     }
 }

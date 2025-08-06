@@ -1,10 +1,9 @@
 package tl.gov.mci.lis.models.aplicante;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.EntityDB;
 
 @Entity
@@ -12,7 +11,8 @@ import tl.gov.mci.lis.models.EntityDB;
 @Setter
 @Table(name = "lis_aplicante_number")
 public class AplicanteNumber extends EntityDB {
-    private String categoriaCode;
+    @Enumerated(EnumType.STRING)
+    private Categoria categoriaCode;
     private int month;
     private int year;
 

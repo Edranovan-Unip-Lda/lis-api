@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,14 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.enums.AccountStatus;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.enums.Role;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
+import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
@@ -50,6 +53,8 @@ public class UserServices {
     private final UserDetailServiceImpl userDetailService;
     private final EmpresaRepository empresaRepository;
     private final EntityManager entityManager;
+    private final DirecaoRepository direcaoRepository;
+    private final AplicanteRepository aplicanteRepository;
 
     @Transactional
     public User register(User obj) {
@@ -61,6 +66,16 @@ public class UserServices {
 
         obj.setRole(
                 roleRepository.getReferenceById(obj.getRole().getId())
+        );
+
+        if (Objects.nonNull(obj.getDirecao()) && Objects.nonNull(obj.getDirecao().getId())) {
+            obj.setDirecao(
+                    direcaoRepository.getReferenceById(obj.getDirecao().getId())
+            );
+        }
+
+        obj.setDirecao(
+                direcaoRepository.getReferenceById(obj.getDirecao().getId())
         );
 
         obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
@@ -210,12 +225,11 @@ public class UserServices {
                 });
     }
 
+    @Transactional
     public User updateByUsername(String username, User obj) {
         logger.info("Updating user with username: {}", username);
 
-        User userByUsername = userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
-        return userRepository.findById(userByUsername.getId())
+        return userRepository.queryByUsername(username)
                 .map(user -> {
                     user.setFirstName(obj.getFirstName());
                     user.setLastName(obj.getLastName());
@@ -225,11 +239,18 @@ public class UserServices {
                             .filter(pw -> !pw.isEmpty())
                             .ifPresent(pw -> user.setPassword(bcryptEncoder.encode(pw)));
 
-                    obj.setRole(
+                    user.setRole(
                             roleRepository.findById(obj.getRole().getId()).orElseThrow(() -> new ResourceNotFoundException("Role " + obj.getRole().getName() + " not found"))
                     );
+
+                    if (Objects.nonNull(obj.getDirecao()) && Objects.nonNull(obj.getDirecao().getId())) {
+                        user.setDirecao(
+                                direcaoRepository.getReferenceById(obj.getDirecao().getId())
+                        );
+                    }
+
                     user.setStatus(obj.getStatus());
-                    return userRepository.save(user);
+                    return user;
                 })
 
                 .orElseThrow(() -> {
@@ -237,6 +258,36 @@ public class UserServices {
                     return new ResourceNotFoundException("User with username " + username + " not found");
                 });
     }
+
+    public Page<AplicanteDto> getPageAplicante(String username, int page, int size) {
+        logger.info("Obtendo pagina do Aplicante com nome do utilizador: {}", username);
+        User user = userRepository.queryByUsername(username)
+                .orElseThrow(() -> {
+                    logger.error("Utilizador com o nome {} não existe", username);
+                    return new ResourceNotFoundException("Utilizador com o nome  " + username + " não existe");
+                });
+        Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
+        return aplicanteRepository.getPageByDirecaoId(user.getDirecao().getId(), paging);
+    }
+
+    public AplicanteDto getAplicanteByIdAndDirecaoId(String username, Long aplicantedId, Long direcaoId) {
+        logger.info("Obtende Aplicante pelo Id {} e direcao id: {}", aplicantedId, direcaoId);
+
+        Direcao userDirecao = userRepository.findDirecaoIdByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador com o nome " + username + " não existe"));
+
+
+        if (!Objects.equals(userDirecao.getId(), direcaoId)) {
+            throw new ForbiddenException("Acesso negado: Incompatibilidade da Direção");
+        }
+
+        return aplicanteRepository.findByIdAndDirecao_Id(aplicantedId, direcaoId)
+                .orElseThrow(() -> {
+                    logger.error("Aplicante não encontrado");
+                    return new ResourceNotFoundException("Aplicante não encontrado");
+                });
+    }
+
 
     private boolean isValidEmail(String email) {
         if (email == null) {

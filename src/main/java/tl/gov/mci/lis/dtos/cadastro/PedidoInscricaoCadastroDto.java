@@ -1,5 +1,8 @@
 package tl.gov.mci.lis.dtos.cadastro;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
@@ -13,7 +16,9 @@ import java.time.Instant;
 /**
  * DTO for {@link tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro}
  */
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PedidoInscricaoCadastroDto implements Serializable {
     Long id;
     Instant createdAt;
@@ -44,6 +49,10 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     String dataEmissaoCertAnterior;
     String observacao;
     FaturaDto fatura;
+
+    public PedidoInscricaoCadastroDto(Long id) {
+        this.id = id;
+    }
 
     public PedidoInscricaoCadastroDto(
             Long id,

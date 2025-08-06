@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -27,6 +28,7 @@ import tl.gov.mci.lis.services.pagamento.FaturaService;
 public class AplicanteController {
     private final AplicanteService aplicanteService;
     private final FaturaService faturaService;
+    private final AplicanteMapper aplicanteMapper;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("")
@@ -37,6 +39,7 @@ public class AplicanteController {
         return new ResponseEntity<>(aplicanteService.getPage(page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @GetMapping("/{id}")
     ResponseEntity<AplicanteDto> getAplicante(@PathVariable Long id) {
         return new ResponseEntity<>(aplicanteService.getById(id), HttpStatus.OK);

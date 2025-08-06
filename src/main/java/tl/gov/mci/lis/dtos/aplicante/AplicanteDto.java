@@ -4,6 +4,7 @@ import lombok.Data;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -23,7 +24,7 @@ public class AplicanteDto implements Serializable {
     String createdBy;
     String updatedBy;
     String tipo;
-    String categoria;
+    Categoria categoria;
     String numero;
     AplicanteStatus estado;
     PedidoStatus pedidoStatus;
@@ -34,7 +35,7 @@ public class AplicanteDto implements Serializable {
     public AplicanteDto() {
     }
 
-    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, String categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
         this.id = id;
         this.isDeleted = isDeleted;
         this.createdAt = createdAt;
@@ -47,5 +48,23 @@ public class AplicanteDto implements Serializable {
         this.estado = estado;
         this.pedidoStatus = pedidoStatus;
         this.faturaStatus = faturaStatus;
+    }
+
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus, Long empresaId, Long pedidoInscricaoCadastroId) {
+        this.id = id;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.tipo = tipo;
+        this.categoria = categoria;
+        this.numero = numero;
+        this.estado = estado;
+        this.pedidoStatus = pedidoStatus;
+        this.faturaStatus = faturaStatus;
+
+        this.empresaDto = new EmpresaDto(empresaId);
+        this.pedidoInscricaoCadastroDto = new PedidoInscricaoCadastroDto(pedidoInscricaoCadastroId);
     }
 }

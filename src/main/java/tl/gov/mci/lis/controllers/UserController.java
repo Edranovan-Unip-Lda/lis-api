@@ -12,10 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
 import tl.gov.mci.lis.dtos.user.UserDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
 import tl.gov.mci.lis.models.user.User;
+import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.user.UserServices;
 
 import java.time.Duration;
@@ -29,10 +32,11 @@ public class UserController {
     private final UserMapper userMapper;
     private final JwtSessionService jwtSessionService;
     private final JwtUtil jwtUtil;
+    private final AplicanteService aplicanteService;
 
     @PostMapping("")
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
-        return new ResponseEntity<>(userServices.register(user), HttpStatus.CREATED);
+    public ResponseEntity<UserLoginDto> register(@Valid @RequestBody User user) {
+        return new ResponseEntity<>(userMapper.toLoginDto(userServices.register(user)), HttpStatus.CREATED);
     }
 
     @GetMapping("")
@@ -104,5 +108,14 @@ public class UserController {
         response.setHeader(HttpHeaders.SET_COOKIE, clearedCookie.toString());
 
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @GetMapping("/{username}/aplicantes")
+    public ResponseEntity<Page<AplicanteDto>> getPageAplicanteByIdAndDirecaoId(
+            @PathVariable String username,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size
+    ) {
+        return new ResponseEntity<>(userServices.getPageAplicante(username, page, size), HttpStatus.OK);
     }
 }

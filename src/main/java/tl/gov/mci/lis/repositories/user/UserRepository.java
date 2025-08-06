@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.User;
 
 import java.util.Optional;
@@ -27,4 +29,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT new User(u.id, u.firstName, u.lastName, u.username, u.email, u.role.id, u.role.name, u.jwtSession, u.status, u.createdAt, u.createdBy) FROM User u")
     Page<User> getPageBy(Pageable pageable);
+
+    @Query("SELECT u.direcao FROM User u WHERE u.username = :username")
+    Optional<Direcao> findDirecaoIdByUsername(@Param("username") String username);
+
+    Optional<User> queryByUsername(String username);
 }

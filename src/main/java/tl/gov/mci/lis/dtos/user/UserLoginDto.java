@@ -16,12 +16,14 @@ public class UserLoginDto implements Serializable {
     String lastName;
     @NotBlank(message = "Username is mandatory")
     String username;
+    String password;
     @NotBlank(message = "Email is mandatory")
     String email;
     RoleDto role;
     String jwtSession;
     String status;
     EmpresaDto empresa;
+    DirecaoDto direcao;
 
     /**
      * DTO for {@link Role}
@@ -39,5 +41,14 @@ public class UserLoginDto implements Serializable {
     public static class EmpresaDto implements Serializable {
         Long id;
         String name;
+    }
+
+    /**
+     * DTO for {@link tl.gov.mci.lis.models.dadosmestre.Direcao}
+     */
+    @Value
+    public static class DirecaoDto implements Serializable {
+        Long id;
+        String nome;
     }
 }
