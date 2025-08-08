@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
@@ -30,9 +29,9 @@ public class AplicanteController {
     private final FaturaService faturaService;
     private final AplicanteMapper aplicanteMapper;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("")
-    ResponseEntity<Page<AplicantePageDto>> getPage(
+    ResponseEntity<Page<AplicanteDto>> getPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size
     ) {

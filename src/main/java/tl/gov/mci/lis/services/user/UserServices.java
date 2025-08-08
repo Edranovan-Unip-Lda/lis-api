@@ -16,21 +16,31 @@ import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AccountStatus;
+import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.enums.Role;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
-import tl.gov.mci.lis.models.dadosmestre.Direcao;
+import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
+import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
+import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
+import tl.gov.mci.lis.services.aplicante.AplicanteService;
+import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -55,6 +65,10 @@ public class UserServices {
     private final EntityManager entityManager;
     private final DirecaoRepository direcaoRepository;
     private final AplicanteRepository aplicanteRepository;
+    private final AplicanteService aplicanteService;
+    private final EmpresaMapper empresaMapper;
+    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
+    private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
 
     @Transactional
     public User register(User obj) {
@@ -259,33 +273,111 @@ public class UserServices {
                 });
     }
 
-    public Page<AplicanteDto> getPageAplicante(String username, int page, int size) {
+    public AplicanteDto getAssignedAplicanteByUsernameAndId(String username, Long aplicanteId) {
+        logger.info("Obtendo Aplicante pelo utilizador id: {} e aplicante id: {}", username, aplicanteId);
+
+        User user = userRepository.queryByUsername(username)
+                .orElseThrow(() -> {
+                    logger.error("Utilizador com {} não existe", username);
+                    return new ResourceNotFoundException("Utilizador com o nome  " + username + " não existe");
+                });
+        AplicanteDto aplicanteDto = aplicanteRepository.getFromIdAndDirecaoId(aplicanteId, user.getDirecao().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+        empresaRepository.findById(aplicanteDto.getEmpresaDto().getId())
+                .map(empresaMapper::toDto)
+                .ifPresent(aplicanteDto::setEmpresaDto);
+
+        PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
+                .getByAplicanteId(aplicanteDto.getId());
+        aplicanteDto.setPedidoInscricaoCadastroDto(pedidoDto);
+
+        aplicanteDto.setHistoricoStatusDto(
+                historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteDto.getId())
+        );
+        return aplicanteDto;
+    }
+
+    public Page<AplicanteDto> getPageAssignedAplicante(String username, int page, int size) {
         logger.info("Obtendo pagina do Aplicante com nome do utilizador: {}", username);
         User user = userRepository.queryByUsername(username)
                 .orElseThrow(() -> {
-                    logger.error("Utilizador com o nome {} não existe", username);
+                    logger.error("Utilizador {} não existe", username);
                     return new ResourceNotFoundException("Utilizador com o nome  " + username + " não existe");
                 });
+
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
         return aplicanteRepository.getPageByDirecaoId(user.getDirecao().getId(), paging);
     }
 
-    public AplicanteDto getAplicanteByIdAndDirecaoId(String username, Long aplicantedId, Long direcaoId) {
-        logger.info("Obtende Aplicante pelo Id {} e direcao id: {}", aplicantedId, direcaoId);
+    @Transactional
+    public Aplicante approveAplicante(String username, Long aplicanteId, HistoricoEstadoAplicante historicoEstadoAplicante) {
+        logger.info("Aprovar aplicante com nome do utilizador: {} e aplicante id: {}", username, aplicanteId);
 
-        Direcao userDirecao = userRepository.findDirecaoIdByUsername(username)
+        User user = userRepository.queryByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Utilizador com o nome " + username + " não existe"));
 
+        historicoEstadoAplicante.setAlteradoPor(user.getUsername());
 
-        if (!Objects.equals(userDirecao.getId(), direcaoId)) {
-            throw new ForbiddenException("Acesso negado: Incompatibilidade da Direção");
-        }
+        return aplicanteRepository.findById(aplicanteId)
+                .map(aplicante -> {
+                    if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO) {
+                        throw new ForbiddenException("O aplicante não está num estado válido para aprovação.");
+                    }
 
-        return aplicanteRepository.findByIdAndDirecao_Id(aplicantedId, direcaoId)
-                .orElseThrow(() -> {
-                    logger.error("Aplicante não encontrado");
-                    return new ResourceNotFoundException("Aplicante não encontrado");
-                });
+                    // Add status history
+                    aplicante.addHistorico(historicoEstadoAplicante);
+                    aplicante.setDirecaoAtribuida(null);
+
+                    // Update status (optional: ensure it's set to APROVADO)
+                    aplicante.setEstado(AplicanteStatus.APROVADO);
+
+                    Endereco sede = new Endereco();
+                    sede.setLocal(aplicante.getPedido().getSede().getLocal());
+                    sede.setAldeia(aplicante.getPedido().getSede().getAldeia());
+
+                    entityManager.persist(sede);
+
+                    // Create and populate CertificadoInscricaoCadastro
+                    CertificadoInscricaoCadastro cert = new CertificadoInscricaoCadastro();
+                    cert.setAplicante(aplicante);
+                    cert.setSociedadeComercial(aplicante.getEmpresa().getNome());
+                    cert.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
+                    cert.setSede(sede);
+                    cert.setAtividade(aplicante.getPedido().getClasseAtividade().getDescricao());
+                    cert.setDataEmissao(LocalDate.now().toString());
+                    cert.setDataValidade(LocalDate.now().plusYears(2).toString());
+                    cert.setNomeDiretorGeral("Donald Trump");
+
+                    // Persist certificate
+                    entityManager.persist(cert);
+
+                    return aplicante;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+    }
+
+    @Transactional
+    public Aplicante rejectAplicante(String username, Long aplicanteId, HistoricoEstadoAplicante historico) {
+        logger.info("Rejeitar aplicante com nome do utilizador: {}", username);
+
+        User user = userRepository.queryByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador com o nome " + username + " não existe"));
+
+        Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+        historico.setStatus(AplicanteStatus.REJEITADO);
+        historico.setAplicante(aplicante);
+        historico.setAlteradoPor(user.getUsername());
+
+        entityManager.persist(historico);
+
+        aplicante.setEstado(AplicanteStatus.REJEITADO);
+        aplicante.setDirecaoAtribuida(null);
+
+        return aplicante; // still managed — changes flushed automatically
     }
 
 

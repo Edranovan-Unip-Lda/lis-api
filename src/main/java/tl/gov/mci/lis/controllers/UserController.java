@@ -9,14 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
+import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
 import tl.gov.mci.lis.dtos.user.UserDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.user.UserServices;
@@ -33,6 +35,7 @@ public class UserController {
     private final JwtSessionService jwtSessionService;
     private final JwtUtil jwtUtil;
     private final AplicanteService aplicanteService;
+    private final AplicanteMapper aplicanteMapper;
 
     @PostMapping("")
     public ResponseEntity<UserLoginDto> register(@Valid @RequestBody User user) {
@@ -110,12 +113,45 @@ public class UserController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @GetMapping("/{username}/aplicantes")
     public ResponseEntity<Page<AplicanteDto>> getPageAplicanteByIdAndDirecaoId(
             @PathVariable String username,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size
     ) {
-        return new ResponseEntity<>(userServices.getPageAplicante(username, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(userServices.getPageAssignedAplicante(username, page, size), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @GetMapping("/{username}/aplicantes/{aplicanteId}")
+    public ResponseEntity<AplicanteDto> getAssignedAplicanteByIdAndDirecaoId(
+            @PathVariable String username,
+            @PathVariable Long aplicanteId
+    ) {
+        return new ResponseEntity<>(userServices.getAssignedAplicanteByUsernameAndId(username, aplicanteId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER')")
+    @PatchMapping("/{username}/aplicantes/{aplicanteId}")
+    public ResponseEntity<AplicanteDto> decisionAplicante(
+            @PathVariable String username,
+            @PathVariable Long aplicanteId,
+            @RequestBody HistoricoEstadoAplicante historicoEstadoAplicante
+    ) {
+        return switch (historicoEstadoAplicante.getStatus()) {
+            case APROVADO -> new ResponseEntity<>(
+                    aplicanteMapper.toDto(
+                            userServices.approveAplicante(username, aplicanteId, historicoEstadoAplicante)
+                    ),
+                    HttpStatus.OK);
+            case REJEITADO -> new ResponseEntity<>(
+                    aplicanteMapper.toDto(
+                            userServices.rejectAplicante(username, aplicanteId, historicoEstadoAplicante)
+                    ),
+                    HttpStatus.OK);
+            default -> ResponseEntity.badRequest().build();
+        };
+
     }
 }

@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.AplicanteRequestDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
-import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.FaturaStatus;
@@ -22,6 +22,7 @@ import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.documento.Documento;
@@ -29,6 +30,8 @@ import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
@@ -59,6 +62,9 @@ public class EmpresaService {
     private final FaturaRepository faturaRepository;
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final DirecaoRepository direcaoRepository;
+    private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
+    private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
+    private final CertificadoMapper certificadoMapper;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -123,6 +129,12 @@ public class EmpresaService {
         obj.setEmpresa(empresaRepository.getReferenceById(empresaId));
         obj.setNumero(aplicanteService.generateAplicanteNumber(obj.getCategoria(), empresaId));
         obj.setEstado(AplicanteStatus.EM_CURSO);
+
+        HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+        historico.setStatus(obj.getEstado());
+        historico.setAlteradoPor(authorizationService.getCurrentUsername());
+        obj.addHistorico(historico);
+
         entityManager.persist(obj);
         return obj;
     }
@@ -144,6 +156,11 @@ public class EmpresaService {
                     // Atribuir Aplicante ao Direção
                     Direcao direcao = direcaoRepository.findByNome(aplicante.getCategoria())
                             .orElseThrow(() -> new ResourceNotFoundException("Direção nao encontrada"));
+
+                    HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+                    historico.setStatus(aplicante.getEstado());
+                    historico.setAlteradoPor(authorizationService.getCurrentUsername());
+                    aplicante.addHistorico(historico);
 
                     aplicanteService.atribuirDirecao(aplicanteId, direcao.getId());
 
@@ -168,6 +185,13 @@ public class EmpresaService {
                 .map(aplicanteDto -> {
                     aplicanteDto.setEmpresaDto(empresaMapper.toDto(getById(empresaId)));
                     aplicanteDto.setPedidoInscricaoCadastroDto(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
+                    aplicanteDto.setHistoricoStatusDto(historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteId));
+                    if (aplicanteDto.getEstado().equals(AplicanteStatus.APROVADO)) {
+                        // Enrich Certificado Cadastro
+                        certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
+                                .map(certificadoMapper::toDto)
+                                .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
+                    }
                     return aplicanteDto;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
@@ -180,7 +204,10 @@ public class EmpresaService {
         Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
 
-        if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO || aplicante.getEstado() == AplicanteStatus.APROVADO) {
+        if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO ||
+                aplicante.getEstado() == AplicanteStatus.APROVADO ||
+                aplicante.getCertificadoInscricaoCadastro() != null
+        ) {
             throw new ForbiddenException("Aplicante deve estar EM_CURSO para ser excluído.");
         }
 
@@ -228,7 +255,7 @@ public class EmpresaService {
     }
 
     private static boolean isAplicanteReadyForSubmission(Aplicante aplicante) {
-        return aplicante.getEstado() == AplicanteStatus.EM_CURSO
+        return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
                 && aplicante.getPedido().getStatus() == PedidoStatus.SUBMETIDO
                 && aplicante.getPedido().getFatura().getStatus() == FaturaStatus.PAGA;
     }

@@ -1,10 +1,12 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
-import tl.gov.mci.lis.AplicanteRequestDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
+import tl.gov.mci.lis.dtos.aplicante.HistoricoEstadoAplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AplicanteMapper {
@@ -28,4 +30,11 @@ public interface AplicanteMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Aplicante partialUpdate(AplicanteRequestDto aplicanteRequestDto, @MappingTarget Aplicante aplicante);
+
+    HistoricoEstadoAplicante toEntity(HistoricoEstadoAplicanteDto historicoEstadoAplicanteDto);
+
+    HistoricoEstadoAplicanteDto toDto(HistoricoEstadoAplicante historicoEstadoAplicante);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    HistoricoEstadoAplicante partialUpdate(HistoricoEstadoAplicanteDto historicoEstadoAplicanteDto, @MappingTarget HistoricoEstadoAplicante historicoEstadoAplicante);
 }

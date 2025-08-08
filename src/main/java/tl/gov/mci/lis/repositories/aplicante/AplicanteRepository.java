@@ -7,12 +7,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 
 import java.util.Optional;
 
 @JaversSpringDataAuditable
 public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
+
+    @Query("""
+                SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
+                    a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy,
+                    a.tipo, a.categoria, a.numero, a.estado,
+                    p.status, f.status
+                )
+                FROM Aplicante a
+                LEFT JOIN PedidoInscricaoCadastro p ON p.aplicante.id = a.id
+                LEFT JOIN Fatura f ON f.pedidoInscricaoCadastro.id = p.id
+                WHERE a.estado = :estado
+            """)
+    Page<AplicanteDto> getPageApprovedAplicante(AplicanteStatus estado, Pageable pageable);
 
     @Query("""
                 SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
@@ -28,6 +42,21 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
                 WHERE a.id = :id
             """)
     Optional<AplicanteDto> getFromId(Long id);
+
+    @Query("""
+                SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
+                    a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy,
+                    a.tipo, a.categoria, a.numero, a.estado,
+                    p.status, f.status,
+                    e.id, p.id
+                )
+                FROM Aplicante a
+                JOIN a.empresa e
+                JOIN a.pedido p
+                JOIN p.fatura f
+                WHERE a.id = :id AND a.direcaoAtribuida.id = :direcaoId
+            """)
+    Optional<AplicanteDto> getFromIdAndDirecaoId(Long id, Long direcaoId);
 
     @Query("""
             SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy, a.tipo, a.categoria, a.numero, a.estado, p.status, f.status) FROM Aplicante a

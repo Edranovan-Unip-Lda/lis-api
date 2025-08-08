@@ -9,12 +9,15 @@ import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.user.User;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,10 +40,18 @@ public class Aplicante extends EntityDB {
     @OneToOne(mappedBy = "aplicante")
     private PedidoInscricaoCadastro pedido;
 
+    @OneToOne(mappedBy = "aplicante")
+    private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "direcao_id")
     @JsonIgnoreProperties("aplicantesAtribuidos")
     private Direcao direcaoAtribuida;
+
+    @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("dataAlteracao DESC")
+    @JsonIgnoreProperties("aplicante")
+    private List<HistoricoEstadoAplicante> historicoStatus = new ArrayList<>();
 
     public Aplicante() {
     }
@@ -64,6 +75,11 @@ public class Aplicante extends EntityDB {
         return (pedido != null && pedido.getFatura() != null)
                 ? pedido.getFatura().getStatus()
                 : null;
+    }
+
+    public void addHistorico(HistoricoEstadoAplicante historico) {
+        historico.setAplicante(this);
+        historicoStatus.add(historico);
     }
 
     @Override

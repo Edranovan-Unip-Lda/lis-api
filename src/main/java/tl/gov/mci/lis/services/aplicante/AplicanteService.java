@@ -16,8 +16,10 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
+import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
@@ -27,6 +29,8 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
@@ -54,13 +58,15 @@ public class AplicanteService {
     private final DirecaoRepository direcaoRepository;
     private final EmpresaMapper empresaMapper;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
+    private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
+    private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
+    private final CertificadoMapper certificadoMapper;
 
 
-    public Page<AplicantePageDto> getPage(int page, int size) {
+    public Page<AplicanteDto> getPage(int page, int size) {
         logger.info("Getting page: {} and size {}", page, size);
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Aplicante> aplicantes = aplicanteRepository.findAll(paging);
-        return aplicantes.map(aplicanteMapper::toDto1);
+        return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging);
     }
 
     public AplicanteDto getById(Long id) {
@@ -82,6 +88,14 @@ public class AplicanteService {
             aplicanteDto.setPedidoInscricaoCadastroDto(pedidoDto);
         }
 
+        // Enrich Certificado Cadastro
+        certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
+                .map(certificadoMapper::toDto)
+                .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
+
+        aplicanteDto.setHistoricoStatusDto(
+                historicoEstadoAplicanteRepository.findAllByAplicante_Id(id)
+        );
         return aplicanteDto;
     }
 

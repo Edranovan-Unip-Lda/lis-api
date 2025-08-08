@@ -32,6 +32,12 @@ public class AuthorizationService {
 
         return empresa.getId();
     }
+    
+    public String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        return userDetails.getUsername();
+    }
 
     /**
      * Verifies that the currently authenticated user is associated with the specified Empresa.

@@ -1,16 +1,17 @@
 package tl.gov.mci.lis.dtos.aplicante;
 
 import lombok.Data;
+import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
-import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.aplicante.Aplicante}
@@ -31,6 +32,8 @@ public class AplicanteDto implements Serializable {
     FaturaStatus faturaStatus;
     EmpresaDto empresaDto;
     PedidoInscricaoCadastroDto pedidoInscricaoCadastroDto;
+    List<HistoricoEstadoAplicanteDto> historicoStatusDto;
+    CertificadoInscricaoCadastroDto certificadoInscricaoCadastro;
 
     public AplicanteDto() {
     }
