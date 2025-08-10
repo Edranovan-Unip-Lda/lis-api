@@ -30,9 +30,9 @@ public class AplicanteDto implements Serializable {
     AplicanteStatus estado;
     PedidoStatus pedidoStatus;
     FaturaStatus faturaStatus;
-    EmpresaDto empresaDto;
-    PedidoInscricaoCadastroDto pedidoInscricaoCadastroDto;
-    List<HistoricoEstadoAplicanteDto> historicoStatusDto;
+    EmpresaDto empresa;
+    PedidoInscricaoCadastroDto pedidoInscricaoCadastro;
+    List<HistoricoEstadoAplicanteDto> historicoStatus;
     CertificadoInscricaoCadastroDto certificadoInscricaoCadastro;
 
     public AplicanteDto() {
@@ -67,7 +67,7 @@ public class AplicanteDto implements Serializable {
         this.pedidoStatus = pedidoStatus;
         this.faturaStatus = faturaStatus;
 
-        this.empresaDto = new EmpresaDto(empresaId);
-        this.pedidoInscricaoCadastroDto = new PedidoInscricaoCadastroDto(pedidoInscricaoCadastroId);
+        this.empresa = new EmpresaDto(empresaId);
+        this.pedidoInscricaoCadastro = new PedidoInscricaoCadastroDto(pedidoInscricaoCadastroId);
     }
 }

@@ -13,7 +13,7 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@Table(name = "lis_historico_estado_aplicante")
+@Table(name = "lis_aplicante_historico")
 public class HistoricoEstadoAplicante extends EntityDB {
     @Enumerated(EnumType.STRING)
     private AplicanteStatus status;

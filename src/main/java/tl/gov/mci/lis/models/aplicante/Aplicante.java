@@ -13,7 +13,6 @@ import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
-import tl.gov.mci.lis.models.user.User;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class Aplicante extends EntityDB {
     private Empresa empresa;
 
     @OneToOne(mappedBy = "aplicante")
-    private PedidoInscricaoCadastro pedido;
+    private PedidoInscricaoCadastro pedidoInscricaoCadastro;
 
     @OneToOne(mappedBy = "aplicante")
     private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
@@ -68,12 +67,12 @@ public class Aplicante extends EntityDB {
     }
 
     public PedidoStatus getPedidoStatus() {
-        return (pedido != null) ? pedido.getStatus() : null;
+        return (pedidoInscricaoCadastro != null) ? pedidoInscricaoCadastro.getStatus() : null;
     }
 
     public FaturaStatus getFaturaStatus() {
-        return (pedido != null && pedido.getFatura() != null)
-                ? pedido.getFatura().getStatus()
+        return (pedidoInscricaoCadastro != null && pedidoInscricaoCadastro.getFatura() != null)
+                ? pedidoInscricaoCadastro.getFatura().getStatus()
                 : null;
     }
 

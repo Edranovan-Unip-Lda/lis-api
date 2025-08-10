@@ -15,7 +15,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 @Entity
 @Getter
 @Setter
-@Table(name = "lis_certificado_inscricao_cadastro")
+@Table(name = "lis_cadastro_certificado_inscricao")
 public class CertificadoInscricaoCadastro extends EntityDB {
 
     @OneToOne

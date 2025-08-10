@@ -3,6 +3,7 @@ package tl.gov.mci.lis.repositories.aplicante;
 import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +38,7 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
                 )
                 FROM Aplicante a
                 JOIN a.empresa e
-                JOIN a.pedido p
+                JOIN a.pedidoInscricaoCadastro p
                 JOIN p.fatura f
                 WHERE a.id = :id
             """)
@@ -52,7 +53,7 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
                 )
                 FROM Aplicante a
                 JOIN a.empresa e
-                JOIN a.pedido p
+                JOIN a.pedidoInscricaoCadastro p
                 JOIN p.fatura f
                 WHERE a.id = :id AND a.direcaoAtribuida.id = :direcaoId
             """)
@@ -102,4 +103,21 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
 
     Optional<Aplicante> findByIdAndEmpresa_id(Long id, Long empresaId);
 
+    @EntityGraph(attributePaths = {"empresa", "empresa.sede"})
+    @Query("SELECT a FROM Aplicante a WHERE a.id = :id")
+    Optional<Aplicante> findByIdWithEmpresaAndEmpresa_Sede(Long id);
+
+    // 1 query, brings: pedido -> (empresaSede, classeAtividade), empresa, certificado, historicoStatus
+    @Query("""
+        select distinct a
+        from Aplicante a
+        left join fetch a.pedidoInscricaoCadastro p
+        left join fetch p.empresaSede
+        left join fetch p.classeAtividade
+        left join fetch a.empresa
+        left join fetch a.certificadoInscricaoCadastro
+        left join fetch a.historicoStatus hs
+        where a.id = :id
+    """)
+    Optional<Aplicante> findByIdWithAllForApproval(@Param("id") Long id);
 }

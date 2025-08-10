@@ -183,9 +183,9 @@ public class EmpresaService {
         authorizationService.assertUserOwnsEmpresa(empresaId);
         return aplicanteRepository.getFromIdAndEmpresaId(aplicanteId, empresaId)
                 .map(aplicanteDto -> {
-                    aplicanteDto.setEmpresaDto(empresaMapper.toDto(getById(empresaId)));
-                    aplicanteDto.setPedidoInscricaoCadastroDto(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
-                    aplicanteDto.setHistoricoStatusDto(historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteId));
+                    aplicanteDto.setEmpresa(empresaMapper.toDto(getById(empresaId)));
+                    aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
+                    aplicanteDto.setHistoricoStatus(historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteId));
                     if (aplicanteDto.getEstado().equals(AplicanteStatus.APROVADO)) {
                         // Enrich Certificado Cadastro
                         certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
@@ -212,7 +212,7 @@ public class EmpresaService {
         }
 
         // Get Pedido
-        PedidoInscricaoCadastro pedido = aplicante.getPedido();
+        PedidoInscricaoCadastro pedido = aplicante.getPedidoInscricaoCadastro();
 
         if (pedido != null) {
             // Get Fatura
@@ -235,7 +235,8 @@ public class EmpresaService {
             }
 
             // Optional: delete Endereco if you don't need it anymore
-            pedido.setSede(null);
+            pedido.setEmpresaSede(null);
+            pedido.setLocalEstabelecimento(null);
 
             // Break link to Aplicante
             pedido.setAplicante(null);
@@ -256,7 +257,7 @@ public class EmpresaService {
 
     private static boolean isAplicanteReadyForSubmission(Aplicante aplicante) {
         return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
-                && aplicante.getPedido().getStatus() == PedidoStatus.SUBMETIDO
-                && aplicante.getPedido().getFatura().getStatus() == FaturaStatus.PAGA;
+                && aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.SUBMETIDO
+                && aplicante.getPedidoInscricaoCadastro().getFatura().getStatus() == FaturaStatus.PAGA;
     }
 }

@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.aplicante.AplicantePageDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
-import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
@@ -27,6 +25,8 @@ import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
+import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
@@ -39,6 +39,8 @@ import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 
 @Service
@@ -47,7 +49,6 @@ public class AplicanteService {
     private static final Logger logger = LoggerFactory.getLogger(AplicanteService.class);
     private static final String PREFIX = "MCI";
     private final AplicanteRepository aplicanteRepository;
-    private final AplicanteMapper aplicanteMapper;
     private final AplicanteNumberRepository repository;
     private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
@@ -75,17 +76,17 @@ public class AplicanteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
         // Enrich Empresa
-        if (aplicanteDto.getEmpresaDto() != null && aplicanteDto.getEmpresaDto().getId() != null) {
-            empresaRepository.findById(aplicanteDto.getEmpresaDto().getId())
+        if (aplicanteDto.getEmpresa() != null && aplicanteDto.getEmpresa().getId() != null) {
+            empresaRepository.findById(aplicanteDto.getEmpresa().getId())
                     .map(empresaMapper::toDto)
-                    .ifPresent(aplicanteDto::setEmpresaDto);
+                    .ifPresent(aplicanteDto::setEmpresa);
         }
 
         // Enrich PedidoInscricaoCadastro
-        if (aplicanteDto.getPedidoInscricaoCadastroDto() != null && aplicanteDto.getPedidoInscricaoCadastroDto().getId() != null) {
+        if (aplicanteDto.getPedidoInscricaoCadastro() != null && aplicanteDto.getPedidoInscricaoCadastro().getId() != null) {
             PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
                     .getByAplicanteId(aplicanteDto.getId());
-            aplicanteDto.setPedidoInscricaoCadastroDto(pedidoDto);
+            aplicanteDto.setPedidoInscricaoCadastro(pedidoDto);
         }
 
         // Enrich Certificado Cadastro
@@ -93,7 +94,7 @@ public class AplicanteService {
                 .map(certificadoMapper::toDto)
                 .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
 
-        aplicanteDto.setHistoricoStatusDto(
+        aplicanteDto.setHistoricoStatus(
                 historicoEstadoAplicanteRepository.findAllByAplicante_Id(id)
         );
         return aplicanteDto;
@@ -136,42 +137,86 @@ public class AplicanteService {
     @Transactional
     public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) throws BadRequestException {
         logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {} e PedidoInscricaoCadastro: {}", aplicanteId, obj);
-        obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
-        obj.setSede(enderecoService.create(obj.getSede()));
+
+        // 1) Carregar Aplicante já com Empresa+Sede (1 consulta)
+        Aplicante aplicante = aplicanteRepository
+                .findByIdWithEmpresaAndEmpresa_Sede(aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
+
+        Empresa empresa = aplicante.getEmpresa();
+        if (empresa == null || empresa.getSede() == null) {
+            throw new BadRequestException("Empresa/Sede do aplicante não configurada");
+        }
+
+        Endereco empresaSede = new Endereco();
+        empresaSede.setLocal(empresa.getSede().getLocal());
+        empresaSede.setAldeia(empresa.getSede().getAldeia());
+
+        obj.setNomeEmpresa(empresa.getNome());
+        obj.setEmpresaNif(empresa.getNif());
+        obj.setEmpresaNumeroRegistoComercial(empresa.getNumeroRegistoComercial());
+        obj.setEmpresaTelefone(empresa.getTelefone());
+        obj.setEmpresaTelemovel(empresa.getTelemovel());
+        obj.setEmpresaGerente(empresa.getGerente());
+        obj.setEmpresaEmail(empresa.getUtilizador().getEmail());
+
+        obj.setAplicante(aplicante);
+        obj.setEmpresaSede(empresaSede);
+        obj.setLocalEstabelecimento(enderecoService.create(obj.getLocalEstabelecimento()));
         obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
         entityManager.persist(obj);
         return pedidoInscricaoCadastroMapper.toDto(obj);
     }
 
-    public PedidoInscricaoCadastroDto updatePedidoInscricaoCadastro(Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro obj) throws BadRequestException {
-        logger.info("Atualizando PedidoInscricaoCadastro pelo id: {} e PedidoInscricaoCadastro: {}", pedidoId, obj);
-        obj.setSede(enderecoService.update(obj.getSede()));
+    @Transactional
+    public PedidoInscricaoCadastroDto updatePedidoInscricaoCadastro(
+            Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro incoming) throws BadRequestException {
 
-        return pedidoInscricaoCadastroRepository.findByIdAndAplicante_Id(pedidoId, aplicanteId)
-                .map(pedidoInscricaoCadastro -> {
-                    pedidoInscricaoCadastro.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
-                    pedidoInscricaoCadastro.setTipoPedidoCadastro(obj.getTipoPedidoCadastro());
-                    pedidoInscricaoCadastro.setNomeEmpresa(obj.getNomeEmpresa());
-                    pedidoInscricaoCadastro.setNif(obj.getNif());
-                    pedidoInscricaoCadastro.setNumeroRegistoComercial(obj.getNumeroRegistoComercial());
-                    pedidoInscricaoCadastro.setTelefone(obj.getTelefone());
-                    pedidoInscricaoCadastro.setTelemovel(obj.getTelemovel());
-                    pedidoInscricaoCadastro.setGerente(obj.getGerente());
-                    pedidoInscricaoCadastro.setNomeEstabelecimento(obj.getNomeEstabelecimento());
-                    pedidoInscricaoCadastro.setLocalEstabelecimento(obj.getLocalEstabelecimento());
-                    pedidoInscricaoCadastro.setTipoEstabelecimento(obj.getTipoEstabelecimento());
-                    pedidoInscricaoCadastro.setCaraterizacaoEstabelecimento(obj.getCaraterizacaoEstabelecimento());
-                    pedidoInscricaoCadastro.setRisco(obj.getRisco());
-                    pedidoInscricaoCadastro.setAto(obj.getAto());
-                    pedidoInscricaoCadastro.setTipoEmpresa(obj.getTipoEmpresa());
-                    pedidoInscricaoCadastro.setQuantoAtividade(obj.getQuantoAtividade());
-                    pedidoInscricaoCadastro.setAlteracoes(obj.getAlteracoes());
-                    pedidoInscricaoCadastro.setDataEmissaoCertAnterior(obj.getDataEmissaoCertAnterior());
-                    pedidoInscricaoCadastro.setObservacao(obj.getObservacao());
+        logger.info("Atualizando PedidoInscricaoCadastro: pedidoId={}, payload={}", pedidoId, incoming);
 
-                    return pedidoInscricaoCadastroMapper.toDto(pedidoInscricaoCadastroRepository.save(pedidoInscricaoCadastro));
-                }).orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
+        // 1) Load managed entity once (throws if not found / not owned by aplicante)
+        PedidoInscricaoCadastro entity = pedidoInscricaoCadastroRepository
+                .findByIdAndAplicante_Id(pedidoId, aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido de inscricao nao encontrado"));
+
+        // 2) Endereços (evitar chamadas desnecessárias)
+        if (incoming.getEmpresaSede() != null) {
+            entity.setEmpresaSede(enderecoService.update(incoming.getEmpresaSede()));
+        }
+        if (incoming.getLocalEstabelecimento() != null) {
+            entity.setLocalEstabelecimento(enderecoService.update(incoming.getLocalEstabelecimento()));
+        }
+
+        // 3) Classe de atividade via referência (evita select quando só precisamos da FK)
+        if (incoming.getClasseAtividade() != null && incoming.getClasseAtividade().getId() != null) {
+            Long newId = incoming.getClasseAtividade().getId();
+            if (entity.getClasseAtividade() == null || !newId.equals(entity.getClasseAtividade().getId())) {
+                entity.setClasseAtividade(classeAtividadeRepository.getReferenceById(newId));
+            }
+        }
+
+        // 4) Copiar campos simples apenas quando mudam (menos “dirty” = menos "UPDATEs")
+        setIfChanged(entity::setTipoPedidoCadastro, entity.getTipoPedidoCadastro(), incoming.getTipoPedidoCadastro());
+        setIfChanged(entity::setNomeEmpresa, entity.getNomeEmpresa(), incoming.getNomeEmpresa());
+        setIfChanged(entity::setEmpresaNif, entity.getEmpresaNif(), incoming.getEmpresaNif());
+        setIfChanged(entity::setEmpresaNumeroRegistoComercial, entity.getEmpresaNumeroRegistoComercial(), incoming.getEmpresaNumeroRegistoComercial());
+        setIfChanged(entity::setEmpresaTelefone, entity.getEmpresaTelefone(), incoming.getEmpresaTelefone());
+        setIfChanged(entity::setEmpresaTelemovel, entity.getEmpresaTelemovel(), incoming.getEmpresaTelemovel());
+        setIfChanged(entity::setEmpresaGerente, entity.getEmpresaGerente(), incoming.getEmpresaGerente());
+        setIfChanged(entity::setNomeEstabelecimento, entity.getNomeEstabelecimento(), incoming.getNomeEstabelecimento());
+        setIfChanged(entity::setTipoEstabelecimento, entity.getTipoEstabelecimento(), incoming.getTipoEstabelecimento());
+        setIfChanged(entity::setCaraterizacaoEstabelecimento, entity.getCaraterizacaoEstabelecimento(), incoming.getCaraterizacaoEstabelecimento());
+        setIfChanged(entity::setRisco, entity.getRisco(), incoming.getRisco());
+        setIfChanged(entity::setAto, entity.getAto(), incoming.getAto());
+        setIfChanged(entity::setTipoEmpresa, entity.getTipoEmpresa(), incoming.getTipoEmpresa());
+        setIfChanged(entity::setQuantoAtividade, entity.getQuantoAtividade(), incoming.getQuantoAtividade());
+        setIfChanged(entity::setAlteracoes, entity.getAlteracoes(), incoming.getAlteracoes());
+        setIfChanged(entity::setDataEmissaoCertAnterior, entity.getDataEmissaoCertAnterior(), incoming.getDataEmissaoCertAnterior());
+        setIfChanged(entity::setObservacao, entity.getObservacao(), incoming.getObservacao());
+
+        // 5) Nada de save(): a entidade está gerenciada; flush ocorre no commit (menos I/O)
+        return pedidoInscricaoCadastroMapper.toDto(entity);
     }
 
     @Transactional
@@ -184,6 +229,15 @@ public class AplicanteService {
 
         aplicante.setDirecaoAtribuida(direcao);
         entityManager.merge(aplicante);
+    }
+
+    /**
+     * Define valor apenas se mudou (lida com nulls).
+     */
+    private static <T> void setIfChanged(Consumer<T> setter, T current, T next) {
+        if (!Objects.equals(current, next)) {
+            setter.accept(next);
+        }
     }
 
 }

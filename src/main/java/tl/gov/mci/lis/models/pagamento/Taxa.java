@@ -41,6 +41,13 @@ public class Taxa extends EntityDB {
     public Taxa() {
     }
 
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Taxa t)) return false;
+        return getId() != null && getId().equals(t.getId());
+    }
+    @Override public int hashCode() { return getId() != null ? getId().hashCode() : 0; }
+
     @Override
     public String toString() {
         return "Taxa{" +

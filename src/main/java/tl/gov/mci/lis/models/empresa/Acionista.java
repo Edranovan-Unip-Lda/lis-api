@@ -8,7 +8,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 
 @Entity
-@Table(name = "lis_acionistas")
+@Table(name = "lis_empresa_acionistas")
 @Getter
 @Setter
 public class Acionista extends EntityDB {

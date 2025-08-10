@@ -40,6 +40,7 @@ import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,10 +88,6 @@ public class UserServices {
                     direcaoRepository.getReferenceById(obj.getDirecao().getId())
             );
         }
-
-        obj.setDirecao(
-                direcaoRepository.getReferenceById(obj.getDirecao().getId())
-        );
 
         obj.setPassword(bcryptEncoder.encode(obj.getPassword()));
 
@@ -284,15 +281,15 @@ public class UserServices {
         AplicanteDto aplicanteDto = aplicanteRepository.getFromIdAndDirecaoId(aplicanteId, user.getDirecao().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
-        empresaRepository.findById(aplicanteDto.getEmpresaDto().getId())
+        empresaRepository.findById(aplicanteDto.getEmpresa().getId())
                 .map(empresaMapper::toDto)
-                .ifPresent(aplicanteDto::setEmpresaDto);
+                .ifPresent(aplicanteDto::setEmpresa);
 
         PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
                 .getByAplicanteId(aplicanteDto.getId());
-        aplicanteDto.setPedidoInscricaoCadastroDto(pedidoDto);
+        aplicanteDto.setPedidoInscricaoCadastro(pedidoDto);
 
-        aplicanteDto.setHistoricoStatusDto(
+        aplicanteDto.setHistoricoStatus(
                 historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteDto.getId())
         );
         return aplicanteDto;
@@ -311,51 +308,58 @@ public class UserServices {
     }
 
     @Transactional
-    public Aplicante approveAplicante(String username, Long aplicanteId, HistoricoEstadoAplicante historicoEstadoAplicante) {
-        logger.info("Aprovar aplicante com nome do utilizador: {} e aplicante id: {}", username, aplicanteId);
+    public Aplicante approveAplicante(String username, Long aplicanteId,
+                                      HistoricoEstadoAplicante historico) {
+        logger.info("Aprovar aplicante: user={}, aplicanteId={}", username, aplicanteId);
 
-        User user = userRepository.queryByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilizador com o nome " + username + " não existe"));
+        String operador = userRepository.queryByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador " + username + " não existe"))
+                .getUsername();
 
-        historicoEstadoAplicante.setAlteradoPor(user.getUsername());
-
-        return aplicanteRepository.findById(aplicanteId)
-                .map(aplicante -> {
-                    if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO) {
-                        throw new ForbiddenException("O aplicante não está num estado válido para aprovação.");
-                    }
-
-                    // Add status history
-                    aplicante.addHistorico(historicoEstadoAplicante);
-                    aplicante.setDirecaoAtribuida(null);
-
-                    // Update status (optional: ensure it's set to APROVADO)
-                    aplicante.setEstado(AplicanteStatus.APROVADO);
-
-                    Endereco sede = new Endereco();
-                    sede.setLocal(aplicante.getPedido().getSede().getLocal());
-                    sede.setAldeia(aplicante.getPedido().getSede().getAldeia());
-
-                    entityManager.persist(sede);
-
-                    // Create and populate CertificadoInscricaoCadastro
-                    CertificadoInscricaoCadastro cert = new CertificadoInscricaoCadastro();
-                    cert.setAplicante(aplicante);
-                    cert.setSociedadeComercial(aplicante.getEmpresa().getNome());
-                    cert.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
-                    cert.setSede(sede);
-                    cert.setAtividade(aplicante.getPedido().getClasseAtividade().getDescricao());
-                    cert.setDataEmissao(LocalDate.now().toString());
-                    cert.setDataValidade(LocalDate.now().plusYears(2).toString());
-                    cert.setNomeDiretorGeral("Donald Trump");
-
-                    // Persist certificate
-                    entityManager.persist(cert);
-
-                    return aplicante;
-                })
+        // Single round-trip, no N+1 when touching associations
+        Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
+        if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO) {
+            throw new ForbiddenException("O aplicante não está num estado válido para aprovação.");
+        }
+
+        // Histórico
+        historico.setAlteradoPor(operador);
+        if (historico.getDataAlteracao() == null) {
+            historico.setDataAlteracao(Instant.now());
+        }
+        historico.setStatus(AplicanteStatus.APROVADO); // se existir no modelo
+        aplicante.addHistorico(historico); // mantém bi-direcional
+
+        // Atualizações de domínio
+        aplicante.setDirecaoAtribuida(null);
+        aplicante.setEstado(AplicanteStatus.APROVADO);
+
+        // Copiar a sede do pedido para o certificado (nova entidade endereço)
+        Endereco sede = new Endereco();
+        Endereco sedePedido = aplicante.getPedidoInscricaoCadastro().getEmpresaSede();
+        sede.setLocal(sedePedido.getLocal());
+        sede.setAldeia(sedePedido.getAldeia());
+        entityManager.persist(sede); // explícito, sem depender de cascade
+
+        // Emitir certificado
+        CertificadoInscricaoCadastro cert = new CertificadoInscricaoCadastro();
+        cert.setAplicante(aplicante);
+        cert.setSociedadeComercial(aplicante.getEmpresa().getNome());
+        cert.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
+        cert.setSede(sede);
+        cert.setAtividade(aplicante.getPedidoInscricaoCadastro().getClasseAtividade().getDescricao());
+        cert.setDataEmissao(LocalDate.now().toString());
+        cert.setDataValidade(LocalDate.now().plusYears(2).toString());
+        cert.setNomeDiretorGeral("Donald Trump");
+
+        entityManager.persist(cert);
+        aplicante.setCertificadoInscricaoCadastro(cert);
+
+        // No save/flush necessário: dirty checking + TX commit
+        // historicoStatus e certificado já estão anexados ao 'aplicante' carregado
+        return aplicante; // serializa com certificado + historicoStatus
     }
 
     @Transactional

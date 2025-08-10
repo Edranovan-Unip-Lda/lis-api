@@ -15,7 +15,7 @@ import tl.gov.mci.lis.models.pagamento.Fatura;
 @Entity
 @Getter
 @Setter
-@Table(name = "lis_pedido_inscricao_cadastro")
+@Table(name = "lis_cadastro_pedido_inscricao")
 public class PedidoInscricaoCadastro extends EntityDB {
     @Enumerated(EnumType.STRING)
     private PedidoStatus status;
@@ -24,17 +24,17 @@ public class PedidoInscricaoCadastro extends EntityDB {
     private TipoPedidoCadastro tipoPedidoCadastro;
 
     private String nomeEmpresa;
-    private String nif;
-    private String gerente;
-    private String numeroRegistoComercial;
-    private String email;
-    private String telefone;
-    private String telemovel;
+    private String empresaNif;
+    private String empresaGerente;
+    private String empresaNumeroRegistoComercial;
+    private String empresaEmail;
+    private String empresaTelefone;
+    private String empresaTelemovel;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "aplicante")
-    private Endereco sede;
+    private Endereco empresaSede;
 
     private String categoria;
 
@@ -46,7 +46,9 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     private String nomeEstabelecimento;
 
-    private String localEstabelecimento;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "endereco_estabelecimento_id", referencedColumnName = "id")
+    private Endereco localEstabelecimento;
 
     @Enumerated(EnumType.STRING)
     private TipoEstabelecimento tipoEstabelecimento;
@@ -59,7 +61,6 @@ public class PedidoInscricaoCadastro extends EntityDB {
 
     @Enumerated(EnumType.STRING)
     private TipoAto ato;
-
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,22 +85,22 @@ public class PedidoInscricaoCadastro extends EntityDB {
     public PedidoInscricaoCadastro() {
     }
 
-    public PedidoInscricaoCadastro(Long id, TipoPedidoCadastro tipoPedidoCadastro, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, TipoEmpresa tipoEmpresa, String nomeEstabelecimento, String localEstabelecimento, TipoEstabelecimento tipoEstabelecimento, CaraterizacaoEstabelecimento caraterizacaoEstabelecimento, NivelRisco risco, TipoAto ato, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
+    public PedidoInscricaoCadastro(Long id, TipoPedidoCadastro tipoPedidoCadastro, String nomeEmpresa, String nif, String gerente, String numeroRegistoComercial, String email, String telefone, String telemovel, Long sedeId, String categoria, TipoEmpresa tipoEmpresa, String nomeEstabelecimento, Long localEstabelecimentoId, TipoEstabelecimento tipoEstabelecimento, CaraterizacaoEstabelecimento caraterizacaoEstabelecimento, NivelRisco risco, TipoAto ato, String alteracoes, String dataEmissaoCertAnterior, String observacao) {
         this.setId(id);
         this.tipoPedidoCadastro = tipoPedidoCadastro;
         this.nomeEmpresa = nomeEmpresa;
-        this.nif = nif;
-        this.gerente = gerente;
-        this.numeroRegistoComercial = numeroRegistoComercial;
-        this.email = email;
-        this.telefone = telefone;
-        this.telemovel = telemovel;
-        this.sede = new Endereco();
-        this.sede.setId(sedeId);
+        this.empresaNif = nif;
+        this.empresaGerente = gerente;
+        this.empresaNumeroRegistoComercial = numeroRegistoComercial;
+        this.empresaEmail = email;
+        this.empresaTelefone = telefone;
+        this.empresaTelemovel = telemovel;
+        this.empresaSede = new Endereco();
+        this.empresaSede.setId(sedeId);
         this.categoria = categoria;
         this.tipoEmpresa = tipoEmpresa;
         this.nomeEstabelecimento = nomeEstabelecimento;
-        this.localEstabelecimento = localEstabelecimento;
+        this.localEstabelecimento.setId(localEstabelecimentoId);
         this.tipoEstabelecimento = tipoEstabelecimento;
         this.caraterizacaoEstabelecimento = caraterizacaoEstabelecimento;
         this.risco = risco;
@@ -115,12 +116,12 @@ public class PedidoInscricaoCadastro extends EntityDB {
                 "id=" + this.getId() +
                 "tipoPedido='" + tipoPedidoCadastro + '\'' +
                 ", nomeEmpresa='" + nomeEmpresa + '\'' +
-                ", nif='" + nif + '\'' +
-                ", gerente='" + gerente + '\'' +
-                ", numeroRegistoComercial='" + numeroRegistoComercial + '\'' +
-                ", email='" + email + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", telemovel='" + telemovel + '\'' +
+                ", nif='" + empresaNif + '\'' +
+                ", gerente='" + empresaGerente + '\'' +
+                ", numeroRegistoComercial='" + empresaNumeroRegistoComercial + '\'' +
+                ", email='" + empresaEmail + '\'' +
+                ", telefone='" + empresaTelefone + '\'' +
+                ", telemovel='" + empresaTelemovel + '\'' +
                 ", categoria='" + categoria + '\'' +
                 ", tipoEmpresa='" + tipoEmpresa + '\'' +
                 ", nomeEstabelecimento='" + nomeEstabelecimento + '\'' +

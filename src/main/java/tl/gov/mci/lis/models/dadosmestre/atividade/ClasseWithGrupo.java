@@ -18,8 +18,6 @@ public interface ClasseWithGrupo {
 
     NivelRisco getTipoRisco();
 
-    NivelRisco getRisco();
-
     interface GrupoAtividadeExcerpt {
         Long getId();
 

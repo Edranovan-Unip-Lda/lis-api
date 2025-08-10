@@ -28,18 +28,18 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     PedidoStatus status;
     TipoPedidoCadastro tipoPedidoCadastro;
     String nomeEmpresa;
-    String nif;
-    String gerente;
-    String numeroRegistoComercial;
-    String email;
-    String telefone;
-    String telemovel;
-    EnderecoDto sede;
+    String empresaNif;
+    String empresaGerente;
+    String empresaNumeroRegistoComercial;
+    String empresaEmail;
+    String empresaTelefone;
+    String empresaTelemovel;
+    EnderecoDto empresaSede;
     String categoria;
     TipoEmpresa tipoEmpresa;
     QuantoAtividade quantoAtividade;
     String nomeEstabelecimento;
-    String localEstabelecimento;
+    EnderecoDto localEstabelecimento;
     TipoEstabelecimento tipoEstabelecimento;
     CaraterizacaoEstabelecimento caraterizacaoEstabelecimento;
     NivelRisco risco;
@@ -75,7 +75,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
             TipoEmpresa tipoEmpresa,
             QuantoAtividade quantoAtividade,
             String nomeEstabelecimento,
-            String localEstabelecimento,
+            EnderecoDto localEstabelecimento,
             TipoEstabelecimento tipoEstabelecimento,
             CaraterizacaoEstabelecimento caraterizacaoEstabelecimento,
             NivelRisco risco,
@@ -84,7 +84,8 @@ public class PedidoInscricaoCadastroDto implements Serializable {
             String alteracoes,
             String dataEmissaoCertAnterior,
             String observacao,
-            FaturaDto fatura) {
+            FaturaDto fatura,
+            String empresaGerente) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -93,13 +94,13 @@ public class PedidoInscricaoCadastroDto implements Serializable {
         this.status = status;
         this.tipoPedidoCadastro = tipoPedidoCadastro;
         this.nomeEmpresa = nomeEmpresa;
-        this.nif = nif;
-        this.gerente = gerente;
-        this.numeroRegistoComercial = numeroRegistoComercial;
-        this.email = email;
-        this.telefone = telefone;
-        this.telemovel = telemovel;
-        this.sede = sede;
+        this.empresaNif = nif;
+        this.empresaGerente = gerente;
+        this.empresaNumeroRegistoComercial = numeroRegistoComercial;
+        this.empresaEmail = email;
+        this.empresaTelefone = telefone;
+        this.empresaTelemovel = telemovel;
+        this.empresaSede = sede;
         this.categoria = categoria;
         this.tipoEmpresa = tipoEmpresa;
         this.quantoAtividade = quantoAtividade;
