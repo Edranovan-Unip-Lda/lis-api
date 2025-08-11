@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteReqsDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
@@ -52,9 +53,9 @@ public class EmpresaController {
     }
 
     @PostMapping("/{empresaId}/aplicantes")
-    ResponseEntity<AplicanteDto> saveAplicante(@PathVariable Long empresaId, @RequestBody Aplicante obj) {
+    ResponseEntity<AplicanteDto> saveAplicante(@PathVariable Long empresaId, @RequestBody AplicanteReqsDto obj) {
         return new ResponseEntity<>(
-                aplicanteMapper.toDto(empresaService.createAplicante(empresaId, obj)),
+                aplicanteMapper.toDto(empresaService.createAplicante(empresaId, aplicanteMapper.toEntity(obj))),
                 HttpStatus.CREATED
         );
     }
@@ -73,7 +74,7 @@ public class EmpresaController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size
     ) {
-        return new ResponseEntity<>(empresaService.getAplicantePage(empresaId, page, size), HttpStatus.OK);
+        return ResponseEntity.ok(empresaService.getAplicantePage(empresaId, page, size));
     }
 
     @GetMapping("/{empresaId}/aplicantes/{aplicanteId}")

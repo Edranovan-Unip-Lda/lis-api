@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.Categoria;
-import tl.gov.mci.lis.enums.FaturaStatus;
-import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -23,7 +20,8 @@ import java.util.List;
 @Setter
 @Table(name = "lis_aplicante")
 public class Aplicante extends EntityDB {
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private AplicanteType tipo;
 
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
@@ -55,7 +53,7 @@ public class Aplicante extends EntityDB {
     public Aplicante() {
     }
 
-    public Aplicante(Long id, Long empresaId, String empresaNome, String empresaNif, AplicanteStatus estado, String numero, Categoria categoria, String tipo, Instant createdAt, Instant updatedAt) {
+    public Aplicante(Long id, Long empresaId, String empresaNome, String empresaNif, AplicanteStatus estado, String numero, Categoria categoria, AplicanteType tipo, Instant createdAt, Instant updatedAt) {
         this.setId(id);
         this.empresa = new Empresa(empresaId, empresaNome, empresaNif);
         this.estado = estado;

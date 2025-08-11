@@ -4,10 +4,7 @@ import lombok.Data;
 import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
-import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.Categoria;
-import tl.gov.mci.lis.enums.FaturaStatus;
-import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.enums.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -24,7 +21,7 @@ public class AplicanteDto implements Serializable {
     Instant updatedAt;
     String createdBy;
     String updatedBy;
-    String tipo;
+    AplicanteType tipo;
     Categoria categoria;
     String numero;
     AplicanteStatus estado;
@@ -38,7 +35,7 @@ public class AplicanteDto implements Serializable {
     public AplicanteDto() {
     }
 
-    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
         this.id = id;
         this.isDeleted = isDeleted;
         this.createdAt = createdAt;
@@ -53,7 +50,7 @@ public class AplicanteDto implements Serializable {
         this.faturaStatus = faturaStatus;
     }
 
-    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, String tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus, Long empresaId, Long pedidoInscricaoCadastroId) {
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus, Long empresaId, Long pedidoInscricaoCadastroId) {
         this.id = id;
         this.isDeleted = isDeleted;
         this.createdAt = createdAt;
