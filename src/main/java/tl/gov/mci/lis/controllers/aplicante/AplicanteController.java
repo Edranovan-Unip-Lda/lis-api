@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
-import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
+import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
+import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -27,7 +29,7 @@ import tl.gov.mci.lis.services.pagamento.FaturaService;
 public class AplicanteController {
     private final AplicanteService aplicanteService;
     private final FaturaService faturaService;
-    private final AplicanteMapper aplicanteMapper;
+    private final LicencaMapper licencaMapper;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("")
@@ -52,6 +54,21 @@ public class AplicanteController {
     ) throws BadRequestException {
         if (tipo == AplicanteType.CADASTRO) {
             return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("/{aplicanteId}/pedidos/atividade")
+    ResponseEntity<PedidoLicencaAtividadeDto> createPedidoLicencaAtividade(
+            @RequestParam(name = "tipo") AplicanteType tipo,
+            @PathVariable Long aplicanteId,
+            @RequestBody PedidoLicencaAtividadeReqsDto incomingObj
+    ) {
+        if (tipo == AplicanteType.ATIVIDADE) {
+            return new ResponseEntity<>(
+                    licencaMapper.toDto(aplicanteService.createPedidoLicencaAtividade(aplicanteId, licencaMapper.toEntity(incomingObj))),
+                    HttpStatus.CREATED);
         } else {
             return null;
         }

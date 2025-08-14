@@ -2,6 +2,7 @@ package tl.gov.mci.lis.dtos.atividade;
 
 import lombok.Value;
 import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -20,4 +21,5 @@ public class GrupoAtividadeDto implements Serializable {
     Categoria tipo;
     String codigo;
     String descricao;
+    NivelRisco tipoRisco;
 }

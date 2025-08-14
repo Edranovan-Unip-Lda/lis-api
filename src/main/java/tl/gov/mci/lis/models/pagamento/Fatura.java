@@ -6,6 +6,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.Documento;
 
@@ -43,6 +44,9 @@ public class Fatura extends EntityDB {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_inscricao_cadastro_id", referencedColumnName = "id")
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
+
+    @OneToOne(mappedBy = "fatura")
+    private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @OneToOne(mappedBy = "fatura", cascade = CascadeType.ALL, orphanRemoval = true)
     private Documento recibo;

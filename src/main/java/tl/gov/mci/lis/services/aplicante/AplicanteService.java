@@ -23,6 +23,7 @@ import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
@@ -34,6 +35,7 @@ import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroReposito
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.atividade.GrupoAtividadeRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
@@ -62,6 +64,7 @@ public class AplicanteService {
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
+    private final GrupoAtividadeRepository grupoAtividadeRepository;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
@@ -217,6 +220,16 @@ public class AplicanteService {
 
         // 5) Nada de save(): a entidade está gerenciada; flush ocorre no commit (menos I/O)
         return pedidoInscricaoCadastroMapper.toDto(entity);
+    }
+
+    @Transactional
+    public PedidoLicencaAtividade createPedidoLicencaAtividade(Long aplicanteId, PedidoLicencaAtividade reqsObj) {
+        logger.info("Criando PedidoLicencaAtividade pelo Aplicante id: {} e PedidoLicencaAtividade: {}", aplicanteId, reqsObj);
+
+        reqsObj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
+        reqsObj.setTipoAtividade(grupoAtividadeRepository.getReferenceById(reqsObj.getTipoAtividade().getId()));
+        entityManager.persist(reqsObj);
+        return reqsObj;
     }
 
     @Transactional
