@@ -28,7 +28,7 @@ public class PedidoLicencaAtividade extends EntityDB {
     private String nomeEmpresa;
     private String empresaNumeroRegistoComercial;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "aplicante")
     private Endereco empresaSede;
@@ -43,11 +43,11 @@ public class PedidoLicencaAtividade extends EntityDB {
     private boolean estatutoSociedadeComercial;
     private String empresaNif;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // cascade so persist/update works
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "representante_id", referencedColumnName = "id")
     private Pessoa representante;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // cascade so persist/update works
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "gerente_id", referencedColumnName = "id")
     private Pessoa gerente;
 
@@ -62,8 +62,8 @@ public class PedidoLicencaAtividade extends EntityDB {
     private boolean reciboPagamento;
     private String outrosDocumentos;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "aplicante_id", referencedColumnName = "id", nullable = false)
     private Aplicante aplicante;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -18,9 +18,11 @@ import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.AplicanteType;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
+import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.pagamento.FaturaService;
 
 @RestController
@@ -30,6 +32,7 @@ public class AplicanteController {
     private final AplicanteService aplicanteService;
     private final FaturaService faturaService;
     private final LicencaMapper licencaMapper;
+    private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("")
@@ -46,46 +49,42 @@ public class AplicanteController {
         return new ResponseEntity<>(aplicanteService.getById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{aplicanteId}/pedidos")
+    @PostMapping("/{aplicanteId}/pedidos/cadastro")
     ResponseEntity<PedidoInscricaoCadastroDto> createPedidoInscricaoCadastro(
-            @RequestParam(name = "tipo") AplicanteType tipo,
             @PathVariable Long aplicanteId,
             @RequestBody PedidoInscricaoCadastro obj
     ) throws BadRequestException {
-        if (tipo == AplicanteType.CADASTRO) {
-            return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
-        } else {
-            return null;
-        }
+        return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
     }
 
     @PostMapping("/{aplicanteId}/pedidos/atividade")
     ResponseEntity<PedidoLicencaAtividadeDto> createPedidoLicencaAtividade(
-            @RequestParam(name = "tipo") AplicanteType tipo,
             @PathVariable Long aplicanteId,
             @RequestBody PedidoLicencaAtividadeReqsDto incomingObj
     ) {
-        if (tipo == AplicanteType.ATIVIDADE) {
-            return new ResponseEntity<>(
-                    licencaMapper.toDto(aplicanteService.createPedidoLicencaAtividade(aplicanteId, licencaMapper.toEntity(incomingObj))),
-                    HttpStatus.CREATED);
-        } else {
-            return null;
-        }
+        return new ResponseEntity<>(
+                licencaMapper.toDto(pedidoLicencaAtividadeService.create(aplicanteId, licencaMapper.toEntity(incomingObj))),
+                HttpStatus.CREATED);
     }
 
-    @PutMapping("/{aplicanteId}/pedidos/{pedidoId}")
+    @PutMapping("/{aplicanteId}/pedidos/cadastro/{pedidoId}")
     ResponseEntity<PedidoInscricaoCadastroDto> updatePedidoInscricaoCadastro(
-            @RequestParam(name = "tipo") AplicanteType tipo,
             @PathVariable Long aplicanteId,
             @PathVariable Long pedidoId,
             @RequestBody PedidoInscricaoCadastro obj
     ) throws BadRequestException {
-        if (tipo == AplicanteType.CADASTRO) {
-            return new ResponseEntity<>(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj), HttpStatus.CREATED);
-        } else {
-            return null;
-        }
+        return new ResponseEntity<>(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{aplicanteId}/pedidos/atividade/{pedidoId}")
+    ResponseEntity<PedidoLicencaAtividadeDto> updatePedidoAtividade(
+            @PathVariable Long aplicanteId,
+            @PathVariable Long pedidoId,
+            @RequestBody PedidoLicencaAtividadeReqsDto obj
+    ) throws BadRequestException {
+        return new ResponseEntity<>(
+                licencaMapper.toDto(pedidoLicencaAtividadeService.updateByIdAndAplicanteId(pedidoId, aplicanteId, licencaMapper.toEntity(obj))),
+                HttpStatus.CREATED);
     }
 
     @PutMapping("/{aplicanteId}/pedidos/{pedidoId}/faturas/{faturaId}/upload/{username}")

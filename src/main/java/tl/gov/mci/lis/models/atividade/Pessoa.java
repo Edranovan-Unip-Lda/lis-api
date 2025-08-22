@@ -16,7 +16,7 @@ public class Pessoa extends EntityDB {
     private String nacionalidade;
     private String naturalidade;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "aplicante")
     private Endereco morada;

@@ -39,10 +39,13 @@ import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
+import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
+
+import static tl.gov.mci.lis.enums.Categoria.INDUSTRIAL;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +68,7 @@ public class EmpresaService {
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
+    private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -184,14 +188,27 @@ public class EmpresaService {
         return aplicanteRepository.getFromIdAndEmpresaId(aplicanteId, empresaId)
                 .map(aplicanteDto -> {
                     aplicanteDto.setEmpresa(empresaMapper.toDto(getById(empresaId)));
-                    aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
                     aplicanteDto.setHistoricoStatus(historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteId));
-                    if (aplicanteDto.getEstado().equals(AplicanteStatus.APROVADO)) {
-                        // Enrich Certificado Cadastro
-                        certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
-                                .map(certificadoMapper::toDto)
-                                .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
+
+                    switch (aplicanteDto.getTipo()) {
+                        case ATIVIDADE -> {
+                            aplicanteDto.setPedidoLicencaAtividade(pedidoLicencaAtividadeService.getByAplicanteId(aplicanteId));
+                        }
+                        case CADASTRO -> {
+                            aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
+
+                            if (aplicanteDto.getEstado().equals(AplicanteStatus.APROVADO)) {
+                                // Enrich Certificado Cadastro
+                                certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
+                                        .map(certificadoMapper::toDto)
+                                        .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
+                            }
+                        }
+                        default -> {
+                            throw new ResourceNotFoundException("Categoria nao encontrada");
+                        }
                     }
+
                     return aplicanteDto;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));

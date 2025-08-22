@@ -31,6 +31,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
@@ -65,6 +66,7 @@ public class AplicanteService {
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
     private final GrupoAtividadeRepository grupoAtividadeRepository;
+    private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
@@ -220,16 +222,6 @@ public class AplicanteService {
 
         // 5) Nada de save(): a entidade está gerenciada; flush ocorre no commit (menos I/O)
         return pedidoInscricaoCadastroMapper.toDto(entity);
-    }
-
-    @Transactional
-    public PedidoLicencaAtividade createPedidoLicencaAtividade(Long aplicanteId, PedidoLicencaAtividade reqsObj) {
-        logger.info("Criando PedidoLicencaAtividade pelo Aplicante id: {} e PedidoLicencaAtividade: {}", aplicanteId, reqsObj);
-
-        reqsObj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
-        reqsObj.setTipoAtividade(grupoAtividadeRepository.getReferenceById(reqsObj.getTipoAtividade().getId()));
-        entityManager.persist(reqsObj);
-        return reqsObj;
     }
 
     @Transactional

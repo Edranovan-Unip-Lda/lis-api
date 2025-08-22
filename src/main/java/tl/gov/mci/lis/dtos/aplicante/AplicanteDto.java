@@ -4,6 +4,7 @@ import lombok.Data;
 import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
+import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.enums.*;
 
 import java.io.Serializable;
@@ -29,6 +30,7 @@ public class AplicanteDto implements Serializable {
     FaturaStatus faturaStatus;
     EmpresaDto empresa;
     PedidoInscricaoCadastroDto pedidoInscricaoCadastro;
+    PedidoLicencaAtividadeDto pedidoLicencaAtividade;
     List<HistoricoEstadoAplicanteDto> historicoStatus;
     CertificadoInscricaoCadastroDto certificadoInscricaoCadastro;
 

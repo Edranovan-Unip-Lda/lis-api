@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
@@ -39,6 +40,9 @@ public class Aplicante extends EntityDB {
 
     @OneToOne(mappedBy = "aplicante")
     private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
+
+    @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "direcao_id")
