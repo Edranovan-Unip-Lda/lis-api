@@ -8,19 +8,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
+import tl.gov.mci.lis.dtos.mappers.FaturaMapper;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
+import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
+import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.atividade.Pessoa;
 import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.pagamento.Fatura;
+import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.GrupoAtividadeRepository;
+import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
+import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
 
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for managing operations related to the PedidoLicencaAtividade entity.
@@ -35,6 +46,9 @@ public class PedidoLicencaAtividadeService {
     private final GrupoAtividadeRepository grupoAtividadeRepository;
     private final EntityManager entityManager;
     private final AplicanteRepository aplicanteRepository;
+    private final TaxaRepository taxaRepository;
+    private final FaturaMapper faturaMapper;
+    private final FaturaRepository faturaRepository;
 
     @Transactional
     public PedidoLicencaAtividade create(Long aplicanteId, PedidoLicencaAtividade reqsObj) {
@@ -107,6 +121,72 @@ public class PedidoLicencaAtividadeService {
                 pedidoLicencaAtividadeRepository.findByAplicante_id(aplicanteId)
                         .orElse(null)
         );
+    }
+
+    @Transactional
+    public FaturaDto createFatura(Long pedidoId, Fatura obj) {
+        logger.info("Criando fatura: {}", obj);
+        PedidoLicencaAtividade pedido = pedidoLicencaAtividadeRepository.findDetailById(pedidoId)
+                .orElseThrow(() -> {
+                    logger.error("PedidoLicencaAtividade nao encontrado");
+                    return new ResourceNotFoundException("PedidoLicencaAtividade nao encontrado");
+                });
+        obj.setStatus(FaturaStatus.EMITIDA);
+
+        // Fetch managed Taxa entities from DB
+        Set<Taxa> managedTaxas = obj.getTaxas().stream()
+                .map(taxa -> taxaRepository.getReferenceById(taxa.getId()))
+                .collect(Collectors.toSet());
+
+        obj.setTaxas(managedTaxas);
+
+        pedido.setFatura(obj);
+
+        return faturaMapper.toDto(obj);
+    }
+
+    @Transactional
+    public FaturaDto updateFatura(Long pedidoId, Long faturaId, Fatura incoming) {
+        Fatura entity = faturaRepository
+                .findByIdAndPedidoLicencaAtividade_Id(faturaId, pedidoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Fatura não encontrada"));
+
+        // simples
+        entity.setNomeEmpresa(incoming.getNomeEmpresa());
+        entity.setSociedadeComercial(incoming.getSociedadeComercial());
+        entity.setSuperficie(incoming.getSuperficie());
+        entity.setTotal(incoming.getTotal());
+
+        // === TAXAS ===
+        if (incoming.getTaxas() != null) {
+            // Ensure equals/hashCode(Taxa) is ID-based!
+            Set<Long> targetIds = incoming.getTaxas().stream()
+                    .map(EntityDB::getId).filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            // Load managed collection (causes the SELECT you see)
+            Set<Taxa> current = entity.getTaxas();
+
+            // Remove
+            for (Iterator<Taxa> it = current.iterator(); it.hasNext(); ) {
+                Taxa t = it.next();
+                if (!targetIds.contains(t.getId())) {
+                    it.remove();                 // marks collection dirty
+                    t.getFaturas().remove(entity); // keep inverse in sync
+                }
+            }
+            // Add
+            Set<Long> currentIds = current.stream().map(EntityDB::getId).collect(Collectors.toSet());
+            for (Long id : targetIds) {
+                if (!currentIds.contains(id)) {
+                    Taxa ref = taxaRepository.getReferenceById(id); // proxy, no SELECT
+                    current.add(ref);               // owning side updated
+                    ref.getFaturas().add(entity);   // inverse side sync (optional but good)
+                }
+            }
+        }
+
+        return faturaMapper.toDto(entity);
     }
 
     /**

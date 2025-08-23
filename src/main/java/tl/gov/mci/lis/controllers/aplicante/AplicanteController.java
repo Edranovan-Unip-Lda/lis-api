@@ -67,6 +67,13 @@ public class AplicanteController {
                 HttpStatus.CREATED);
     }
 
+    @GetMapping("/{aplicanteId}/pedidos/atividade")
+    ResponseEntity<PedidoLicencaAtividadeDto> getPedidoLicencaAtividade(
+            @PathVariable Long aplicanteId
+    ) {
+        return ResponseEntity.ok(pedidoLicencaAtividadeService.getByAplicanteId(aplicanteId));
+    }
+
     @PutMapping("/{aplicanteId}/pedidos/cadastro/{pedidoId}")
     ResponseEntity<PedidoInscricaoCadastroDto> updatePedidoInscricaoCadastro(
             @PathVariable Long aplicanteId,
@@ -96,7 +103,7 @@ public class AplicanteController {
             @RequestParam("file") MultipartFile file
     ) {
         if (file != null) {
-            return new ResponseEntity<>(faturaService.saveRecibo(aplicanteId, pedidoId, username, faturaId, file), HttpStatus.CREATED);
+            return new ResponseEntity<>(faturaService.saveRecibo(faturaId, pedidoId, aplicanteId, username, file), HttpStatus.CREATED);
         }
         return ResponseEntity.badRequest().body("O Recibo é obrigatório.");
     }
