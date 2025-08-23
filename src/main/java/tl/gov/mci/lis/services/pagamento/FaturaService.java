@@ -46,7 +46,7 @@ public class FaturaService {
                     return new ResourceNotFoundException("Fatura não encontrada com ID: " + faturaId);
                 });
 
-        if (Objects.isNull(fatura.getPedidoInscricaoCadastro()) && Objects.isNull(fatura.getPedidoLicencaAtividade())) {
+        if (Objects.isNull(fatura.getPedidoInscricaoCadastro()) && Objects.isNull(fatura.getPedidoLicencaAtividade()) && Objects.isNull(fatura.getPedidoVistoria())) {
             logger.error("Fatura {} não pertence ao pedido {} ou aplicante {}", faturaId, pedidoId, aplicanteId);
             throw new ResourceNotFoundException("Fatura não encontrada com ID: " + faturaId);
         }

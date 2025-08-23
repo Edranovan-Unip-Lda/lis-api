@@ -6,19 +6,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
+import tl.gov.mci.lis.dtos.mappers.FaturaMapper;
 import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
+import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
+import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.pagamento.Fatura;
+import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.endereco.EnderecoRepository;
+import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
+import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
 import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -36,6 +44,9 @@ public class PedidoVistoriaService {
     private final ClasseAtividadeRepository classeAtividadeRepository;
     private final EntityManager entityManager;
     private final VistoriaMapper vistoriaMapper;
+    private final TaxaRepository taxaRepository;
+    private final FaturaMapper faturaMapper;
+    private final FaturaRepository faturaRepository;
 
     @Transactional
     public PedidoVistoria create(Long aplicanteId, PedidoVistoria obj) {
@@ -89,6 +100,72 @@ public class PedidoVistoriaService {
         return pedidoVistoriaRepository.findByAplicante_id(aplicanteId)
                 .stream()
                 .map(vistoriaMapper::toDto).collect(Collectors.toSet());
+    }
+
+    @Transactional
+    public FaturaDto createFatura(Long pedidoId, Fatura obj) {
+        logger.info("Criando fatura: {}", obj);
+        PedidoVistoria pedido = pedidoVistoriaRepository.findDetailById(pedidoId)
+                .orElseThrow(() -> {
+                    logger.error("PedidoLicencaAtividade nao encontrado");
+                    return new ResourceNotFoundException("PedidoLicencaAtividade nao encontrado");
+                });
+        obj.setStatus(FaturaStatus.EMITIDA);
+
+        // Fetch managed Taxa entities from DB
+        Set<Taxa> managedTaxas = obj.getTaxas().stream()
+                .map(taxa -> taxaRepository.getReferenceById(taxa.getId()))
+                .collect(Collectors.toSet());
+
+        obj.setTaxas(managedTaxas);
+
+        pedido.setFatura(obj);
+
+        return faturaMapper.toDto(obj);
+    }
+
+    @Transactional
+    public FaturaDto updateFatura(Long pedidoId, Long faturaId, Fatura incoming) {
+        Fatura entity = faturaRepository
+                .findByIdAndPedidoVistoria_Id(faturaId, pedidoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Fatura não encontrada"));
+
+        // simples
+        entity.setNomeEmpresa(incoming.getNomeEmpresa());
+        entity.setSociedadeComercial(incoming.getSociedadeComercial());
+        entity.setSuperficie(incoming.getSuperficie());
+        entity.setTotal(incoming.getTotal());
+
+        // === TAXAS ===
+        if (incoming.getTaxas() != null) {
+            // Ensure equals/hashCode(Taxa) is ID-based!
+            Set<Long> targetIds = incoming.getTaxas().stream()
+                    .map(EntityDB::getId).filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            // Load managed collection (causes the SELECT you see)
+            Set<Taxa> current = entity.getTaxas();
+
+            // Remove
+            for (Iterator<Taxa> it = current.iterator(); it.hasNext(); ) {
+                Taxa t = it.next();
+                if (!targetIds.contains(t.getId())) {
+                    it.remove();                 // marks collection dirty
+                    t.getFaturas().remove(entity); // keep inverse in sync
+                }
+            }
+            // Add
+            Set<Long> currentIds = current.stream().map(EntityDB::getId).collect(Collectors.toSet());
+            for (Long id : targetIds) {
+                if (!currentIds.contains(id)) {
+                    Taxa ref = taxaRepository.getReferenceById(id); // proxy, no SELECT
+                    current.add(ref);               // owning side updated
+                    ref.getFaturas().add(entity);   // inverse side sync (optional but good)
+                }
+            }
+        }
+
+        return faturaMapper.toDto(entity);
     }
 
     /**

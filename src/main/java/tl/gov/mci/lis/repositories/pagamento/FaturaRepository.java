@@ -30,14 +30,22 @@ public interface FaturaRepository extends JpaRepository<Fatura, Long> {
     })
     Optional<Fatura> findByIdAndPedidoLicencaAtividade_Id(Long id, Long pedidoLicencaAtividadeId);
 
+    @EntityGraph(attributePaths = {
+            "pedidoInscricaoCadastro",
+            "pedidoLicencaAtividade",
+            "recibo",
+            "taxas"
+    })
+    Optional<Fatura> findByIdAndPedidoVistoria_Id(Long id, Long pedidoLicencaAtividadeId);
+
     @Query("""
-        select distinct f
-        from Fatura f
-        left join fetch f.pedidoInscricaoCadastro pic
-        left join fetch f.pedidoLicencaAtividade pla
-        left join fetch f.recibo r
-        left join fetch f.taxas t
-        where f.id = :id
-    """)
+                select distinct f
+                from Fatura f
+                left join fetch f.pedidoInscricaoCadastro pic
+                left join fetch f.pedidoLicencaAtividade pla
+                left join fetch f.recibo r
+                left join fetch f.taxas t
+                where f.id = :id
+            """)
     Optional<Fatura> findDetailById(@Param("id") Long id);
 }
