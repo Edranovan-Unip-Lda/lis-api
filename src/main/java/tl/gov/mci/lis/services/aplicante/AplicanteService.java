@@ -18,12 +18,12 @@ import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
-import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
@@ -31,15 +31,14 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
-import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
-import tl.gov.mci.lis.repositories.dadosmestre.atividade.GrupoAtividadeRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
+import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -65,8 +64,7 @@ public class AplicanteService {
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
-    private final GrupoAtividadeRepository grupoAtividadeRepository;
-    private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
+    private final PedidoVistoriaService pedidoVistoriaService;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
@@ -93,6 +91,12 @@ public class AplicanteService {
                     .getByAplicanteId(aplicanteDto.getId());
             aplicanteDto.setPedidoInscricaoCadastro(pedidoDto);
         }
+
+        if (aplicanteDto.getTipo().equals(AplicanteType.ATIVIDADE)) {
+            aplicanteDto.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(id));
+        }
+
+        logger.info("Pedido Vistorias: {}", aplicanteDto.getPedidoVistorias().size());
 
         // Enrich Certificado Cadastro
         certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())

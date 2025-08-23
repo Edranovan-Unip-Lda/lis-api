@@ -16,7 +16,10 @@ import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
+import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
+import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
+import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaReqDto;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
@@ -24,6 +27,7 @@ import tl.gov.mci.lis.models.documento.DocumentoDownload;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.pagamento.FaturaService;
+import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 @RestController
 @RequestMapping("/api/v1/aplicantes")
@@ -33,6 +37,8 @@ public class AplicanteController {
     private final FaturaService faturaService;
     private final LicencaMapper licencaMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
+    private final PedidoVistoriaService pedidoVistoriaService;
+    private final VistoriaMapper vistoriaMapper;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("")
@@ -67,6 +73,16 @@ public class AplicanteController {
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("/{aplicanteId}/pedidos/vistoria")
+    ResponseEntity<PedidoVistoriaDto> createPedidoVistoria(
+            @PathVariable Long aplicanteId,
+            @RequestBody PedidoVistoriaReqDto incomingObj
+    ) {
+        return new ResponseEntity<>(
+                vistoriaMapper.toDto(pedidoVistoriaService.create(aplicanteId, vistoriaMapper.toEntity(incomingObj))),
+                HttpStatus.CREATED);
+    }
+
     @GetMapping("/{aplicanteId}/pedidos/atividade")
     ResponseEntity<PedidoLicencaAtividadeDto> getPedidoLicencaAtividade(
             @PathVariable Long aplicanteId
@@ -80,7 +96,7 @@ public class AplicanteController {
             @PathVariable Long pedidoId,
             @RequestBody PedidoInscricaoCadastro obj
     ) throws BadRequestException {
-        return new ResponseEntity<>(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj), HttpStatus.CREATED);
+        return ResponseEntity.ok(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj));
     }
 
     @PutMapping("/{aplicanteId}/pedidos/atividade/{pedidoId}")
@@ -89,9 +105,16 @@ public class AplicanteController {
             @PathVariable Long pedidoId,
             @RequestBody PedidoLicencaAtividadeReqsDto obj
     ) throws BadRequestException {
-        return new ResponseEntity<>(
-                licencaMapper.toDto(pedidoLicencaAtividadeService.updateByIdAndAplicanteId(pedidoId, aplicanteId, licencaMapper.toEntity(obj))),
-                HttpStatus.CREATED);
+        return ResponseEntity.ok(licencaMapper.toDto(pedidoLicencaAtividadeService.updateByIdAndAplicanteId(pedidoId, aplicanteId, licencaMapper.toEntity(obj))));
+    }
+
+    @PutMapping("/{aplicanteId}/pedidos/vistoria/{pedidoId}")
+    ResponseEntity<PedidoVistoriaDto> updatePedidoVistoria(
+            @PathVariable Long aplicanteId,
+            @PathVariable Long pedidoId,
+            @RequestBody PedidoVistoriaReqDto incomingObj
+    ) {
+        return ResponseEntity.ok(vistoriaMapper.toDto(pedidoVistoriaService.update(pedidoId, aplicanteId, vistoriaMapper.toEntity(incomingObj))));
     }
 
     @PutMapping("/{aplicanteId}/pedidos/{pedidoId}/faturas/{faturaId}/upload/{username}")
@@ -103,7 +126,7 @@ public class AplicanteController {
             @RequestParam("file") MultipartFile file
     ) {
         if (file != null) {
-            return new ResponseEntity<>(faturaService.saveRecibo(faturaId, pedidoId, aplicanteId, username, file), HttpStatus.CREATED);
+            return ResponseEntity.ok(faturaService.saveRecibo(faturaId, pedidoId, aplicanteId, username, file));
         }
         return ResponseEntity.badRequest().body("O Recibo é obrigatório.");
     }

@@ -11,10 +11,12 @@ import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,6 +45,10 @@ public class Aplicante extends EntityDB {
 
     @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     private PedidoLicencaAtividade pedidoLicencaAtividade;
+
+    @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("aplicante")
+    private Set<PedidoVistoria> pedidoVistorias;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "direcao_id")

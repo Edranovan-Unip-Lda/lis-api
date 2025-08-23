@@ -9,6 +9,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.Documento;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +48,9 @@ public class Fatura extends EntityDB {
 
     @OneToOne(mappedBy = "fatura")
     private PedidoLicencaAtividade pedidoLicencaAtividade;
+
+    @OneToOne(mappedBy = "fatura")
+    private PedidoVistoria pedidoVistoria;
 
     @OneToOne(mappedBy = "fatura", cascade = CascadeType.ALL, orphanRemoval = true)
     private Documento recibo;

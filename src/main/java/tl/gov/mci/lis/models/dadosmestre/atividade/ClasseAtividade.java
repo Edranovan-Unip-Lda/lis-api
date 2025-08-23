@@ -9,6 +9,7 @@ import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.util.Set;
 
@@ -41,4 +42,8 @@ public class ClasseAtividade extends EntityDB {
     @OneToMany(mappedBy = "classeAtividade")
     @JsonIgnoreProperties(value = "classeAtividade", allowSetters = true)
     private Set<PedidoInscricaoCadastro> listaPedidoInscricaoCadastro;
+
+    @OneToMany(mappedBy = "classeAtividade")
+    @JsonIgnoreProperties(value = "classeAtividade", allowSetters = true)
+    private Set<PedidoVistoria> listaPedidoVistoria;
 }

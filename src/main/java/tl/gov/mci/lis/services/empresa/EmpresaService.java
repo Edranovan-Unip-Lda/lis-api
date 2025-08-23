@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
@@ -44,8 +44,7 @@ import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
-
-import static tl.gov.mci.lis.enums.Categoria.INDUSTRIAL;
+import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +68,7 @@ public class EmpresaService {
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
+    private final PedidoVistoriaService pedidoVistoriaService;
 
     @Transactional
     public Empresa create(Empresa obj) throws BadRequestException {
@@ -193,6 +193,7 @@ public class EmpresaService {
                     switch (aplicanteDto.getTipo()) {
                         case ATIVIDADE -> {
                             aplicanteDto.setPedidoLicencaAtividade(pedidoLicencaAtividadeService.getByAplicanteId(aplicanteId));
+                            aplicanteDto.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(aplicanteId));
                         }
                         case CADASTRO -> {
                             aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
