@@ -10,7 +10,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import java.util.Objects;
 
 @Entity
-@Table(name = "md_aldeia")
+@Table(name = "lis_dm_aldeia")
 @Getter
 @Setter
 public class Aldeia extends EntityDB {

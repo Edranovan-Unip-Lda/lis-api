@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
@@ -21,6 +22,7 @@ import tl.gov.mci.lis.dtos.user.UserLoginDto;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
+import tl.gov.mci.lis.services.aplicante.AssignmentService;
 import tl.gov.mci.lis.services.user.UserServices;
 
 import java.time.Duration;
@@ -36,6 +38,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final AplicanteService aplicanteService;
     private final AplicanteMapper aplicanteMapper;
+    private final AssignmentService assignmentService;
 
     @PostMapping("")
     public ResponseEntity<UserLoginDto> register(@Valid @RequestBody User user) {
@@ -123,13 +126,15 @@ public class UserController {
         return new ResponseEntity<>(userServices.getPageAssignedAplicante(username, page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("/{username}/aplicantes/{aplicanteId}")
     public ResponseEntity<AplicanteDto> getAssignedAplicanteByIdAndDirecaoId(
             @PathVariable String username,
             @PathVariable Long aplicanteId
     ) {
-        return new ResponseEntity<>(userServices.getAssignedAplicanteByUsernameAndId(username, aplicanteId), HttpStatus.OK);
+        return ResponseEntity.ok(
+                aplicanteMapper.toDto(userServices.getAssignedAplicanteByUsernameAndId(username, aplicanteId))
+        );
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_MANAGER')")
@@ -153,5 +158,27 @@ public class UserController {
             default -> ResponseEntity.badRequest().build();
         };
 
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER', 'ROLE_STAFF')")
+    @GetMapping("/{username}/aplicantes/atribuidos")
+    public ResponseEntity<Page<AplicanteDto>> getListAplicanteAtribuidos(
+            @PathVariable String username,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size
+    ) {
+        return ResponseEntity.ok(aplicanteService.getAplicantesAtribuidos(username, page, size)
+                .map(aplicanteMapper::toDto));
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER')")
+    @PatchMapping("/{username}/aplicantes/atribuidos/{aplicanteId}")
+    public ResponseEntity<AplicanteAssignmentDto> atribuirAplicante(
+            @PathVariable String username,
+            @PathVariable Long aplicanteId,
+            @RequestParam String staffUsername,
+            @RequestParam String notes
+    ) {
+        return ResponseEntity.ok(aplicanteMapper.toDto(assignmentService.assign(aplicanteId, username, staffUsername, notes)));
     }
 }

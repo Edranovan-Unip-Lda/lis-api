@@ -17,5 +17,7 @@ public interface HistoricoEstadoAplicanteRepository extends JpaRepository<Histor
             WHERE h.aplicante.id = :aplicanteId
             ORDER BY h.id DESC
             """)
-    List<HistoricoEstadoAplicanteDto> findAllByAplicante_Id(Long aplicanteId);
+    List<HistoricoEstadoAplicanteDto> findAllDtoByAplicante_Id(Long aplicanteId);
+
+    List<HistoricoEstadoAplicante> findAllByAplicante_Id(Long aplicanteId);
 }

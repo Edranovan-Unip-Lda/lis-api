@@ -10,11 +10,14 @@ import lombok.ToString;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.AplicanteAssignment;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.dadosmestre.Role;
 import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,6 +58,14 @@ public class User extends EntityDB {
     @JoinColumn(name = "direcao_id")
     @JsonIgnoreProperties("users")
     private Direcao direcao;
+
+    // Assignments where this staff is the assignee (responsável)
+    @OneToMany(mappedBy = "assignee")
+    private List<AplicanteAssignment> assignedApplicants = new ArrayList<>();
+
+    // Assignments created by this staff in role of manager
+    @OneToMany(mappedBy = "assignedBy")
+    private List<AplicanteAssignment> assignmentsMade = new ArrayList<>();
 
     @Transient
     private String oneTimePassword;

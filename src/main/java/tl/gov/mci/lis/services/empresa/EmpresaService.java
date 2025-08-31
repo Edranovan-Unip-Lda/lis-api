@@ -2,7 +2,6 @@ package tl.gov.mci.lis.services.empresa;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,9 +15,12 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
+import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
+import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
@@ -31,6 +33,7 @@ import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
@@ -41,9 +44,11 @@ import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
+import tl.gov.mci.lis.services.cadastro.CertificadoService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
+import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 @Service
@@ -69,12 +74,16 @@ public class EmpresaService {
     private final CertificadoMapper certificadoMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final PedidoVistoriaService pedidoVistoriaService;
+    private final AutoVistoriaService autoVistoriaService;
+    private final VistoriaMapper vistoriaMapper;
+    private final CertificadoService certificadoLicencaService;
+    private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
 
     @Transactional
-    public Empresa create(Empresa obj) throws BadRequestException {
+    public Empresa create(Empresa obj) {
         logger.info("Criando empresa: {}", obj);
         // Register the account first
-        obj.getUtilizador().setRole(roleRepository.getReferenceById(3L)); // 3 = empresa
+        obj.getUtilizador().setRole(roleRepository.getReferenceById(obj.getUtilizador().getRole().getId())); // 3 = empresa
         obj.setUtilizador(userServices.register(obj.getUtilizador()));
         obj.setSede(enderecoService.create(obj.getSede()));
         obj.getAcionistas().forEach(obj::addAcionista);
@@ -82,7 +91,7 @@ public class EmpresaService {
         return obj;
     }
 
-    public Empresa update(Empresa obj) throws BadRequestException {
+    public Empresa update(Empresa obj) {
         logger.info("Atualizando empresa: {}", obj);
         Empresa empresa = empresaRepository.findById(obj.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
@@ -188,12 +197,16 @@ public class EmpresaService {
         return aplicanteRepository.getFromIdAndEmpresaId(aplicanteId, empresaId)
                 .map(aplicanteDto -> {
                     aplicanteDto.setEmpresa(empresaMapper.toDto(getById(empresaId)));
-                    aplicanteDto.setHistoricoStatus(historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteId));
+                    aplicanteDto.setHistoricoStatus(historicoEstadoAplicanteRepository.findAllDtoByAplicante_Id(aplicanteId));
 
                     switch (aplicanteDto.getTipo()) {
                         case ATIVIDADE -> {
                             aplicanteDto.setPedidoLicencaAtividade(pedidoLicencaAtividadeService.getByAplicanteId(aplicanteId));
                             aplicanteDto.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(aplicanteId));
+                            aplicanteDto.setAutoVistoria(vistoriaMapper.toDto(autoVistoriaService.getByAplicanteId(aplicanteId)));
+                            certificadoLicencaAtividadeRepository.findByAplicante_id(aplicanteId)
+                                    .map(certificadoMapper::toDto)
+                                    .ifPresent(aplicanteDto::setCertificadoLicencaAtividade);
                         }
                         case CADASTRO -> {
                             aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
@@ -219,7 +232,7 @@ public class EmpresaService {
     public Aplicante deleteAplicante(Long empresaId, Long aplicanteId) {
         logger.info("Excluindo aplicante: {}", aplicanteId);
 
-        Aplicante aplicante = aplicanteRepository.findById(aplicanteId)
+        Aplicante aplicante = aplicanteRepository.findByIdAndEmpresa_id(aplicanteId, empresaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
 
         if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO ||
@@ -273,9 +286,26 @@ public class EmpresaService {
         return aplicante;
     }
 
-    private static boolean isAplicanteReadyForSubmission(Aplicante aplicante) {
-        return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
-                && aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.SUBMETIDO
-                && aplicante.getPedidoInscricaoCadastro().getFatura().getStatus() == FaturaStatus.PAGA;
+    private boolean isAplicanteReadyForSubmission(Aplicante aplicante) {
+        switch (aplicante.getTipo()) {
+            case CADASTRO -> {
+                return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
+                        && aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.SUBMETIDO
+                        && aplicante.getPedidoInscricaoCadastro().getFatura().getStatus() == FaturaStatus.PAGA;
+            }
+            case ATIVIDADE -> {
+                PedidoVistoriaDto pedidoVistoria = pedidoVistoriaService.getByAplicanteId(aplicante.getId()).stream().filter(item -> !item.getStatus().equals(PedidoStatus.REJEITADO)).findFirst().orElse(null);
+                if (pedidoVistoria == null) return false;
+                return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
+                        && aplicante.getPedidoLicencaAtividade().getStatus() == PedidoStatus.SUBMETIDO
+                        && aplicante.getPedidoLicencaAtividade().getFatura().getStatus() == FaturaStatus.PAGA
+                        && pedidoVistoria.getStatus() == PedidoStatus.SUBMETIDO
+                        && pedidoVistoria.getFatura().getStatus() == FaturaStatus.PAGA;
+            }
+            default -> {
+                return false;
+            }
+        }
+
     }
 }

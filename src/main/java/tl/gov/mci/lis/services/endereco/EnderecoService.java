@@ -2,11 +2,11 @@ package tl.gov.mci.lis.services.endereco;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.endereco.Aldeia;
 import tl.gov.mci.lis.models.endereco.Endereco;
@@ -22,7 +22,7 @@ public class EnderecoService {
     private final EntityManager entityManager;
 
     @Transactional
-    public Endereco create(Endereco obj) throws BadRequestException {
+    public Endereco create(Endereco obj) {
         logger.info("Criando endereco: {}", obj);
         if (obj.getAldeia() == null || obj.getAldeia().getId() == null) {
             throw new BadRequestException("ID da Aldeia é obrigatório");

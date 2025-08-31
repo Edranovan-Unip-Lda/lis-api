@@ -3,9 +3,10 @@ package tl.gov.mci.lis.dtos.mappers;
 import org.mapstruct.*;
 import tl.gov.mci.lis.dtos.aplicante.*;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.AplicanteAssignment;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class, AplicanteMapper.class})
 public interface AplicanteMapper {
     Aplicante toEntity(AplicanteDto aplicanteDto);
 
@@ -41,4 +42,14 @@ public interface AplicanteMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Aplicante partialUpdate(AplicanteReqsDto aplicanteReqsDto, @MappingTarget Aplicante aplicante);
+
+
+    AplicanteAssignmentDto toDto(AplicanteAssignment aplicanteAssignment);
+
+    AplicanteAssignment toEntity(tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto aplicanteAssignmentDto);
+
+    tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto toDto1(AplicanteAssignment aplicanteAssignment);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    AplicanteAssignment partialUpdate(tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto aplicanteAssignmentDto, @MappingTarget AplicanteAssignment aplicanteAssignment);
 }

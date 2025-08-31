@@ -10,7 +10,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import java.util.Set;
 
 @Entity
-@Table(name = "md_postoadministrativo")
+@Table(name = "lis_dm_postoadministrativo")
 @Getter
 @Setter
 public class PostoAdministrativo extends EntityDB {

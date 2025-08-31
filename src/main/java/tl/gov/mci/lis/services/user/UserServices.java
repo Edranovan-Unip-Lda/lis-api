@@ -16,32 +16,31 @@ import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
-import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AccountStatus;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.enums.Role;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
+import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
+import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
-import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
-import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
-import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
+import tl.gov.mci.lis.services.cadastro.CertificadoService;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -67,9 +66,7 @@ public class UserServices {
     private final DirecaoRepository direcaoRepository;
     private final AplicanteRepository aplicanteRepository;
     private final AplicanteService aplicanteService;
-    private final EmpresaMapper empresaMapper;
-    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
-    private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
+    private final CertificadoService certificadoService;
 
     @Transactional
     public User register(User obj) {
@@ -270,29 +267,22 @@ public class UserServices {
                 });
     }
 
-    public AplicanteDto getAssignedAplicanteByUsernameAndId(String username, Long aplicanteId) {
+    public Aplicante getAssignedAplicanteByUsernameAndId(String username, Long aplicanteId) {
         logger.info("Obtendo Aplicante pelo utilizador id: {} e aplicante id: {}", username, aplicanteId);
 
-        User user = userRepository.queryByUsername(username)
+        Aplicante aplicante = aplicanteService.getById(aplicanteId);
+        Direcao direcao = userRepository.findDirecaoIdByUsername(username)
                 .orElseThrow(() -> {
                     logger.error("Utilizador com {} não existe", username);
                     return new ResourceNotFoundException("Utilizador com o nome  " + username + " não existe");
                 });
-        AplicanteDto aplicanteDto = aplicanteRepository.getFromIdAndDirecaoId(aplicanteId, user.getDirecao().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
-        empresaRepository.findById(aplicanteDto.getEmpresa().getId())
-                .map(empresaMapper::toDto)
-                .ifPresent(aplicanteDto::setEmpresa);
+        if (!direcao.getId().equals(aplicante.getDirecaoAtribuida().getId())) {
+            logger.error("Aplicante com id={} nao pertence ao Direcao id={}", aplicanteId, direcao.getId());
+            throw new ForbiddenException("Aplicante com id=" + aplicanteId + " nao pertence ao Direcao id=" + direcao.getId());
+        }
 
-        PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
-                .getByAplicanteId(aplicanteDto.getId());
-        aplicanteDto.setPedidoInscricaoCadastro(pedidoDto);
-
-        aplicanteDto.setHistoricoStatus(
-                historicoEstadoAplicanteRepository.findAllByAplicante_Id(aplicanteDto.getId())
-        );
-        return aplicanteDto;
+        return aplicante;
     }
 
     public Page<AplicanteDto> getPageAssignedAplicante(String username, int page, int size) {
@@ -320,8 +310,8 @@ public class UserServices {
         Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
-        if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO) {
-            throw new ForbiddenException("O aplicante não está num estado válido para aprovação.");
+        if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO && aplicante.getEstado() != AplicanteStatus.REVISAO) {
+            throw new BadRequestException("O aplicante não está num estado válido para aprovação.");
         }
 
         // Histórico
@@ -336,26 +326,21 @@ public class UserServices {
         aplicante.setDirecaoAtribuida(null);
         aplicante.setEstado(AplicanteStatus.APROVADO);
 
-        // Copiar a sede do pedido para o certificado (nova entidade endereço)
-        Endereco sede = new Endereco();
-        Endereco sedePedido = aplicante.getPedidoInscricaoCadastro().getEmpresaSede();
-        sede.setLocal(sedePedido.getLocal());
-        sede.setAldeia(sedePedido.getAldeia());
-        entityManager.persist(sede); // explícito, sem depender de cascade
 
         // Emitir certificado
-        CertificadoInscricaoCadastro cert = new CertificadoInscricaoCadastro();
-        cert.setAplicante(aplicante);
-        cert.setSociedadeComercial(aplicante.getEmpresa().getNome());
-        cert.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
-        cert.setSede(sede);
-        cert.setAtividade(aplicante.getPedidoInscricaoCadastro().getClasseAtividade().getDescricao());
-        cert.setDataEmissao(LocalDate.now().toString());
-        cert.setDataValidade(LocalDate.now().plusYears(2).toString());
-        cert.setNomeDiretorGeral("Donald Trump");
+        EntityDB cert;
 
-        entityManager.persist(cert);
-        aplicante.setCertificadoInscricaoCadastro(cert);
+        switch (aplicante.getTipo()) {
+            case CADASTRO -> {
+                cert = certificadoService.saveCertificadoInscricaoCadastro(aplicante);
+                aplicante.setCertificadoInscricaoCadastro((CertificadoInscricaoCadastro) cert);
+            }
+            case ATIVIDADE -> {
+                cert = certificadoService.saveCertificadoLicencaAtividade(aplicante);
+                aplicante.setCertificadoLicencaAtividade((CertificadoLicencaAtividade) cert);
+            }
+        }
+
 
         // No save/flush necessário: dirty checking + TX commit
         // historicoStatus e certificado já estão anexados ao 'aplicante' carregado

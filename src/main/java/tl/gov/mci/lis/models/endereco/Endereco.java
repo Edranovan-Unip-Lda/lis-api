@@ -6,7 +6,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 
 @Entity
-@Table(name = "md_endereco")
+@Table(name = "lis_dm_endereco")
 @Getter
 @Setter
 public class Endereco extends EntityDB {

@@ -30,34 +30,22 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
     Page<AplicanteDto> getPageApprovedAplicante(AplicanteStatus estado, Pageable pageable);
 
     @Query("""
-                SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
-                    a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy,
-                    a.tipo, a.categoria, a.numero, a.estado,
-                    p.status, f.status,
-                    e.id, p.id
-                )
+                SELECT a
                 FROM Aplicante a
                 JOIN a.empresa e
                 JOIN a.pedidoInscricaoCadastro p
                 JOIN p.fatura f
-                WHERE a.id = :id
+                WHERE a.id = ?1
             """)
-    Optional<AplicanteDto> getFromId(Long id);
+    Optional<Aplicante> getFromId(Long id);
 
     @Query("""
-                SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
-                    a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy,
-                    a.tipo, a.categoria, a.numero, a.estado,
-                    p.status, f.status,
-                    e.id, p.id
-                )
+                SELECT a
                 FROM Aplicante a
                 JOIN a.empresa e
-                JOIN a.pedidoInscricaoCadastro p
-                JOIN p.fatura f
                 WHERE a.id = :id AND a.direcaoAtribuida.id = :direcaoId
             """)
-    Optional<AplicanteDto> getFromIdAndDirecaoId(Long id, Long direcaoId);
+    Optional<Aplicante> getFromIdAndDirecaoId(Long id, Long direcaoId);
 
     @Query("""
             SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy, a.tipo, a.categoria, a.numero, a.estado, p.status, f.status) FROM Aplicante a
@@ -109,15 +97,19 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
 
     // 1 query, brings: pedido -> (empresaSede, classeAtividade), empresa, certificado, historicoStatus
     @Query("""
-        select distinct a
-        from Aplicante a
-        left join fetch a.pedidoInscricaoCadastro p
-        left join fetch p.empresaSede
-        left join fetch p.classeAtividade
-        left join fetch a.empresa
-        left join fetch a.certificadoInscricaoCadastro
-        left join fetch a.historicoStatus hs
-        where a.id = :id
-    """)
+                select distinct a
+                from Aplicante a
+                left join fetch a.pedidoInscricaoCadastro pi
+                left join fetch a.pedidoLicencaAtividade pl
+                left join fetch pi.empresaSede
+                left join fetch pi.classeAtividade
+                left join fetch pl.empresaSede
+                left join fetch pl.tipoAtividade
+                left join fetch a.empresa
+                left join fetch a.certificadoInscricaoCadastro
+                left join fetch a.certificadoLicencaAtividade
+                left join fetch a.historicoStatus hs
+                where a.id = :id
+            """)
     Optional<Aplicante> findByIdWithAllForApproval(@Param("id") Long id);
 }

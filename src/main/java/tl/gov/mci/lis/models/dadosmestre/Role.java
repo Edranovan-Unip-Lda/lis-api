@@ -22,10 +22,19 @@ public class Role extends EntityDB {
     @JsonIgnoreProperties(value = "role", allowSetters = true)
     private Set<User> users;
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(Long id, String name) {
         this.setId(id);
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id='" + getId() + '\'' +
+                "name='" + name + '\'' +
+                '}';
     }
 }

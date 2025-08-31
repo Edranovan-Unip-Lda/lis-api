@@ -6,7 +6,8 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.AldeiaDto;
 import tl.gov.mci.lis.dtos.endereco.PostoAdministrativoDto;
@@ -25,7 +26,6 @@ import tl.gov.mci.lis.repositories.endereco.AldeiaRepository;
 import tl.gov.mci.lis.repositories.endereco.MunicipioRepository;
 import tl.gov.mci.lis.repositories.endereco.PostoAdministrativoRepository;
 import tl.gov.mci.lis.repositories.endereco.SucoRepository;
-import tl.gov.mci.lis.services.dadosmestre.DadosMestreService;
 
 import java.util.Objects;
 
@@ -40,7 +40,6 @@ public class DadosMestreController {
     private final SucoMapper sucoMapper;
     private final AldeiaMapper aldeiaMapper;
     private final AtividadeEconomicaMapper atividadeEconomicaMapper;
-    private final DadosMestreService dadosMestreService;
     private final GrupoAtividadeRepository grupoAtividadeRepository;
     private final ClasseAtividadeRepository classeAtividadeRepository;
 

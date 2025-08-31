@@ -141,6 +141,7 @@ public class PedidoLicencaAtividadeService {
         obj.setTaxas(managedTaxas);
 
         pedido.setFatura(obj);
+        entityManager.persist(obj);
 
         return faturaMapper.toDto(obj);
     }

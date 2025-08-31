@@ -15,18 +15,19 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
+import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
 import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
+import tl.gov.mci.lis.dtos.vistoria.AutoVistoriaDto;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaReqDto;
-import tl.gov.mci.lis.enums.AplicanteType;
-import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.pagamento.FaturaService;
+import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 @RestController
@@ -39,6 +40,8 @@ public class AplicanteController {
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final PedidoVistoriaService pedidoVistoriaService;
     private final VistoriaMapper vistoriaMapper;
+    private final AplicanteMapper aplicanteMapper;
+    private final AutoVistoriaService autoVistoriaService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("")
@@ -49,10 +52,10 @@ public class AplicanteController {
         return new ResponseEntity<>(aplicanteService.getPage(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
     @GetMapping("/{id}")
     ResponseEntity<AplicanteDto> getAplicante(@PathVariable Long id) {
-        return new ResponseEntity<>(aplicanteService.getById(id), HttpStatus.OK);
+        return new ResponseEntity<>(aplicanteMapper.toDto(aplicanteService.getById(id)), HttpStatus.OK);
     }
 
     @PostMapping("/{aplicanteId}/pedidos/cadastro")
@@ -115,6 +118,17 @@ public class AplicanteController {
             @RequestBody PedidoVistoriaReqDto incomingObj
     ) {
         return ResponseEntity.ok(vistoriaMapper.toDto(pedidoVistoriaService.update(pedidoId, aplicanteId, vistoriaMapper.toEntity(incomingObj))));
+    }
+
+    @PostMapping("/{aplicanteId}/auto-vistorias")
+    ResponseEntity<AutoVistoriaDto> createAutoVistoria(
+            @PathVariable Long aplicanteId,
+            @RequestBody AutoVistoriaDto incomingObj
+    ) throws BadRequestException {
+        return new ResponseEntity<>(
+                vistoriaMapper.toDto(autoVistoriaService.create(aplicanteId, vistoriaMapper.toEntity(incomingObj))),
+                HttpStatus.CREATED
+        );
     }
 
     @PutMapping("/{aplicanteId}/pedidos/{pedidoId}/faturas/{faturaId}/upload/{username}")

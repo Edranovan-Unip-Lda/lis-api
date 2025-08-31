@@ -2,7 +2,6 @@ package tl.gov.mci.lis.services.aplicante;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,13 +13,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
-import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
-import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
+import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteNumber;
@@ -28,21 +27,27 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.user.User;
+import tl.gov.mci.lis.repositories.aplicante.AplicanteAssignmentRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
+import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
+import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,12 +64,15 @@ public class AplicanteService {
     private final EmpresaRepository empresaRepository;
     private final EntityManager entityManager;
     private final DirecaoRepository direcaoRepository;
-    private final EmpresaMapper empresaMapper;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
-    private final CertificadoMapper certificadoMapper;
     private final PedidoVistoriaService pedidoVistoriaService;
+    private final VistoriaMapper vistoriaMapper;
+    private final AplicanteAssignmentRepository aplicanteAssignmentRepository;
+    private final UserRepository userRepository;
+    private final AutoVistoriaService autoVistoriaService;
+    private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
@@ -73,40 +81,41 @@ public class AplicanteService {
         return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging);
     }
 
-    public AplicanteDto getById(Long id) {
+    public Aplicante getById(Long id) {
         logger.info("Obtendo aplicante pelo id: {}", id);
-        AplicanteDto aplicanteDto = aplicanteRepository.getFromId(id)
+        Aplicante aplicante = aplicanteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
         // Enrich Empresa
-        if (aplicanteDto.getEmpresa() != null && aplicanteDto.getEmpresa().getId() != null) {
-            empresaRepository.findById(aplicanteDto.getEmpresa().getId())
-                    .map(empresaMapper::toDto)
-                    .ifPresent(aplicanteDto::setEmpresa);
+        if (aplicante.getEmpresa() != null && aplicante.getEmpresa().getId() != null) {
+            empresaRepository.findById(aplicante.getEmpresa().getId())
+                    .ifPresent(aplicante::setEmpresa);
         }
 
-        // Enrich PedidoInscricaoCadastro
-        if (aplicanteDto.getPedidoInscricaoCadastro() != null && aplicanteDto.getPedidoInscricaoCadastro().getId() != null) {
-            PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
-                    .getByAplicanteId(aplicanteDto.getId());
-            aplicanteDto.setPedidoInscricaoCadastro(pedidoDto);
+        switch (aplicante.getTipo()) {
+            case CADASTRO:
+                if (aplicante.getPedidoInscricaoCadastro() != null && aplicante.getPedidoInscricaoCadastro().getId() != null) {
+                    PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
+                            .getByAplicanteId(aplicante.getId());
+                    aplicante.setPedidoInscricaoCadastro(
+                            pedidoInscricaoCadastroMapper.toEntity(pedidoDto)
+                    );
+                }
+                certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicante.getId())
+                        .ifPresent(aplicante::setCertificadoInscricaoCadastro);
+                break;
+            case ATIVIDADE:
+                aplicante.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(id).stream().map(vistoriaMapper::toEntity).collect(Collectors.toSet()));
+                aplicante.setAutoVistoria(autoVistoriaService.getByAplicanteId(id));
+                certificadoLicencaAtividadeRepository.findByAplicante_id(aplicante.getId())
+                        .ifPresent(aplicante::setCertificadoLicencaAtividade);
+                break;
         }
 
-        if (aplicanteDto.getTipo().equals(AplicanteType.ATIVIDADE)) {
-            aplicanteDto.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(id));
-        }
-
-        logger.info("Pedido Vistorias: {}", aplicanteDto.getPedidoVistorias().size());
-
-        // Enrich Certificado Cadastro
-        certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
-                .map(certificadoMapper::toDto)
-                .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
-
-        aplicanteDto.setHistoricoStatus(
+        aplicante.setHistoricoStatus(
                 historicoEstadoAplicanteRepository.findAllByAplicante_Id(id)
         );
-        return aplicanteDto;
+        return aplicante;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -144,7 +153,7 @@ public class AplicanteService {
      * @return PedidoInscricaoCadastro dto
      */
     @Transactional
-    public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) throws BadRequestException {
+    public PedidoInscricaoCadastroDto createPedidoInscricaoCadastro(Long aplicanteId, PedidoInscricaoCadastro obj) {
         logger.info("Criando PedidoInscricaoCadastro pelo Aplicante id: {} e PedidoInscricaoCadastro: {}", aplicanteId, obj);
 
         // 1) Carregar Aplicante já com Empresa+Sede (1 consulta)
@@ -180,7 +189,7 @@ public class AplicanteService {
 
     @Transactional
     public PedidoInscricaoCadastroDto updatePedidoInscricaoCadastro(
-            Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro incoming) throws BadRequestException {
+            Long aplicanteId, Long pedidoId, PedidoInscricaoCadastro incoming) {
 
         logger.info("Atualizando PedidoInscricaoCadastro: pedidoId={}, payload={}", pedidoId, incoming);
 
@@ -238,6 +247,18 @@ public class AplicanteService {
 
         aplicante.setDirecaoAtribuida(direcao);
         entityManager.merge(aplicante);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Aplicante> getAplicantesAtribuidos(String username, int page, int size) {
+        logger.info("Obtendo lista de aplicantes atribuidos pelo username: {}", username);
+        User staff = userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+                    logger.error("User not found");
+                    return new ResourceNotFoundException("User not found");
+                });
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return aplicanteAssignmentRepository.findActiveAplicantesByStaffId(staff.getId(), pageable);
     }
 
     /**

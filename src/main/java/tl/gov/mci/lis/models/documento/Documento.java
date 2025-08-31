@@ -1,13 +1,12 @@
 package tl.gov.mci.lis.models.documento;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.pagamento.Fatura;
+import tl.gov.mci.lis.models.vistoria.AutoVistoria;
 
 @Entity
 @Table(name = "lis_documento")
@@ -24,6 +23,11 @@ public class Documento extends EntityDB {
     @OneToOne()
     @JoinColumn(name = "fatura_id", unique = true)
     private Fatura fatura;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auto_vistoria_id", referencedColumnName = "id")
+    @JsonIgnoreProperties(value = "documentos")
+    private AutoVistoria autoVistoria;
 
     @Override
     public String toString() {

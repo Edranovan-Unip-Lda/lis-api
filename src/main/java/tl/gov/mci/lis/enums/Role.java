@@ -1,5 +1,5 @@
 package tl.gov.mci.lis.enums;
 
 public enum Role {
-    ROLE_ADMIN, ROLE_STAFF, ROLE_CLIENT;
+    ROLE_ADMIN, ROLE_MANAGER, ROLE_STAFF, ROLE_CLIENT;
 }

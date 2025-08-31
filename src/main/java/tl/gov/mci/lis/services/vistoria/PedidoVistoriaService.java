@@ -20,11 +20,9 @@ import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
-import tl.gov.mci.lis.repositories.endereco.EnderecoRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
 import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
-import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -38,9 +36,7 @@ import java.util.stream.Collectors;
 public class PedidoVistoriaService {
     private static final Logger logger = LoggerFactory.getLogger(PedidoVistoriaService.class);
     private final PedidoVistoriaRepository pedidoVistoriaRepository;
-    private final EnderecoRepository enderecoRepository;
     private final AplicanteRepository aplicanteRepository;
-    private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final ClasseAtividadeRepository classeAtividadeRepository;
     private final EntityManager entityManager;
     private final VistoriaMapper vistoriaMapper;
@@ -121,6 +117,7 @@ public class PedidoVistoriaService {
 
         pedido.setFatura(obj);
 
+        entityManager.persist(obj);
         return faturaMapper.toDto(obj);
     }
 

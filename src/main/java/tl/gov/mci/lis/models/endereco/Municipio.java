@@ -13,7 +13,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import java.util.Set;
 
 @Entity
-@Table(name = "md_municipio")
+@Table(name = "lis_dm_municipio")
 @Getter
 @Setter
 public class Municipio extends EntityDB {

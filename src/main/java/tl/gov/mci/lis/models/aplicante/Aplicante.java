@@ -6,16 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.vistoria.AutoVistoria;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -43,6 +46,9 @@ public class Aplicante extends EntityDB {
     @OneToOne(mappedBy = "aplicante")
     private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
 
+    @OneToOne(mappedBy = "aplicante")
+    private CertificadoLicencaAtividade certificadoLicencaAtividade;
+
     @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     private PedidoLicencaAtividade pedidoLicencaAtividade;
 
@@ -50,10 +56,17 @@ public class Aplicante extends EntityDB {
     @JsonIgnoreProperties("aplicante")
     private Set<PedidoVistoria> pedidoVistorias;
 
+    @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AutoVistoria autoVistoria;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "direcao_id")
     @JsonIgnoreProperties("aplicantesAtribuidos")
     private Direcao direcaoAtribuida;
+
+    @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("assignedAt DESC")
+    private List<AplicanteAssignment> assignments = new ArrayList<>();
 
     @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("dataAlteracao DESC")
@@ -82,6 +95,16 @@ public class Aplicante extends EntityDB {
         return (pedidoInscricaoCadastro != null && pedidoInscricaoCadastro.getFatura() != null)
                 ? pedidoInscricaoCadastro.getFatura().getStatus()
                 : null;
+    }
+
+    // Convenience helpers
+    public Optional<AplicanteAssignment> getCurrentAssignment() {
+        return assignments.stream().filter(AplicanteAssignment::isActive).findFirst();
+    }
+
+    public void addAssignment(AplicanteAssignment aa) {
+        aa.setAplicante(this);
+        this.assignments.add(aa);
     }
 
     public void addHistorico(HistoricoEstadoAplicante historico) {

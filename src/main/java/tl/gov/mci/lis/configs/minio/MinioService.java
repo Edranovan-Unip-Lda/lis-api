@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -76,6 +78,37 @@ public class MinioService {
             logger.error("Falha ao fazer upload:  {}: {}", original, e.getMessage(), e);
             throw new FileDownloadUploadException("Falha ao fazer upload: " + original);
         }
+    }
+
+    public List<Documento> uploadFiles(String username, List<MultipartFile> files) {
+        Objects.requireNonNull(username, "username is required");
+        if (files == null || files.isEmpty()) return List.of();
+
+        try {
+            // Ensure bucket exists once
+            boolean exists = minioClient.bucketExists(
+                    BucketExistsArgs.builder().bucket(minioBucketName).build()
+            );
+            if (!exists) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioBucketName).build());
+            }
+        } catch (Exception e) {
+            throw new FileDownloadUploadException("Falha ao preparar o bucket: " + e.getMessage());
+        }
+
+        List<Documento> uploaded = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (file == null || file.isEmpty()) continue;
+            try {
+                Documento doc = uploadFile(username, file);  // reuse helper below
+                uploaded.add(doc);
+            } catch (Exception e) {
+                logger.error("Falha ao fazer upload de {}: {}",
+                        file.getOriginalFilename(), e.getMessage(), e);
+                // continue with next file
+            }
+        }
+        return uploaded;
     }
 
 
