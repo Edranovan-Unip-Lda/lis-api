@@ -9,5 +9,5 @@ import java.util.Optional;
 @JaversSpringDataAuditable
 public interface CertificadoLicencaAtividadeRepository extends JpaRepository<CertificadoLicencaAtividade, Long> {
 
-    Optional<CertificadoLicencaAtividade> findByAplicante_id(Long id);
+    Optional<CertificadoLicencaAtividade> findByPedidoLicencaAtividade_Id(Long id);
 }

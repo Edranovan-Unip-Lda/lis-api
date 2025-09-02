@@ -6,18 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
-import tl.gov.mci.lis.dtos.vistoria.AutoVistoriaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.vistoria.AutoVistoria;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 import tl.gov.mci.lis.models.vistoria.Requerente;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.endereco.PostoAdministrativoRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
-import tl.gov.mci.lis.repositories.vistoria.AutoVistoriaRepository;
+import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.aplicante.AssignmentService;
+import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 
 import java.util.Objects;
@@ -29,20 +31,22 @@ public class AutoVistoriaService {
     private final AplicanteRepository aplicanteRepository;
     private final AssignmentService assignmentService;
     private final EntityManager entityManager;
-    private final AutoVistoriaRepository autoVistoriaRepository;
-    private final VistoriaMapper vistoriaMapper;
     private final UserRepository userRepository;
     private final EnderecoService enderecoService;
     private final ClasseAtividadeRepository classAtividadeRepo;
     private final PostoAdministrativoRepository postoAdministrativoRepository;
+    private final PedidoVistoriaRepository pedidoVistoriaRepository;
+    private final AuthorizationService authorizationService;
 
     @Transactional
-    public AutoVistoria create(Long aplicanteId, AutoVistoria obj) {
-        logger.info("Criando auto vistoria com aplicanteId: {}", aplicanteId);
-        if (!aplicanteRepository.existsById(aplicanteId)) {
-            logger.error("Aplicante nao encontrado");
-            throw new ResourceNotFoundException("Aplicante nao encontrado");
-        }
+    public AutoVistoria create(Long pedidoVistoriaId, AutoVistoria obj) {
+        logger.info("Criando auto vistoria com pedidoVistoria Id: {}", pedidoVistoriaId);
+
+        PedidoVistoria pedidoVistoria = pedidoVistoriaRepository.findById(pedidoVistoriaId)
+                .orElseThrow(() -> {
+                    logger.error("Pedido Vistoria nao encontrado");
+                    return new ResourceNotFoundException("Pedido Vistoria nao encontrado");
+                });
 
         obj.setLocal(
                 enderecoService.create(obj.getLocal())
@@ -66,38 +70,24 @@ public class AutoVistoriaService {
             requerente.setPostoAdministrativo(postoAdministrativoRepository.getReferenceById(requerente.getPostoAdministrativo().getId()));
         }
 
-        obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
+        obj.setPedidoVistoria(pedidoVistoriaRepository.getReferenceById(pedidoVistoriaId));
         obj.setFuncionario(userRepository.getReferenceById(obj.getFuncionario().getId()));
 
         entityManager.persist(obj);
 
         // atualizar estado do aplicante sem carregar o objeto inteiro:
-        aplicanteRepository.getReferenceById(aplicanteId)
-                .setEstado(AplicanteStatus.REVISAO); // dirty checking
+        Aplicante aplicante = aplicanteRepository.getReferenceById(pedidoVistoria.getPedidoLicencaAtividade().getAplicante().getId());
+
+        aplicante.setEstado(AplicanteStatus.REVISAO);
+
+        // add history
+        HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+        historico.setStatus(aplicante.getEstado());
+        historico.setAlteradoPor(authorizationService.getCurrentUsername());
+        aplicante.addHistorico(historico);
 
         // close assignment
-        assignmentService.closeAssignment(aplicanteId);
+        assignmentService.closeAssignment(aplicante.getId());
         return obj;
     }
-
-    @Transactional(readOnly = true)
-    public AutoVistoriaDto getById(Long id) {
-        logger.info("Obtendo auto vistoria com id: {}", id);
-
-        return autoVistoriaRepository.findById(id)
-                .map(vistoriaMapper::toDto)
-                .orElseThrow(() -> {
-                    logger.error("Auto Vistoria nao encontrada");
-                    return new ResourceNotFoundException("Auto Vistoria nao encontrada");
-                });
-    }
-
-    @Transactional(readOnly = true)
-    public AutoVistoria getByAplicanteId(Long aplicanteId) {
-        logger.info("Obtendo auto vistoria com aplicante id: {}", aplicanteId);
-
-        return autoVistoriaRepository.findByAplicante_id(aplicanteId)
-                .orElse(null);
-    }
-
 }

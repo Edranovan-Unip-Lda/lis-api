@@ -302,9 +302,8 @@ public class UserServices {
                                       HistoricoEstadoAplicante historico) {
         logger.info("Aprovar aplicante: user={}, aplicanteId={}", username, aplicanteId);
 
-        String operador = userRepository.queryByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilizador " + username + " não existe"))
-                .getUsername();
+        User operador = userRepository.queryByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador " + username + " não existe"));
 
         // Single round-trip, no N+1 when touching associations
         Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
@@ -315,7 +314,7 @@ public class UserServices {
         }
 
         // Histórico
-        historico.setAlteradoPor(operador);
+        historico.setAlteradoPor(operador.getUsername());
         if (historico.getDataAlteracao() == null) {
             historico.setDataAlteracao(Instant.now());
         }
@@ -332,12 +331,12 @@ public class UserServices {
 
         switch (aplicante.getTipo()) {
             case CADASTRO -> {
-                cert = certificadoService.saveCertificadoInscricaoCadastro(aplicante);
-                aplicante.setCertificadoInscricaoCadastro((CertificadoInscricaoCadastro) cert);
+                cert = certificadoService.saveCertificadoInscricaoCadastro(aplicante, operador);
+                aplicante.getPedidoInscricaoCadastro().setCertificadoInscricaoCadastro((CertificadoInscricaoCadastro) cert);
             }
             case ATIVIDADE -> {
-                cert = certificadoService.saveCertificadoLicencaAtividade(aplicante);
-                aplicante.setCertificadoLicencaAtividade((CertificadoLicencaAtividade) cert);
+                cert = certificadoService.saveCertificadoLicencaAtividade(aplicante, operador);
+                aplicante.getPedidoLicencaAtividade().setCertificadoLicencaAtividade((CertificadoLicencaAtividade) cert);
             }
         }
 

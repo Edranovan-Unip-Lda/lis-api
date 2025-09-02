@@ -7,7 +7,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 
 @Entity
-@Table(name = "lis_auto_vistoria_participante")
+@Table(name = "lis_atividade_auto_vistoria_participante")
 @Getter
 @Setter
 public class Participante extends EntityDB {

@@ -1,15 +1,18 @@
 package tl.gov.mci.lis.dtos.licenca;
 
 import lombok.Value;
+import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.atividade.GrupoAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
 import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
+import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.atividade.TipoPedidoAtividade;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade}
@@ -40,4 +43,6 @@ public class PedidoLicencaAtividadeDto implements Serializable {
     boolean reciboPagamento;
     String outrosDocumentos;
     FaturaDto fatura;
+    Set<PedidoVistoriaDto> listaPedidoVistoria;
+    CertificadoLicencaAtividadeDto certificadoLicencaAtividade;
 }

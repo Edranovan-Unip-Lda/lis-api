@@ -79,8 +79,11 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
     private Aplicante aplicante;
 
-    @OneToOne(mappedBy = "pedidoInscricaoCadastro")
+    @OneToOne(mappedBy = "pedidoInscricaoCadastro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Fatura fatura;
+
+    @OneToOne(mappedBy = "pedidoInscricaoCadastro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
 
     public PedidoInscricaoCadastro() {
     }

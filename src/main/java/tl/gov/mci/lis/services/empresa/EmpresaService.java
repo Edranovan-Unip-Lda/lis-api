@@ -15,7 +15,6 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
-import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.FaturaStatus;
@@ -25,30 +24,23 @@ import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
-import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
-import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
-import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
-import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
-import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
-import tl.gov.mci.lis.services.cadastro.CertificadoService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
-import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 @Service
@@ -66,18 +58,12 @@ public class EmpresaService {
     private final AplicanteService aplicanteService;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final EntityManager entityManager;
-    private final FaturaRepository faturaRepository;
-    private final PedidoInscricaoCadastroRepository pedidoInscricaoCadastroRepository;
     private final DirecaoRepository direcaoRepository;
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final PedidoVistoriaService pedidoVistoriaService;
-    private final AutoVistoriaService autoVistoriaService;
-    private final VistoriaMapper vistoriaMapper;
-    private final CertificadoService certificadoLicencaService;
-    private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
 
     @Transactional
     public Empresa create(Empresa obj) {
@@ -202,20 +188,15 @@ public class EmpresaService {
                     switch (aplicanteDto.getTipo()) {
                         case ATIVIDADE -> {
                             aplicanteDto.setPedidoLicencaAtividade(pedidoLicencaAtividadeService.getByAplicanteId(aplicanteId));
-                            aplicanteDto.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(aplicanteId));
-                            aplicanteDto.setAutoVistoria(vistoriaMapper.toDto(autoVistoriaService.getByAplicanteId(aplicanteId)));
-                            certificadoLicencaAtividadeRepository.findByAplicante_id(aplicanteId)
-                                    .map(certificadoMapper::toDto)
-                                    .ifPresent(aplicanteDto::setCertificadoLicencaAtividade);
                         }
                         case CADASTRO -> {
                             aplicanteDto.setPedidoInscricaoCadastro(pedidoInscricaoCadastroService.getByAplicanteId(aplicanteId));
 
                             if (aplicanteDto.getEstado().equals(AplicanteStatus.APROVADO)) {
                                 // Enrich Certificado Cadastro
-                                certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicanteDto.getId())
+                                certificadoInscricaoCadastroRepository.findByPedidoInscricaoCadastro_Id(aplicanteDto.getPedidoInscricaoCadastro().getId())
                                         .map(certificadoMapper::toDto)
-                                        .ifPresent(aplicanteDto::setCertificadoInscricaoCadastro);
+                                        .ifPresent(certificadoInscricaoCadastroDto -> aplicanteDto.getPedidoInscricaoCadastro().setCertificadoInscricaoCadastro(certificadoInscricaoCadastroDto));
                             }
                         }
                         default -> {
@@ -232,57 +213,53 @@ public class EmpresaService {
     public Aplicante deleteAplicante(Long empresaId, Long aplicanteId) {
         logger.info("Excluindo aplicante: {}", aplicanteId);
 
-        Aplicante aplicante = aplicanteRepository.findByIdAndEmpresa_id(aplicanteId, empresaId)
+        Aplicante aplicante = aplicanteRepository
+                .findByIdAndEmpresa_id(aplicanteId, empresaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
 
+        // ---- Business guardrails ----
         if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO ||
-                aplicante.getEstado() == AplicanteStatus.APROVADO ||
-                aplicante.getCertificadoInscricaoCadastro() != null
-        ) {
+                aplicante.getEstado() == AplicanteStatus.APROVADO) {
             throw new ForbiddenException("Aplicante deve estar EM_CURSO para ser excluído.");
         }
 
-        // Get Pedido
-        PedidoInscricaoCadastro pedido = aplicante.getPedidoInscricaoCadastro();
+        if (aplicante.getPedidoInscricaoCadastro() != null &&
+                aplicante.getPedidoInscricaoCadastro().getCertificadoInscricaoCadastro() != null) {
+            throw new ForbiddenException("Aplicante com Certificado de Inscrição não pode ser excluído.");
+        }
 
-        if (pedido != null) {
-            // Get Fatura
-            Fatura fatura = pedido.getFatura();
-            if (fatura != null) {
-                // Break link to Documento recibo
-                Documento recibo = fatura.getRecibo();
-                if (recibo != null) {
-                    fatura.setRecibo(null); // orphanRemoval triggers deletion
-                }
+        if (aplicante.getPedidoLicencaAtividade() != null &&
+                aplicante.getPedidoLicencaAtividade().getCertificadoLicencaAtividade() != null) {
+            throw new ForbiddenException("Aplicante com Certificado de Licença não pode ser excluído.");
+        }
 
-                // Clear many-to-many to avoid constraint violation
-                fatura.getTaxas().clear();
-
-                // Break link to Pedido (optional for safety)
-                fatura.setPedidoInscricaoCadastro(null);
-
-                // Delete Fatura
-                faturaRepository.delete(fatura);
+        // ---- Clean up associations that cascade won't handle ----
+        if (aplicante.getPedidoInscricaoCadastro() != null &&
+                aplicante.getPedidoInscricaoCadastro().getFatura() != null) {
+            Fatura fatura = aplicante.getPedidoInscricaoCadastro().getFatura();
+            if (fatura.getTaxas() != null) {
+                fatura.getTaxas().clear(); // Many-to-many won't orphan-remove automatically
             }
-
-            // Optional: delete Endereco if you don't need it anymore
-            pedido.setEmpresaSede(null);
-            pedido.setLocalEstabelecimento(null);
-
-            // Break link to Aplicante
-            pedido.setAplicante(null);
-
-            // Delete Pedido
-            pedidoInscricaoCadastroRepository.delete(pedido);
+        }
+        if (aplicante.getPedidoLicencaAtividade() != null &&
+                aplicante.getPedidoLicencaAtividade().getFatura() != null) {
+            Fatura fatura = aplicante.getPedidoLicencaAtividade().getFatura();
+            if (fatura.getTaxas() != null) {
+                fatura.getTaxas().clear();
+            }
         }
 
-        // Now safe to delete Aplicante
+        // ---- Break link to empresa (optional, keeps bidirectional consistency) ----
         Empresa empresa = aplicante.getEmpresa();
-        if (empresa != null) {
-            empresa.getListaAplicante().remove(aplicante); // break bidirectional
+        if (empresa != null && empresa.getListaAplicante() != null) {
+            empresa.getListaAplicante().remove(aplicante);
+            aplicante.setEmpresa(null);
         }
 
+        // ---- Delete root; cascades will remove children (Pedidos, Faturas, Recibos, Certificados) ----
         aplicanteRepository.delete(aplicante);
+
+        logger.info("Aplicante {} removido com sucesso", aplicanteId);
         return aplicante;
     }
 
@@ -294,7 +271,8 @@ public class EmpresaService {
                         && aplicante.getPedidoInscricaoCadastro().getFatura().getStatus() == FaturaStatus.PAGA;
             }
             case ATIVIDADE -> {
-                PedidoVistoriaDto pedidoVistoria = pedidoVistoriaService.getByAplicanteId(aplicante.getId()).stream().filter(item -> !item.getStatus().equals(PedidoStatus.REJEITADO)).findFirst().orElse(null);
+                PedidoVistoriaDto pedidoVistoria = pedidoVistoriaService
+                        .getBypedidoLicencaAtividadeId(aplicante.getPedidoLicencaAtividade().getId()).stream().filter(item -> !item.getStatus().equals(PedidoStatus.REJEITADO)).findFirst().orElse(null);
                 if (pedidoVistoria == null) return false;
                 return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
                         && aplicante.getPedidoLicencaAtividade().getStatus() == PedidoStatus.SUBMETIDO

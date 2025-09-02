@@ -6,20 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.empresa.Empresa;
-import tl.gov.mci.lis.models.vistoria.AutoVistoria;
-import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -40,24 +36,11 @@ public class Aplicante extends EntityDB {
     @JsonIgnoreProperties(value = "listaAplicante", allowSetters = true)
     private Empresa empresa;
 
-    @OneToOne(mappedBy = "aplicante")
+    @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
-
-    @OneToOne(mappedBy = "aplicante")
-    private CertificadoInscricaoCadastro certificadoInscricaoCadastro;
-
-    @OneToOne(mappedBy = "aplicante")
-    private CertificadoLicencaAtividade certificadoLicencaAtividade;
 
     @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     private PedidoLicencaAtividade pedidoLicencaAtividade;
-
-    @OneToMany(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("aplicante")
-    private Set<PedidoVistoria> pedidoVistorias;
-
-    @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private AutoVistoria autoVistoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "direcao_id")

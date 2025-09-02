@@ -14,7 +14,7 @@ public interface PedidoLicencaAtividadeRepository extends JpaRepository<PedidoLi
             "empresaSede",
             "representante", "representante.morada",
             "gerente", "gerente.morada",
-            "fatura"
+            "fatura", "certificadoLicencaAtividade"
     })
     Optional<PedidoLicencaAtividade> findByAplicante_id(Long id);
 

@@ -17,7 +17,7 @@ spring:
     change-log: classpath:db/changelog/master.yaml
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://mci-postgresql-tbu02f:5432/lis_dbms
+    url: jdbc:postgresql://mci-postgresql-tbu02f:5432/lis_staging_dbms
     username: postgres
     password: postgres
   jpa:

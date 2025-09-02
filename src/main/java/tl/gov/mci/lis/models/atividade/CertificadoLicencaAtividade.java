@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.endereco.Endereco;
 
 @Entity
@@ -18,8 +17,8 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 @Setter
 public class CertificadoLicencaAtividade extends EntityDB {
     @OneToOne
-    @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
-    private Aplicante aplicante;
+    @JoinColumn(name = "pedido_licenca_atividade_id", referencedColumnName = "id")
+    private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @NotNull
     private String sociedadeComercial;

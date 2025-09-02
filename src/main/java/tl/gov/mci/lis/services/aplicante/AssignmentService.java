@@ -14,10 +14,12 @@ import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteAssignment;
+import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteAssignmentRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
+import tl.gov.mci.lis.services.authorization.AuthorizationService;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class AssignmentService {
     private final AplicanteRepository aplicanteRepo;
     private final UserRepository staffRepo;
     private final EntityManager entityManager;
+    private final AuthorizationService authorizationService;
 
     @Transactional
     public AplicanteAssignment assign(Long aplicanteId, String managerUsername, String assigneeStaffUsername, String notes) {
@@ -76,16 +79,23 @@ public class AssignmentService {
 
         aplicante.addAssignment(aa); // sets back-reference
         entityManager.persist(aa);
+
+        // add history
+        HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+        historico.setStatus(aplicante.getEstado());
+        historico.setAlteradoPor(authorizationService.getCurrentUsername());
+        aplicante.addHistorico(historico);
+
         return aa;
     }
 
     @Transactional
-    public void closeAssignment(Long assignmentId) {
+    public void closeAssignment(Long aplicanteId) {
 
-        AplicanteAssignment aa = assignmentRepository.findByAplicante_IdAndActiveTrue(assignmentId)
+        AplicanteAssignment aa = assignmentRepository.findByAplicante_IdAndActiveTrue(aplicanteId)
                 .orElseThrow(() -> {
-                    logger.error("Atribuicao nao encontrada: {}", assignmentId);
-                    return new ResourceNotFoundException("Atribuicao nao encontrada: " + assignmentId);
+                    logger.error("Atribuicao nao encontrada: {}", aplicanteId);
+                    return new ResourceNotFoundException("Atribuicao nao encontrada: " + aplicanteId);
                 });
 
         aa.setActive(false);

@@ -18,7 +18,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
-import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
@@ -36,18 +36,18 @@ import java.util.stream.Collectors;
 public class PedidoVistoriaService {
     private static final Logger logger = LoggerFactory.getLogger(PedidoVistoriaService.class);
     private final PedidoVistoriaRepository pedidoVistoriaRepository;
-    private final AplicanteRepository aplicanteRepository;
     private final ClasseAtividadeRepository classeAtividadeRepository;
     private final EntityManager entityManager;
     private final VistoriaMapper vistoriaMapper;
     private final TaxaRepository taxaRepository;
     private final FaturaMapper faturaMapper;
     private final FaturaRepository faturaRepository;
+    private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
 
     @Transactional
-    public PedidoVistoria create(Long aplicanteId, PedidoVistoria obj) {
-        logger.info("Criando pedido de vistoria com aplicanteId: {}", aplicanteId);
-        obj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
+    public PedidoVistoria create(Long pedidoLicencaAtividadeId, PedidoVistoria obj) {
+        logger.info("Criando pedido de vistoria com aplicanteId: {}", pedidoLicencaAtividadeId);
+        obj.setPedidoLicencaAtividade(pedidoLicencaAtividadeRepository.getReferenceById(pedidoLicencaAtividadeId));
         obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
         entityManager.persist(obj);
@@ -55,9 +55,9 @@ public class PedidoVistoriaService {
     }
 
     @Transactional
-    public PedidoVistoria update(Long pedidoId, Long aplicanteId, PedidoVistoria obj) {
+    public PedidoVistoria update(Long pedidoId, Long pedidoLicencaAtividadeId, PedidoVistoria obj) {
         logger.info("Atualizando pedido de vistoria com id: {}", pedidoId);
-        PedidoVistoria entity = pedidoVistoriaRepository.findByIdAndAplicante_id(pedidoId, aplicanteId)
+        PedidoVistoria entity = pedidoVistoriaRepository.findByIdAndPedidoLicencaAtividade_Id(pedidoId, pedidoLicencaAtividadeId)
                 .orElseThrow(() -> {
                     logger.error("PedidoVistoria nao encontrado");
                     return new ResourceNotFoundException("PedidoVistoria nao encontrado");
@@ -90,10 +90,10 @@ public class PedidoVistoriaService {
     }
 
     @Transactional(readOnly = true)
-    public Set<PedidoVistoriaDto> getByAplicanteId(Long aplicanteId) {
-        logger.info("Obtendo Pedido Vistoria pelo Id: {}", aplicanteId);
+    public Set<PedidoVistoriaDto> getBypedidoLicencaAtividadeId(Long pedidoLicencaAtividadeId) {
+        logger.info("Obtendo Pedido Vistoria pelo PedidoLicencaAtividade Id: {}", pedidoLicencaAtividadeId);
 
-        return pedidoVistoriaRepository.findByAplicante_id(aplicanteId)
+        return pedidoVistoriaRepository.findByPedidoLicencaAtividade_Id(pedidoLicencaAtividadeId)
                 .stream()
                 .map(vistoriaMapper::toDto).collect(Collectors.toSet());
     }

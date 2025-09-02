@@ -11,7 +11,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 
 @Entity
-@Table(name = "lis_auto_vistoria_requerente")
+@Table(name = "lis_atividade_auto_vistoria_requerente")
 @Getter
 @Setter
 public class Requerente extends EntityDB {
@@ -41,9 +41,9 @@ public class Requerente extends EntityDB {
     private String naturalidade;
     private String nacionalidade;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "posto_administrativo_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = "requerente", allowSetters = true)
+    @JsonIgnoreProperties(value = "listaRequerente", allowSetters = true)
     private PostoAdministrativo postoAdministrativo;
     private String regiao;
     private String tipoDocumento;

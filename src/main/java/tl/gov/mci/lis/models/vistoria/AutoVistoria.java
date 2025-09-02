@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.user.User;
@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "lis_auto_vistoria")
+@Table(name = "lis_atividade_auto_vistoria")
 @Getter
 @Setter
 public class AutoVistoria extends EntityDB {
+    @Enumerated(EnumType.STRING)
+    private PedidoStatus status;
+
     private String numeroProcesso;
 
     @OneToOne
@@ -72,9 +75,10 @@ public class AutoVistoria extends EntityDB {
     private String recomendacoes;
     private int prazo;
 
-    @OneToOne
-    @JoinColumn(name = "aplicante_id", referencedColumnName = "id", nullable = false)
-    private Aplicante aplicante;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pedido_vistoria_id", nullable = false)
+    @JsonIgnoreProperties(value = "autoVistoria", allowSetters = true)
+    private PedidoVistoria pedidoVistoria;
 
     @OneToMany(mappedBy = "autoVistoria", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "autoVistoria", allowSetters = true)

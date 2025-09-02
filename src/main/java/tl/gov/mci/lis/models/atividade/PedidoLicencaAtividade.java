@@ -12,11 +12,14 @@ import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.dadosmestre.atividade.GrupoAtividade;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
+
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "lis_pedido_licenca_atividade")
+@Table(name = "lis_atividade_pedido_licenca")
 public class PedidoLicencaAtividade extends EntityDB {
 
     @Enumerated(EnumType.STRING)
@@ -69,6 +72,13 @@ public class PedidoLicencaAtividade extends EntityDB {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "fatura_id", referencedColumnName = "id")
     private Fatura fatura;
+
+    @OneToMany(mappedBy = "pedidoLicencaAtividade", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("pedidoLicencaAtividade")
+    private Set<PedidoVistoria> listaPedidoVistoria;
+
+    @OneToOne(mappedBy = "pedidoLicencaAtividade")
+    private CertificadoLicencaAtividade certificadoLicencaAtividade;
 
     @Override
     public String toString() {

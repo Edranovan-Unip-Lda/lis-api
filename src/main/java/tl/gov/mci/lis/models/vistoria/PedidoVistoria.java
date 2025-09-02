@@ -8,16 +8,20 @@ import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.cadastro.*;
 import tl.gov.mci.lis.enums.vistoria.TipoVistoria;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
+import java.util.Set;
+
 @Entity
-@Table(name = "lis_pedido_vistoria")
+@Table(name = "lis_atividade_pedido_vistoria")
 @Getter
 @Setter
 public class PedidoVistoria extends EntityDB {
+    @Column(nullable = false)
+    private int jornada;
 
     @Enumerated(EnumType.STRING)
     private TipoVistoria tipoVistoria;
@@ -68,10 +72,14 @@ public class PedidoVistoria extends EntityDB {
 
     private String observacao;
 
+    @OneToMany(mappedBy = "pedidoVistoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "pedidoVistoria", allowSetters = true)
+    private Set<AutoVistoria> listaAutoVistoria;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
-    private Aplicante aplicante;
+    @JoinColumn(name = "pedido_licenca_atividade_id", referencedColumnName = "id")
+    private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "fatura_id", referencedColumnName = "id")

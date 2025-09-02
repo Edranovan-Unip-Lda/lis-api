@@ -76,16 +76,6 @@ public class AplicanteController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping("/{aplicanteId}/pedidos/vistoria")
-    ResponseEntity<PedidoVistoriaDto> createPedidoVistoria(
-            @PathVariable Long aplicanteId,
-            @RequestBody PedidoVistoriaReqDto incomingObj
-    ) {
-        return new ResponseEntity<>(
-                vistoriaMapper.toDto(pedidoVistoriaService.create(aplicanteId, vistoriaMapper.toEntity(incomingObj))),
-                HttpStatus.CREATED);
-    }
-
     @GetMapping("/{aplicanteId}/pedidos/atividade")
     ResponseEntity<PedidoLicencaAtividadeDto> getPedidoLicencaAtividade(
             @PathVariable Long aplicanteId
@@ -111,25 +101,6 @@ public class AplicanteController {
         return ResponseEntity.ok(licencaMapper.toDto(pedidoLicencaAtividadeService.updateByIdAndAplicanteId(pedidoId, aplicanteId, licencaMapper.toEntity(obj))));
     }
 
-    @PutMapping("/{aplicanteId}/pedidos/vistoria/{pedidoId}")
-    ResponseEntity<PedidoVistoriaDto> updatePedidoVistoria(
-            @PathVariable Long aplicanteId,
-            @PathVariable Long pedidoId,
-            @RequestBody PedidoVistoriaReqDto incomingObj
-    ) {
-        return ResponseEntity.ok(vistoriaMapper.toDto(pedidoVistoriaService.update(pedidoId, aplicanteId, vistoriaMapper.toEntity(incomingObj))));
-    }
-
-    @PostMapping("/{aplicanteId}/auto-vistorias")
-    ResponseEntity<AutoVistoriaDto> createAutoVistoria(
-            @PathVariable Long aplicanteId,
-            @RequestBody AutoVistoriaDto incomingObj
-    ) throws BadRequestException {
-        return new ResponseEntity<>(
-                vistoriaMapper.toDto(autoVistoriaService.create(aplicanteId, vistoriaMapper.toEntity(incomingObj))),
-                HttpStatus.CREATED
-        );
-    }
 
     @PutMapping("/{aplicanteId}/pedidos/{pedidoId}/faturas/{faturaId}/upload/{username}")
     ResponseEntity<?> uploadFatura(

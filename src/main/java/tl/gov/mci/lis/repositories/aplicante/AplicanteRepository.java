@@ -106,8 +106,6 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
                 left join fetch pl.empresaSede
                 left join fetch pl.tipoAtividade
                 left join fetch a.empresa
-                left join fetch a.certificadoInscricaoCadastro
-                left join fetch a.certificadoLicencaAtividade
                 left join fetch a.historicoStatus hs
                 where a.id = :id
             """)

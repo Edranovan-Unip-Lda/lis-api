@@ -1,6 +1,5 @@
 package tl.gov.mci.lis.models.cadastro;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -9,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.endereco.Endereco;
 
 @Entity
@@ -19,8 +17,8 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 public class CertificadoInscricaoCadastro extends EntityDB {
 
     @OneToOne
-    @JoinColumn(name = "aplicante_id", referencedColumnName = "id")
-    private Aplicante aplicante;
+    @JoinColumn(name = "pedido_inscricao_cadastro_id", referencedColumnName = "id")
+    private PedidoInscricaoCadastro pedidoInscricaoCadastro;
 
     @NotNull
     private String sociedadeComercial;

@@ -9,6 +9,7 @@ import tl.gov.mci.lis.enums.cadastro.*;
 import tl.gov.mci.lis.enums.vistoria.TipoVistoria;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.vistoria.PedidoVistoria}
@@ -37,4 +38,5 @@ public class PedidoVistoriaDto implements Serializable {
     String alteracoes;
     String observacao;
     FaturaDto fatura;
+    Set<AutoVistoriaDto> listaAutoVistoria;
 }

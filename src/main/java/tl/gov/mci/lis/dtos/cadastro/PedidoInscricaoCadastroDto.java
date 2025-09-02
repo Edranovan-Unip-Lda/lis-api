@@ -49,71 +49,9 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     String dataEmissaoCertAnterior;
     String observacao;
     FaturaDto fatura;
+    CertificadoInscricaoCadastroDto certificadoInscricaoCadastro;
 
     public PedidoInscricaoCadastroDto(Long id) {
         this.id = id;
-    }
-
-    public PedidoInscricaoCadastroDto(
-            Long id,
-            Boolean isDeleted,
-            Instant createdAt,
-            Instant updatedAt,
-            String createdBy,
-            String updatedBy,
-            PedidoStatus status,
-            TipoPedidoCadastro tipoPedidoCadastro,
-            String nomeEmpresa,
-            String nif,
-            String gerente,
-            String numeroRegistoComercial,
-            String email,
-            String telefone,
-            String telemovel,
-            EnderecoDto sede,
-            String categoria,
-            TipoEmpresa tipoEmpresa,
-            QuantoAtividade quantoAtividade,
-            String nomeEstabelecimento,
-            EnderecoDto localEstabelecimento,
-            TipoEstabelecimento tipoEstabelecimento,
-            CaraterizacaoEstabelecimento caraterizacaoEstabelecimento,
-            NivelRisco risco,
-            TipoAto ato,
-            ClasseAtividadeDto classeAtividade,
-            String alteracoes,
-            String dataEmissaoCertAnterior,
-            String observacao,
-            FaturaDto fatura,
-            String empresaGerente) {
-        this.id = id;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.status = status;
-        this.tipoPedidoCadastro = tipoPedidoCadastro;
-        this.nomeEmpresa = nomeEmpresa;
-        this.empresaNif = nif;
-        this.empresaGerente = gerente;
-        this.empresaNumeroRegistoComercial = numeroRegistoComercial;
-        this.empresaEmail = email;
-        this.empresaTelefone = telefone;
-        this.empresaTelemovel = telemovel;
-        this.empresaSede = sede;
-        this.categoria = categoria;
-        this.tipoEmpresa = tipoEmpresa;
-        this.quantoAtividade = quantoAtividade;
-        this.nomeEstabelecimento = nomeEstabelecimento;
-        this.localEstabelecimento = localEstabelecimento;
-        this.tipoEstabelecimento = tipoEstabelecimento;
-        this.caraterizacaoEstabelecimento = caraterizacaoEstabelecimento;
-        this.risco = risco;
-        this.ato = ato;
-        this.classeAtividade = classeAtividade;
-        this.alteracoes = alteracoes;
-        this.dataEmissaoCertAnterior = dataEmissaoCertAnterior;
-        this.observacao = observacao;
-        this.fatura = fatura;
     }
 }

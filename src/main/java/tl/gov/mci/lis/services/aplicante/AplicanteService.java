@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
-import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.BadRequestException;
@@ -32,8 +30,6 @@ import tl.gov.mci.lis.repositories.aplicante.AplicanteAssignmentRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteNumberRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
-import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
-import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.cadastro.PedidoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
@@ -41,13 +37,10 @@ import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
-import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
-import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -66,13 +59,8 @@ public class AplicanteService {
     private final DirecaoRepository direcaoRepository;
     private final PedidoInscricaoCadastroService pedidoInscricaoCadastroService;
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
-    private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
-    private final PedidoVistoriaService pedidoVistoriaService;
-    private final VistoriaMapper vistoriaMapper;
     private final AplicanteAssignmentRepository aplicanteAssignmentRepository;
     private final UserRepository userRepository;
-    private final AutoVistoriaService autoVistoriaService;
-    private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
@@ -92,24 +80,12 @@ public class AplicanteService {
                     .ifPresent(aplicante::setEmpresa);
         }
 
-        switch (aplicante.getTipo()) {
-            case CADASTRO:
-                if (aplicante.getPedidoInscricaoCadastro() != null && aplicante.getPedidoInscricaoCadastro().getId() != null) {
-                    PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
-                            .getByAplicanteId(aplicante.getId());
-                    aplicante.setPedidoInscricaoCadastro(
-                            pedidoInscricaoCadastroMapper.toEntity(pedidoDto)
-                    );
-                }
-                certificadoInscricaoCadastroRepository.findByAplicante_Id(aplicante.getId())
-                        .ifPresent(aplicante::setCertificadoInscricaoCadastro);
-                break;
-            case ATIVIDADE:
-                aplicante.setPedidoVistorias(pedidoVistoriaService.getByAplicanteId(id).stream().map(vistoriaMapper::toEntity).collect(Collectors.toSet()));
-                aplicante.setAutoVistoria(autoVistoriaService.getByAplicanteId(id));
-                certificadoLicencaAtividadeRepository.findByAplicante_id(aplicante.getId())
-                        .ifPresent(aplicante::setCertificadoLicencaAtividade);
-                break;
+        if (aplicante.getPedidoInscricaoCadastro() != null && aplicante.getPedidoInscricaoCadastro().getId() != null) {
+            PedidoInscricaoCadastroDto pedidoDto = pedidoInscricaoCadastroService
+                    .getByAplicanteId(aplicante.getId());
+            aplicante.setPedidoInscricaoCadastro(
+                    pedidoInscricaoCadastroMapper.toEntity(pedidoDto)
+            );
         }
 
         aplicante.setHistoricoStatus(

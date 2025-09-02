@@ -10,6 +10,7 @@ import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.endereco.Endereco;
+import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class CertificadoService {
     private final EnderecoService enderecoService;
 
     @Transactional
-    public CertificadoInscricaoCadastro saveCertificadoInscricaoCadastro(Aplicante aplicante) {
+    public CertificadoInscricaoCadastro saveCertificadoInscricaoCadastro(Aplicante aplicante, User diretor) {
         logger.info("Salvando certificado de inscricao: {}", aplicante.getId());
 
         Endereco sede = new Endereco();
@@ -32,23 +33,25 @@ public class CertificadoService {
 
         sede = enderecoService.create(sede);
 
+        String nomeDiretor = diretor.getFirstName() + " " + diretor.getLastName();
+
         // Emitir certificado
         CertificadoInscricaoCadastro certificadoInscricaoCadastro = new CertificadoInscricaoCadastro();
-        certificadoInscricaoCadastro.setAplicante(aplicante);
+        certificadoInscricaoCadastro.setPedidoInscricaoCadastro(aplicante.getPedidoInscricaoCadastro());
         certificadoInscricaoCadastro.setSociedadeComercial(aplicante.getEmpresa().getNome());
         certificadoInscricaoCadastro.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
         certificadoInscricaoCadastro.setSede(sede);
         certificadoInscricaoCadastro.setAtividade(aplicante.getPedidoInscricaoCadastro().getClasseAtividade().getDescricao());
         certificadoInscricaoCadastro.setDataEmissao(LocalDate.now().toString());
         certificadoInscricaoCadastro.setDataValidade(LocalDate.now().plusYears(2).toString());
-        certificadoInscricaoCadastro.setNomeDiretorGeral("Donald Trump");
+        certificadoInscricaoCadastro.setNomeDiretorGeral(nomeDiretor);
 
         entityManager.persist(certificadoInscricaoCadastro);
         return certificadoInscricaoCadastro;
     }
 
     @Transactional
-    public CertificadoLicencaAtividade saveCertificadoLicencaAtividade(Aplicante aplicante) {
+    public CertificadoLicencaAtividade saveCertificadoLicencaAtividade(Aplicante aplicante, User diretor) {
         logger.info("Salvando certificado de licenca de atividade: {}", aplicante.getId());
 
         Endereco sede = new Endereco();
@@ -58,9 +61,11 @@ public class CertificadoService {
 
         sede = enderecoService.create(sede);
 
+        String nomeDiretor = diretor.getFirstName() + " " + diretor.getLastName();
+
         // Emitir certificado
         CertificadoLicencaAtividade certificadoLicencaAtividade = new CertificadoLicencaAtividade();
-        certificadoLicencaAtividade.setAplicante(aplicante);
+        certificadoLicencaAtividade.setPedidoLicencaAtividade(aplicante.getPedidoLicencaAtividade());
         certificadoLicencaAtividade.setSociedadeComercial(aplicante.getEmpresa().getNome());
         certificadoLicencaAtividade.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
         certificadoLicencaAtividade.setSede(sede);
@@ -69,7 +74,7 @@ public class CertificadoService {
         certificadoLicencaAtividade.setNivelRisco(aplicante.getPedidoLicencaAtividade().getRisco());
         certificadoLicencaAtividade.setDataEmissao(LocalDate.now().toString());
         certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(2).toString());
-        certificadoLicencaAtividade.setNomeDiretorGeral("Donald Trump");
+        certificadoLicencaAtividade.setNomeDiretorGeral(nomeDiretor);
 
         entityManager.persist(certificadoLicencaAtividade);
         return certificadoLicencaAtividade;

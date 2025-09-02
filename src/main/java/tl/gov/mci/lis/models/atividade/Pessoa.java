@@ -8,7 +8,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.endereco.Endereco;
 
 @Entity
-@Table(name = "lis_pedido_licenca_atividade_pessoa")
+@Table(name = "lis_atividade_pedido_licenca_pessoa")
 @Getter
 @Setter
 public class Pessoa extends EntityDB {
