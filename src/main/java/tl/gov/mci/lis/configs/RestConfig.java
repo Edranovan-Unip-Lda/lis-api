@@ -14,6 +14,7 @@ import tl.gov.mci.lis.models.endereco.Municipio;
 import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 import tl.gov.mci.lis.models.endereco.Suco;
 import tl.gov.mci.lis.models.pagamento.Taxa;
+import tl.gov.mci.lis.models.user.User;
 
 @Configuration
 public class RestConfig implements RepositoryRestConfigurer {
@@ -31,7 +32,8 @@ public class RestConfig implements RepositoryRestConfigurer {
                 SociedadeComercial.class,
                 GrupoAtividade.class,
                 ClasseAtividade.class,
-                Direcao.class
+                Direcao.class,
+                User.class
         );
     }
 }

@@ -1,15 +1,12 @@
 package tl.gov.mci.lis.models.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.AplicanteAssignment;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.dadosmestre.Role;
@@ -18,7 +15,6 @@ import tl.gov.mci.lis.models.empresa.Empresa;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "lis_user")
@@ -84,7 +80,7 @@ public class User extends EntityDB {
         this.status = status;
     }
 
-    public User(Long id, String firstName, String lastName, String username, String email, String password, Long roleId, String roleName, String jwtSession, String status) {
+    public User(Long id, String firstName, String lastName, String username, String email, String password, Long roleId, String roleName, String jwtSession, String status, Direcao direcao) {
         this.setId(id);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -94,6 +90,7 @@ public class User extends EntityDB {
         this.setRole(new Role(roleId, roleName));
         this.jwtSession = jwtSession;
         this.status = status;
+        this.setDirecao(direcao);
     }
 
     public User(Long id, String firstName, String lastName, String username, String email, Long roleId, String roleName, String jwtSession, String status, Instant createdDate, String createdBy) {

@@ -2,19 +2,17 @@ package tl.gov.mci.lis.controllers.empresa;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteReqsDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
-import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaRequestDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
-import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.services.empresa.EmpresaService;
 
@@ -27,7 +25,7 @@ public class EmpresaController {
     private final AplicanteMapper aplicanteMapper;
 
     @PostMapping("")
-    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody EmpresaRequestDto obj) throws BadRequestException {
+    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody EmpresaRequestDto obj) {
         return new ResponseEntity<>(
                 empresaMapper.toDto(empresaService.create(
                         empresaMapper.toEntity(obj)
@@ -35,7 +33,7 @@ public class EmpresaController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<EmpresaDto> updateEmpresa(@RequestBody Empresa obj) throws BadRequestException {
+    ResponseEntity<EmpresaDto> updateEmpresa(@RequestBody Empresa obj) {
         return new ResponseEntity<>(empresaMapper.toDto(empresaService.update(obj)), HttpStatus.OK);
     }
 
@@ -84,7 +82,6 @@ public class EmpresaController {
 
     @DeleteMapping("/{empresaId}/aplicantes/{aplicanteId}")
     ResponseEntity<?> deleteAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId) {
-        return new ResponseEntity<>(
-                aplicanteMapper.toDto(empresaService.deleteAplicante(empresaId, aplicanteId)), HttpStatus.OK);
+        return new ResponseEntity<>(empresaService.deleteAplicante(empresaId, aplicanteId), HttpStatus.OK);
     }
 }

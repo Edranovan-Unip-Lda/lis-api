@@ -210,7 +210,7 @@ public class EmpresaService {
     }
 
     @Transactional
-    public Aplicante deleteAplicante(Long empresaId, Long aplicanteId) {
+    public Long deleteAplicante(Long empresaId, Long aplicanteId) {
         logger.info("Excluindo aplicante: {}", aplicanteId);
 
         Aplicante aplicante = aplicanteRepository
@@ -260,7 +260,7 @@ public class EmpresaService {
         aplicanteRepository.delete(aplicante);
 
         logger.info("Aplicante {} removido com sucesso", aplicanteId);
-        return aplicante;
+        return aplicanteId;
     }
 
     private boolean isAplicanteReadyForSubmission(Aplicante aplicante) {

@@ -17,6 +17,7 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
+import tl.gov.mci.lis.dtos.user.UserDetailDto;
 import tl.gov.mci.lis.dtos.user.UserDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
@@ -51,13 +52,13 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<User> getByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(userServices.getByUsername(username), HttpStatus.OK);
+    public ResponseEntity<UserDetailDto> getByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(userMapper.toDto1(userServices.getByUsername(username)), HttpStatus.OK);
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<UserDto> update(@PathVariable String username, @RequestBody User user) {
-        return new ResponseEntity<>(userMapper.toDto(userServices.updateByUsername(username, user)), HttpStatus.OK);
+    public ResponseEntity<UserDetailDto> update(@PathVariable String username, @RequestBody User user) {
+        return new ResponseEntity<>(userMapper.toDto1(userServices.updateByUsername(username, user)), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")

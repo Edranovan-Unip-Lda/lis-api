@@ -30,6 +30,14 @@ public class Direcao extends EntityDB {
     @JsonIgnoreProperties(value = "direcaoAtribuida", allowSetters = true)
     private Set<Aplicante> aplicantesAtribuidos;
 
+    public Direcao() {
+    }
+
+    public Direcao(Long id, Categoria nome) {
+        this.setId(id);
+        this.nome = nome;
+    }
+
     public void addAplicante(Aplicante aplicante) {
         aplicantesAtribuidos.add(aplicante);
         aplicante.setDirecaoAtribuida(this);
