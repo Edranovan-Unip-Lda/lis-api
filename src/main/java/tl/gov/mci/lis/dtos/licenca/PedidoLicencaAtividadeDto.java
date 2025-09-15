@@ -4,6 +4,7 @@ import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.atividade.GrupoAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.PedidoStatus;
@@ -42,6 +43,7 @@ public class PedidoLicencaAtividadeDto implements Serializable {
     Double numEmpregadosCriar;
     boolean reciboPagamento;
     String outrosDocumentos;
+    Set<DocumentoDto> documentos;
     FaturaDto fatura;
     Set<PedidoVistoriaDto> listaPedidoVistoria;
     CertificadoLicencaAtividadeDto certificadoLicencaAtividade;

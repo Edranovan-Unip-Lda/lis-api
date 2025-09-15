@@ -59,7 +59,7 @@ public class EmpresaController {
     }
 
     @PatchMapping("/{empresaId}/aplicantes/{aplicanteId}")
-    ResponseEntity<AplicanteDto> submitAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId, @RequestBody AplicanteRequestDto obj) {
+    ResponseEntity<AplicanteDto> submitAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId, @Valid @RequestBody AplicanteRequestDto obj) {
         return new ResponseEntity<>(
                 aplicanteMapper.toDto(empresaService.submitAplicante(empresaId, aplicanteId, obj)),
                 HttpStatus.ACCEPTED

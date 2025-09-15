@@ -75,9 +75,7 @@ public class AutoVistoria extends EntityDB {
     private String recomendacoes;
     private int prazo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_vistoria_id", nullable = false)
-    @JsonIgnoreProperties(value = "autoVistoria", allowSetters = true)
+    @OneToOne(mappedBy = "autoVistoria")
     private PedidoVistoria pedidoVistoria;
 
     @OneToMany(mappedBy = "autoVistoria", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -3,11 +3,13 @@ package tl.gov.mci.lis.dtos.licenca;
 import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.GrupoAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.atividade.TipoPedidoAtividade;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade}
@@ -36,4 +38,5 @@ public class PedidoLicencaAtividadeReqsDto implements Serializable {
     Double numEmpregadosCriar;
     boolean reciboPagamento;
     String outrosDocumentos;
+    Set<DocumentoDto> documentos;
 }

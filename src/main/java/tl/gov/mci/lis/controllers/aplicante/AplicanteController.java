@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,8 @@ import tl.gov.mci.lis.services.pagamento.FaturaService;
 import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/aplicantes")
 @RequiredArgsConstructor
@@ -49,7 +52,7 @@ public class AplicanteController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "50") int size
     ) {
-        return new ResponseEntity<>(aplicanteService.getPage(page, size), HttpStatus.OK);
+        return ResponseEntity.ok(aplicanteService.getPage(page, size));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
@@ -62,7 +65,7 @@ public class AplicanteController {
     ResponseEntity<PedidoInscricaoCadastroDto> createPedidoInscricaoCadastro(
             @PathVariable Long aplicanteId,
             @RequestBody PedidoInscricaoCadastro obj
-    ) throws BadRequestException {
+    ) {
         return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
     }
 

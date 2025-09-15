@@ -72,9 +72,9 @@ public class PedidoVistoria extends EntityDB {
 
     private String observacao;
 
-    @OneToMany(mappedBy = "pedidoVistoria", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "pedidoVistoria", allowSetters = true)
-    private Set<AutoVistoria> listaAutoVistoria;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "auto_vistoria_id", referencedColumnName = "id")
+    private AutoVistoria autoVistoria;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
+import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.vistoria.AutoVistoria;
 
@@ -23,6 +25,16 @@ public class Documento extends EntityDB {
     @OneToOne()
     @JoinColumn(name = "fatura_id", unique = true)
     private Fatura fatura;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pedido_inscricao_cadastro_id")
+    @JsonIgnoreProperties(value = "documentos")
+    private PedidoInscricaoCadastro pedidoInscricaoCadastro;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pedido_licenca_atividade_id")
+    @JsonIgnoreProperties(value = "documentos")
+    private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auto_vistoria_id", referencedColumnName = "id")

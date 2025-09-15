@@ -10,6 +10,7 @@ import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.dadosmestre.atividade.GrupoAtividade;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
@@ -64,6 +65,10 @@ public class PedidoLicencaAtividade extends EntityDB {
     private Double numEmpregadosCriar;
     private boolean reciboPagamento;
     private String outrosDocumentos;
+
+    @OneToMany(mappedBy = "pedidoLicencaAtividade", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("pedidoLicencaAtividade")
+    private Set<Documento> documentos;
 
     @OneToOne
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id", nullable = false)

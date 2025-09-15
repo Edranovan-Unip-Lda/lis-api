@@ -9,8 +9,12 @@ import tl.gov.mci.lis.enums.cadastro.*;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -74,6 +78,10 @@ public class PedidoInscricaoCadastro extends EntityDB {
     private String dataEmissaoCertAnterior;
 
     private String observacao;
+
+    @OneToMany(mappedBy = "pedidoInscricaoCadastro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "pedidoInscricaoCadastro", allowSetters = true)
+    private Set<Documento> documentos;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id")

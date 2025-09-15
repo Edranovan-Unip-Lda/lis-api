@@ -36,7 +36,7 @@ public class AplicanteDto implements Serializable {
     public AplicanteDto() {
     }
 
-    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus) {
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado) {
         this.id = id;
         this.isDeleted = isDeleted;
         this.createdAt = createdAt;
@@ -47,8 +47,6 @@ public class AplicanteDto implements Serializable {
         this.categoria = categoria;
         this.numero = numero;
         this.estado = estado;
-        this.pedidoStatus = pedidoStatus;
-        this.faturaStatus = faturaStatus;
     }
 
     public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus, Long empresaId, Long pedidoInscricaoCadastroId) {

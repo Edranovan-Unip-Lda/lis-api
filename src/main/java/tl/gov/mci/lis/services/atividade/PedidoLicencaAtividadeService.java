@@ -2,7 +2,6 @@ package tl.gov.mci.lis.services.atividade;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,9 @@ public class PedidoLicencaAtividadeService {
 
         reqsObj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
         reqsObj.setTipoAtividade(grupoAtividadeRepository.getReferenceById(reqsObj.getTipoAtividade().getId()));
+        if (reqsObj.getDocumentos() != null) {
+            reqsObj.getDocumentos().forEach(doc -> doc.setPedidoLicencaAtividade(reqsObj));
+        }
         reqsObj.setStatus(PedidoStatus.SUBMETIDO);
         entityManager.persist(reqsObj);
         return reqsObj;
@@ -68,10 +70,9 @@ public class PedidoLicencaAtividadeService {
      * @param pedidoId    the ID of the order (PedidoLicencaAtividade) to be updated
      * @param incoming    the object containing new data to update the existing entity
      * @return the updated PedidoLicencaAtividade entity
-     * @throws BadRequestException if the input data violates any constraints
      */
     @Transactional
-    public PedidoLicencaAtividade updateByIdAndAplicanteId(Long pedidoId, Long aplicanteId, PedidoLicencaAtividade incoming) throws BadRequestException {
+    public PedidoLicencaAtividade updateByIdAndAplicanteId(Long pedidoId, Long aplicanteId, PedidoLicencaAtividade incoming) {
         logger.info("Atualizando PedidoLicencaAtividade: aplicanteId={},  pedidoId={}, payload={}", aplicanteId, pedidoId, incoming);
 
         PedidoLicencaAtividade entity = pedidoLicencaAtividadeRepository.findByIdAndAplicante_id(pedidoId, aplicanteId)
@@ -82,6 +83,15 @@ public class PedidoLicencaAtividadeService {
 
         if (incoming.getTipoAtividade() != null) {
             entity.setTipoAtividade(grupoAtividadeRepository.getReferenceById(incoming.getTipoAtividade().getId()));
+        }
+
+        if (incoming.getDocumentos() != null) {
+            incoming.getDocumentos().forEach(doc -> {
+                if (Objects.isNull(doc.getId())) {
+                    doc.setPedidoLicencaAtividade(entity);
+                    entity.getDocumentos().add(doc);
+                }
+            });
         }
 
         setIfChanged(entity::setTipo, entity.getTipo(), incoming.getTipo());

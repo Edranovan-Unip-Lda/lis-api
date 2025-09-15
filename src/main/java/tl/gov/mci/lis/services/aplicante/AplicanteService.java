@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.Categoria;
@@ -61,12 +62,13 @@ public class AplicanteService {
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final AplicanteAssignmentRepository aplicanteAssignmentRepository;
     private final UserRepository userRepository;
+    private final AplicanteMapper aplicanteMapper;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {
         logger.info("Getting page: {} and size {}", page, size);
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
-        return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging);
+        return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging).map(aplicanteMapper::toDto);
     }
 
     public Aplicante getById(Long id) {
@@ -159,6 +161,9 @@ public class AplicanteService {
         obj.setLocalEstabelecimento(enderecoService.create(obj.getLocalEstabelecimento()));
         obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
+        if (obj.getDocumentos() != null) {
+            obj.getDocumentos().forEach(d -> d.setPedidoInscricaoCadastro(obj));
+        }
         entityManager.persist(obj);
         return pedidoInscricaoCadastroMapper.toDto(obj);
     }
@@ -208,6 +213,15 @@ public class AplicanteService {
         setIfChanged(entity::setAlteracoes, entity.getAlteracoes(), incoming.getAlteracoes());
         setIfChanged(entity::setDataEmissaoCertAnterior, entity.getDataEmissaoCertAnterior(), incoming.getDataEmissaoCertAnterior());
         setIfChanged(entity::setObservacao, entity.getObservacao(), incoming.getObservacao());
+
+        if (incoming.getDocumentos() != null) {
+            incoming.getDocumentos().forEach(d -> {
+                if (Objects.isNull(d.getId())) {
+                    d.setPedidoInscricaoCadastro(entity);
+                    entity.getDocumentos().add(d);
+                }
+            });
+        }
 
         // 5) Nada de save(): a entidade está gerenciada; flush ocorre no commit (menos I/O)
         return pedidoInscricaoCadastroMapper.toDto(entity);

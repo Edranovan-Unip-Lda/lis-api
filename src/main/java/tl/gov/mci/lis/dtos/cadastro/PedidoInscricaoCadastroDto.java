@@ -3,15 +3,16 @@ package tl.gov.mci.lis.dtos.cadastro;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.dtos.pagamento.FaturaDto;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.enums.cadastro.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro}
@@ -50,6 +51,7 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     String observacao;
     FaturaDto fatura;
     CertificadoInscricaoCadastroDto certificadoInscricaoCadastro;
+    Set<DocumentoDto> documentos;
 
     public PedidoInscricaoCadastroDto(Long id) {
         this.id = id;
