@@ -75,7 +75,8 @@ public class AutoVistoria extends EntityDB {
     private String recomendacoes;
     private int prazo;
 
-    @OneToOne(mappedBy = "autoVistoria")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pedido_vistoria_id", referencedColumnName = "id")
     private PedidoVistoria pedidoVistoria;
 
     @OneToMany(mappedBy = "autoVistoria", cascade = CascadeType.ALL, orphanRemoval = true)

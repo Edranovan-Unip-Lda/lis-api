@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,20 +17,12 @@ import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
-import tl.gov.mci.lis.dtos.mappers.VistoriaMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
-import tl.gov.mci.lis.dtos.vistoria.AutoVistoriaDto;
-import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
-import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaReqDto;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.pagamento.FaturaService;
-import tl.gov.mci.lis.services.vistoria.AutoVistoriaService;
-import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/aplicantes")
@@ -41,12 +32,9 @@ public class AplicanteController {
     private final FaturaService faturaService;
     private final LicencaMapper licencaMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
-    private final PedidoVistoriaService pedidoVistoriaService;
-    private final VistoriaMapper vistoriaMapper;
     private final AplicanteMapper aplicanteMapper;
-    private final AutoVistoriaService autoVistoriaService;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("")
     ResponseEntity<Page<AplicanteDto>> getPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -55,7 +43,7 @@ public class AplicanteController {
         return ResponseEntity.ok(aplicanteService.getPage(page, size));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("/{id}")
     ResponseEntity<AplicanteDto> getAplicante(@PathVariable Long id) {
         return new ResponseEntity<>(aplicanteMapper.toDto(aplicanteService.getById(id)), HttpStatus.OK);

@@ -26,4 +26,6 @@ public interface PedidoVistoriaRepository extends JpaRepository<PedidoVistoria, 
             "fatura"
     })
     Set<PedidoVistoria> findByPedidoLicencaAtividade_Id(Long pedidoLicencaAtividadeId);
+
+    Optional<PedidoVistoria> findTopByPedidoLicencaAtividade_IdOrderByIdDesc(Long atividadeId);
 }

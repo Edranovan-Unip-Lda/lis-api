@@ -34,8 +34,8 @@ public class AssignmentService {
     private final AuthorizationService authorizationService;
 
     @Transactional
-    public AplicanteAssignment assign(Long aplicanteId, String managerUsername, String assigneeStaffUsername, String notes) {
-        logger.info("Atribuindo aplicante id: {} para o funcionario: {} pelo Diretor: {}", aplicanteId, assigneeStaffUsername, managerUsername);
+    public AplicanteAssignment assign(Long aplicanteId, String chiefUsername, String assigneeStaffUsername, String notes) {
+        logger.info("Atribuindo aplicante id: {} para o funcionario: {} pelo Diretor: {}", aplicanteId, assigneeStaffUsername, chiefUsername);
 
         Aplicante aplicante = aplicanteRepo.findById(aplicanteId)
                 .orElseThrow(() -> {
@@ -49,15 +49,15 @@ public class AssignmentService {
                     return new ResourceNotFoundException("Aplicante nao encontrado");
                 });
 
-        User manager = staffRepo.findUserByUsername(managerUsername)
+        User chief = staffRepo.findUserByUsername(chiefUsername)
                 .orElseThrow(() -> {
-                    logger.error("Diretor nao encontrado");
-                    return new ResourceNotFoundException("Diretor nao encontrado");
+                    logger.error("Utilizador nao encontrado");
+                    return new ResourceNotFoundException("Utilizador nao encontrado");
                 });
 
-        if (!manager.getRole().getName().equals(Role.ROLE_MANAGER.toString())) {
-            logger.error(("O Utilizador tem permissao para atribuir aplicantes"));
-            throw new ForbiddenException(("O Utilizador tem permissao para atribuir aplicantes"));
+        if (!chief.getRole().getName().equals(Role.ROLE_CHIEF.toString())) {
+            logger.error(("O Utilizador nao tem permissao para atribuir aplicantes"));
+            throw new ForbiddenException(("O Utilizador nao tem permissao para atribuir aplicantes"));
         }
 
         // Optional: avoid exact duplicate active assignment for same pair
@@ -72,7 +72,7 @@ public class AssignmentService {
         AplicanteAssignment aa = new AplicanteAssignment();
         aa.setAplicante(aplicante);
         aa.setAssignee(assignee);
-        aa.setAssignedBy(manager);
+        aa.setAssignedBy(chief);
         aa.setActive(true);
         aa.setStatus(EstadoTarefa.ATRIBUIDO);
         aa.setNotes(notes);

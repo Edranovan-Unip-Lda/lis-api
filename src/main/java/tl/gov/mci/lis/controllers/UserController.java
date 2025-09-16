@@ -117,7 +117,7 @@ public class UserController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_CHIEF')")
     @GetMapping("/{username}/aplicantes")
     public ResponseEntity<Page<AplicanteDto>> getPageAplicanteByIdAndDirecaoId(
             @PathVariable String username,
@@ -127,7 +127,7 @@ public class UserController {
         return new ResponseEntity<>(userServices.getPageAssignedAplicante(username, page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("/{username}/aplicantes/{aplicanteId}")
     public ResponseEntity<AplicanteDto> getAssignedAplicanteByIdAndDirecaoId(
             @PathVariable String username,
@@ -161,7 +161,7 @@ public class UserController {
 
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("/{username}/aplicantes/atribuidos")
     public ResponseEntity<Page<AplicanteDto>> getListAplicanteAtribuidos(
             @PathVariable String username,
@@ -172,7 +172,7 @@ public class UserController {
                 .map(aplicanteMapper::toDto));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_MANAGER', 'ROLE_CHIEF')")
     @PatchMapping("/{username}/aplicantes/atribuidos/{aplicanteId}")
     public ResponseEntity<AplicanteAssignmentDto> atribuirAplicante(
             @PathVariable String username,

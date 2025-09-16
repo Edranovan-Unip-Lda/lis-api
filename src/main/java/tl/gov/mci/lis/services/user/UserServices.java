@@ -16,10 +16,7 @@ import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.enums.AccountStatus;
-import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.EmailTemplate;
-import tl.gov.mci.lis.enums.Role;
+import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
@@ -37,6 +34,7 @@ import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
+import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.cadastro.CertificadoService;
 
@@ -67,6 +65,7 @@ public class UserServices {
     private final AplicanteRepository aplicanteRepository;
     private final AplicanteService aplicanteService;
     private final CertificadoService certificadoService;
+    private final PedidoVistoriaRepository pedidoVistoriaRepository;
 
     @Transactional
     public User register(User obj) {
@@ -364,6 +363,13 @@ public class UserServices {
 
         aplicante.setEstado(AplicanteStatus.REJEITADO);
         aplicante.setDirecaoAtribuida(null);
+
+        if (aplicante.getTipo() == AplicanteType.ATIVIDADE) {
+            pedidoVistoriaRepository.findTopByPedidoLicencaAtividade_IdOrderByIdDesc(
+                            aplicante.getPedidoLicencaAtividade().getId()
+                    )
+                    .ifPresent(pedidoVistoria -> pedidoVistoria.setStatus(PedidoStatus.REJEITADO));
+        }
 
         return aplicante; // still managed — changes flushed automatically
     }

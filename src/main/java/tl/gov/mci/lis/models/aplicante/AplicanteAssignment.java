@@ -52,8 +52,8 @@ public class AplicanteAssignment extends EntityDB {
     @PreUpdate
     private void validateManager() {
         System.out.println("Validating assignedBy: " + assignedBy.getRole());
-        if (!assignedBy.getRole().getName().equals(Role.ROLE_MANAGER.toString())) {
-            throw new IllegalStateException("As atribuições devem ser realizadas por um membro da equipa com o papel de GESTOR");
+        if (!assignedBy.getRole().getName().equals(Role.ROLE_CHIEF.toString())) {
+            throw new IllegalStateException("As atribuições devem ser realizadas por um membro da equipa com o papel de Chefe Departamento");
         }
     }
 }
