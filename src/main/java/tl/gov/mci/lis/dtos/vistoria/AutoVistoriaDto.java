@@ -46,6 +46,7 @@ public class AutoVistoriaDto implements Serializable {
     boolean distribuicaoAgua;
     boolean redeDistribuicao;
     boolean redeEsgotos;
+    boolean maximoHigieneSeguranca;
     boolean equipamentoUtensilios;
     boolean equipamentoPrimeirosSocorros;
     boolean recipientesLixo;

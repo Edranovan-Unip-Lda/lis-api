@@ -61,6 +61,7 @@ public class AutoVistoria extends EntityDB {
     private boolean distribuicaoAgua;
     private boolean redeDistribuicao;
     private boolean redeEsgotos;
+    private boolean maximoHigieneSeguranca;
     private boolean equipamentoUtensilios;
     private boolean equipamentoPrimeirosSocorros;
     private boolean recipientesLixo;
