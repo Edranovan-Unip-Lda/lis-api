@@ -16,9 +16,7 @@ import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
-import tl.gov.mci.lis.enums.AplicanteStatus;
-import tl.gov.mci.lis.enums.FaturaStatus;
-import tl.gov.mci.lis.enums.PedidoStatus;
+import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
@@ -30,6 +28,7 @@ import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
@@ -64,6 +63,7 @@ public class EmpresaService {
     private final CertificadoMapper certificadoMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final PedidoVistoriaService pedidoVistoriaService;
+    private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
 
     @Transactional
     public Empresa create(Empresa obj) {
@@ -261,6 +261,25 @@ public class EmpresaService {
 
         logger.info("Aplicante {} removido com sucesso", aplicanteId);
         return aplicanteId;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<?> getCertificatesPage(Long empresaId, Categoria categoria, AplicanteType aplicanteType, int page, int size) {
+        logger.info("Obtendo certificados page pelo empresa id: {}, categoria: {}, type: {}", empresaId, categoria, aplicanteType);
+        authorizationService.assertUserOwnsEmpresa(empresaId);
+        Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
+        switch (aplicanteType) {
+            case CADASTRO -> {
+                return certificadoInscricaoCadastroRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging).map(certificadoMapper::toDto1);
+            }
+            case ATIVIDADE -> {
+                return certificadoLicencaAtividadeRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging).map(certificadoMapper::toDto1);
+            }
+            default -> {
+                return null;
+            }
+        }
+
     }
 
     private boolean isAplicanteReadyForSubmission(Aplicante aplicante) {

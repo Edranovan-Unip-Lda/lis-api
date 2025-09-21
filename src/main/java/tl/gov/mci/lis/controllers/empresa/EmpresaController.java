@@ -13,6 +13,8 @@ import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaRequestDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
+import tl.gov.mci.lis.enums.AplicanteType;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.services.empresa.EmpresaService;
 
@@ -83,5 +85,16 @@ public class EmpresaController {
     @DeleteMapping("/{empresaId}/aplicantes/{aplicanteId}")
     ResponseEntity<?> deleteAplicante(@PathVariable Long empresaId, @PathVariable Long aplicanteId) {
         return new ResponseEntity<>(empresaService.deleteAplicante(empresaId, aplicanteId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{empresaId}/certificados")
+    ResponseEntity<Page<?>> getPageCertificates(
+            @PathVariable Long empresaId,
+            @RequestParam(value = "categoria") Categoria categoria,
+            @RequestParam(value = "type") AplicanteType aplicanteType,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size
+    ) {
+        return ResponseEntity.ok(empresaService.getCertificatesPage(empresaId, categoria, aplicanteType, page, size));
     }
 }

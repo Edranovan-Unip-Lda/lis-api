@@ -22,6 +22,7 @@ import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
+import tl.gov.mci.lis.services.cadastro.CertificadoService;
 import tl.gov.mci.lis.services.pagamento.FaturaService;
 
 @RestController
@@ -33,6 +34,7 @@ public class AplicanteController {
     private final LicencaMapper licencaMapper;
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final AplicanteMapper aplicanteMapper;
+    private final CertificadoService certificadoService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("")

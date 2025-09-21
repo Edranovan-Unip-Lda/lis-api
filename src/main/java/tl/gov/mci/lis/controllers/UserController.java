@@ -18,12 +18,14 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
 import tl.gov.mci.lis.dtos.user.UserDetailDto;
-import tl.gov.mci.lis.dtos.user.UserDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
+import tl.gov.mci.lis.enums.AplicanteType;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.aplicante.AssignmentService;
+import tl.gov.mci.lis.services.cadastro.CertificadoService;
 import tl.gov.mci.lis.services.user.UserServices;
 
 import java.time.Duration;
@@ -40,6 +42,7 @@ public class UserController {
     private final AplicanteService aplicanteService;
     private final AplicanteMapper aplicanteMapper;
     private final AssignmentService assignmentService;
+    private final CertificadoService certificadoService;
 
     @PostMapping("")
     public ResponseEntity<UserLoginDto> register(@Valid @RequestBody User user) {
@@ -181,5 +184,16 @@ public class UserController {
             @RequestParam String notes
     ) {
         return ResponseEntity.ok(aplicanteMapper.toDto(assignmentService.assign(aplicanteId, username, staffUsername, notes)));
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
+    @GetMapping("/{username}/certificados")
+    ResponseEntity<Page<?>> getPageCertificates(
+            @RequestParam(value = "categoria") Categoria categoria,
+            @RequestParam(value = "type") AplicanteType aplicanteType,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "50") int size
+    ) {
+        return ResponseEntity.ok(certificadoService.findPageApprovedCertificados(aplicanteType, categoria, page, size));
     }
 }

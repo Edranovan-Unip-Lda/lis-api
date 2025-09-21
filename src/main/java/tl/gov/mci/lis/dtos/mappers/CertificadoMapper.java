@@ -1,6 +1,8 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
+import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDetailDto;
+import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDetailsDto;
 import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
@@ -21,4 +23,18 @@ public interface CertificadoMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     CertificadoLicencaAtividade partialUpdate(CertificadoLicencaAtividadeDto certificadoLicencaAtividadeDto, @MappingTarget CertificadoLicencaAtividade certificadoLicencaAtividade);
+
+    CertificadoInscricaoCadastro toEntity(CertificadoInscricaoCadastroDetailsDto certificadoInscricaoCadastroDetailsDto);
+
+    CertificadoInscricaoCadastroDetailsDto toDto1(CertificadoInscricaoCadastro certificadoInscricaoCadastro);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    CertificadoInscricaoCadastro partialUpdate(CertificadoInscricaoCadastroDetailsDto certificadoInscricaoCadastroDetailsDto, @MappingTarget CertificadoInscricaoCadastro certificadoInscricaoCadastro);
+
+    CertificadoLicencaAtividade toEntity(CertificadoLicencaAtividadeDetailDto certificadoLicencaAtividadeDetailDto);
+
+    CertificadoLicencaAtividadeDetailDto toDto1(CertificadoLicencaAtividade certificadoLicencaAtividade);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    CertificadoLicencaAtividade partialUpdate(CertificadoLicencaAtividadeDetailDto certificadoLicencaAtividadeDetailDto, @MappingTarget CertificadoLicencaAtividade certificadoLicencaAtividade);
 }
