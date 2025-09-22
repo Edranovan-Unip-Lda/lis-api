@@ -10,6 +10,7 @@ import tl.gov.mci.lis.enums.TipoPropriedade;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.empresa.Empresa}
@@ -36,6 +37,7 @@ public class EmpresaDto implements Serializable {
     Double capitalSocial;
     LocalDate dataRegisto;
     SociedadeComercialDto sociedadeComercial;
+    Set<EmpresaRequestDto.AcionistaDto> acionistas;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}
