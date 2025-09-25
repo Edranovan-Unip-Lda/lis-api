@@ -141,6 +141,23 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_CHIEF')")
+    @PatchMapping("/{username}/aplicantes/{aplicanteId}/revisto")
+    public ResponseEntity<AplicanteDto> revistoAplicante(
+            @PathVariable String username,
+            @PathVariable Long aplicanteId,
+            @RequestBody HistoricoEstadoAplicante historicoEstadoAplicante
+    ) {
+        return switch (historicoEstadoAplicante.getStatus()) {
+            case REVISTO -> ResponseEntity.ok(
+                    aplicanteMapper.toDto(userServices.reviewedAplicante(username, aplicanteId)));
+            case REJEITADO -> ResponseEntity.ok(
+                    aplicanteMapper.toDto(
+                            userServices.rejectAplicante(username, aplicanteId, historicoEstadoAplicante)));
+            default -> ResponseEntity.badRequest().build();
+        };
+    }
+
     @PreAuthorize("hasAnyAuthority('ROLE_MANAGER')")
     @PatchMapping("/{username}/aplicantes/{aplicanteId}")
     public ResponseEntity<AplicanteDto> decisionAplicante(

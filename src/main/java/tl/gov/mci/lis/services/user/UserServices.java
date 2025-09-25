@@ -297,6 +297,34 @@ public class UserServices {
     }
 
     @Transactional
+    public Aplicante reviewedAplicante(String username, Long aplicanteId) {
+        logger.info("Revisto aplicante: user={}, aplicanteId={}", username, aplicanteId);
+
+        User operador = userRepository.queryByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador " + username + " não existe"));
+        Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
+
+        if (aplicante.getEstado() != AplicanteStatus.REVISAO) {
+            logger.error("O aplicante não está num estado válido para revisao.");
+            throw new BadRequestException("O aplicante não está num estado válido para revisao.");
+        }
+
+        aplicante.setEstado(AplicanteStatus.REVISTO);
+
+        // add history
+        HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+        if (historico.getDataAlteracao() == null) {
+            historico.setDataAlteracao(Instant.now());
+        }
+        historico.setStatus(aplicante.getEstado());
+        historico.setAlteradoPor(operador.getUsername());
+        aplicante.addHistorico(historico);
+
+        return aplicante;
+    }
+
+    @Transactional
     public Aplicante approveAplicante(String username, Long aplicanteId,
                                       HistoricoEstadoAplicante historico) {
         logger.info("Aprovar aplicante: user={}, aplicanteId={}", username, aplicanteId);
@@ -308,7 +336,8 @@ public class UserServices {
         Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
-        if (aplicante.getEstado() != AplicanteStatus.SUBMETIDO && aplicante.getEstado() != AplicanteStatus.REVISAO) {
+        if (aplicante.getEstado() != AplicanteStatus.REVISTO) {
+            logger.error("O aplicante não está num estado válido para aprovação.");
             throw new BadRequestException("O aplicante não está num estado válido para aprovação.");
         }
 
