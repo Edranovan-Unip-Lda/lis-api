@@ -7,13 +7,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.TipoPropriedade;
+import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.dadosmestre.SociedadeComercial;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.user.User;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,6 +51,11 @@ public class Empresa extends EntityDB {
     @NotNull
     private TipoPropriedade tipoPropriedade;
 
+    private Long totalTrabalhadores;
+    private Double volumeNegocioAnual;
+    private Double balancoTotalAnual;
+    private TipoEmpresa tipoEmpresa;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sociedade_comercial_id", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties(value = "empresas", allowSetters = true)
@@ -61,6 +69,10 @@ public class Empresa extends EntityDB {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "sede", allowSetters = true)
     private Endereco sede;
+
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "empresa", allowSetters = true)
+    private List<Documento> documentos;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "aplicante", allowSetters = true)
@@ -78,6 +90,11 @@ public class Empresa extends EntityDB {
     public void addAcionista(Acionista a) {
         acionistas.add(a);
         a.setEmpresa(this);
+    }
+
+    public void addDocumento(Documento d) {
+        documentos.add(d);
+        d.setEmpresa(this);
     }
 
     @Override

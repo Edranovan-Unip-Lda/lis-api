@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Value;
+import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.TipoPropriedade;
+import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,6 +41,11 @@ public class EmpresaRequestDto implements Serializable {
     SociedadeComercialDto sociedadeComercial;
     Set<AcionistaDto> acionistas;
     EnderecoDto sede;
+    List<DocumentoDto> documentos;
+    Long totalTrabalhadores;
+    Double volumeNegocioAnual;
+    Double balancoTotalAnual;
+    TipoEmpresa tipoEmpresa;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}
@@ -102,29 +111,10 @@ public class EmpresaRequestDto implements Serializable {
         String email;
         @NotNull
         Double acoes;
-    }
-
-    /**
-     * DTO for {@link tl.gov.mci.lis.models.endereco.Endereco}
-     */
-    @Value
-    @Getter
-    @Setter
-    public static class EnderecoDto implements Serializable {
-        Long id;
-        String local;
-        AldeiaDto aldeia;
-
-        /**
-         * DTO for {@link tl.gov.mci.lis.models.endereco.Aldeia}
-         */
-        @Value
-        @Getter
-        @Setter
-        public static class AldeiaDto implements Serializable {
-            Long id;
-            @NotBlank(message = "Nome é obrigatório")
-            String nome;
-        }
+        @NotNull
+        String agregadoFamilia;
+        @NotNull
+        String relacaoFamilia;
+        EnderecoDto endereco;
     }
 }

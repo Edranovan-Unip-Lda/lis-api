@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteReqsDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
@@ -18,6 +20,8 @@ import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.services.empresa.EmpresaService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/empresas")
 @RequiredArgsConstructor
@@ -26,11 +30,14 @@ public class EmpresaController {
     private final EmpresaMapper empresaMapper;
     private final AplicanteMapper aplicanteMapper;
 
-    @PostMapping("")
-    ResponseEntity<EmpresaDto> createEmpresa(@Valid @RequestBody EmpresaRequestDto obj) {
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<EmpresaDto> createEmpresa(
+            @Valid @RequestPart("data") EmpresaRequestDto obj,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
         return new ResponseEntity<>(
                 empresaMapper.toDto(empresaService.create(
-                        empresaMapper.toEntity(obj)
+                        empresaMapper.toEntity(obj), files
                 )), HttpStatus.CREATED);
     }
 

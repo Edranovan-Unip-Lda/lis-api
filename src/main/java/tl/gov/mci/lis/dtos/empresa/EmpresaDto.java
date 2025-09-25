@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.TipoPropriedade;
+import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,6 +41,11 @@ public class EmpresaDto implements Serializable {
     LocalDate dataRegisto;
     SociedadeComercialDto sociedadeComercial;
     Set<EmpresaRequestDto.AcionistaDto> acionistas;
+    private List<DocumentoDto> documentos;
+    private Long totalTrabalhadores;
+    private Double volumeNegocioAnual;
+    private Double balancoTotalAnual;
+    private TipoEmpresa tipoEmpresa;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}

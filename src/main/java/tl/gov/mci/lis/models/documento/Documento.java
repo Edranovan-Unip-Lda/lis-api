@@ -7,6 +7,7 @@ import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
+import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.vistoria.AutoVistoria;
 
@@ -40,6 +41,11 @@ public class Documento extends EntityDB {
     @JoinColumn(name = "auto_vistoria_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "documentos")
     private AutoVistoria autoVistoria;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    @JsonIgnoreProperties(value = "documentos")
+    private Empresa empresa;
 
     @Override
     public String toString() {

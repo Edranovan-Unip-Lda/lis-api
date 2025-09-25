@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.endereco.Endereco;
 
 @Entity
 @Table(name = "lis_empresa_acionistas")
@@ -24,6 +25,15 @@ public class Acionista extends EntityDB {
     private String email;
     @NotNull
     private Double acoes;
+    @NotNull
+    private String agregadoFamilia;
+    @NotNull
+    private String relacaoFamilia;
+
+    @OneToOne
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    @JsonIgnoreProperties(value = "sede", allowSetters = true)
+    private Endereco endereco;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", referencedColumnName = "id", nullable = false)

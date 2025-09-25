@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import tl.gov.mci.lis.configs.minio.MinioService;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteRequestDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
@@ -17,6 +19,7 @@ import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.*;
+import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
 import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
@@ -42,6 +45,8 @@ import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmpresaService {
@@ -64,15 +69,23 @@ public class EmpresaService {
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final PedidoVistoriaService pedidoVistoriaService;
     private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
+    private final MinioService minioService;
 
     @Transactional
-    public Empresa create(Empresa obj) {
+    public Empresa create(Empresa obj, List<MultipartFile> files) {
         logger.info("Criando empresa: {}", obj);
+        // Upload the files to Minio
+        obj.setDocumentos(minioService.uploadFiles(obj.getUtilizador().getUsername(), files));
+        obj.getDocumentos().forEach(documento -> documento.setEmpresa(obj));
         // Register the account first
-        obj.getUtilizador().setRole(roleRepository.getReferenceById(obj.getUtilizador().getRole().getId())); // 3 = empresa
+        obj.getUtilizador().setRole(roleRepository.getReferenceById(obj.getUtilizador().getRole().getId()));
         obj.setUtilizador(userServices.register(obj.getUtilizador()));
         obj.setSede(enderecoService.create(obj.getSede()));
-        obj.getAcionistas().forEach(obj::addAcionista);
+        obj.getAcionistas().forEach(acionista -> {
+            obj.addAcionista(acionista);
+            acionista.setEndereco(enderecoService.create(acionista.getEndereco()));
+        });
+        obj.setTipoEmpresa(classificarEmpresa(obj.getTotalTrabalhadores(), obj.getVolumeNegocioAnual(), obj.getBalancoTotalAnual()));
         entityManager.persist(obj);
         return obj;
     }
@@ -304,5 +317,28 @@ public class EmpresaService {
             }
         }
 
+    }
+
+    private static TipoEmpresa classificarEmpresa(Long trabalhadores, double volumeNegocios, double balancoTotal) {
+        // MICRO
+        if (trabalhadores <= 5 &&
+                (volumeNegocios <= 5000 || balancoTotal <= 30000)) {
+            return TipoEmpresa.MICROEMPRESA;
+        }
+
+        // PEQUENA
+        if (trabalhadores >= 6 && trabalhadores <= 20 &&
+                (volumeNegocios <= 50000 || balancoTotal <= 200000)) {
+            return TipoEmpresa.PEQUENA_EMPRESA;
+        }
+
+        // MEDIA
+        if (trabalhadores >= 21 && trabalhadores <= 50 &&
+                (volumeNegocios <= 1000000 || balancoTotal <= 1240000)) {
+            return TipoEmpresa.MEDIA_EMPRESA;
+        }
+
+        // GRANDE (mais de 50 trab. ou ultrapassa limites)
+        return TipoEmpresa.GRANDE_EMPRESA;
     }
 }

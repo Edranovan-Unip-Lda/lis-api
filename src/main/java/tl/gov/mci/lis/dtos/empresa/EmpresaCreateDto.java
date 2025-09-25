@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import tl.gov.mci.lis.enums.TipoPropriedade;
+import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
 import tl.gov.mci.lis.models.dadosmestre.SociedadeComercial;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * DTO for {@link tl.gov.mci.lis.models.empresa.Empresa}
@@ -26,6 +28,10 @@ public class EmpresaCreateDto implements Serializable {
     String dataRegisto;
     TipoPropriedade tipoPropriedade;
     SociedadeComercialDto sociedadeComercial;
+    Long totalTrabalhadores;
+    Double volumeNegocioAnual;
+    Double balancoTotalAnual;
+    TipoEmpresa tipoEmpresa;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}
