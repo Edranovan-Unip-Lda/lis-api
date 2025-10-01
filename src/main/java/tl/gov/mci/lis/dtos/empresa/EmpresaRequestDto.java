@@ -108,6 +108,8 @@ public class EmpresaRequestDto implements Serializable {
         @NotNull
         String numeroDocumento;
         @NotNull
+        String telefone;
+        @NotNull
         String email;
         @NotNull
         Double acoes;

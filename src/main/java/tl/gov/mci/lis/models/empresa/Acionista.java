@@ -21,6 +21,7 @@ public class Acionista extends EntityDB {
     private String tipoDocumento;
     @NotNull
     private String numeroDocumento;
+    private String telefone;
     @NotNull
     private String email;
     @NotNull

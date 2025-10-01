@@ -41,14 +41,14 @@ public class EmpresaController {
                 )), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<EmpresaDto> updateEmpresa(@RequestBody Empresa obj) {
-        return new ResponseEntity<>(empresaMapper.toDto(empresaService.update(obj)), HttpStatus.OK);
+    @PatchMapping("/{username}")
+    ResponseEntity<EmpresaDto> updateEmpresa(@PathVariable String username, @RequestBody Empresa obj) {
+        return new ResponseEntity<>(empresaMapper.toDto(empresaService.update(username, obj)), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<EmpresaDto> getEmpresa(@PathVariable Long id) {
-        return new ResponseEntity<>(empresaMapper.toDto(empresaService.getById(id)), HttpStatus.OK);
+    @GetMapping("/{username}")
+    ResponseEntity<EmpresaDto> getEmpresaByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(empresaMapper.toDto(empresaService.getByUtilizadorUsername(username)));
     }
 
     @GetMapping("")

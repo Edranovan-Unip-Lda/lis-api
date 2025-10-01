@@ -20,23 +20,23 @@ import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.vistoria.PedidoVistoriaDto;
 import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.enums.cadastro.TipoEmpresa;
-import tl.gov.mci.lis.exceptions.BadRequestException;
 import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
+import tl.gov.mci.lis.models.documento.Documento;
+import tl.gov.mci.lis.models.empresa.Acionista;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.pagamento.Fatura;
-import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
 import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.cadastro.CertificadoInscricaoCadastroRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.SociedadeComercialRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
-import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
@@ -45,7 +45,10 @@ import tl.gov.mci.lis.services.endereco.EnderecoService;
 import tl.gov.mci.lis.services.user.UserServices;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +58,6 @@ public class EmpresaService {
     private final UserServices userServices;
     private final AplicanteRepository aplicanteRepository;
     private final EnderecoService enderecoService;
-    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EmpresaMapper empresaMapper;
     private final AuthorizationService authorizationService;
@@ -70,6 +72,7 @@ public class EmpresaService {
     private final PedidoVistoriaService pedidoVistoriaService;
     private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
     private final MinioService minioService;
+    private final SociedadeComercialRepository sociedadeComercialRepository;
 
     @Transactional
     public Empresa create(Empresa obj, List<MultipartFile> files) {
@@ -90,39 +93,59 @@ public class EmpresaService {
         return obj;
     }
 
-    public Empresa update(Empresa obj) {
-        logger.info("Atualizando empresa: {}", obj);
-        Empresa empresa = empresaRepository.findById(obj.getId())
+    @Transactional
+    public Empresa update(String username, Empresa incoming) {
+        logger.info("Atualizando empresa: {}", username);
+
+        Empresa empresa = empresaRepository.findByUtilizador_Username(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
 
-        empresa.setSede(enderecoService.update(obj.getSede()));
-
-        if (obj.getUtilizador().getId() == null) {
-            throw new BadRequestException("ID do utilizador é obrigatório");
+        if (empresa.getUtilizador().getRole().getName().equals(Role.ROLE_CLIENT.name())) {
+            authorizationService.assertUserOwnsEmpresa(incoming.getId());
         }
 
-        User utilizador = userRepository.findById(obj.getUtilizador().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Utilizador não encontrado"));
-        utilizador.setId(obj.getUtilizador().getId());
-        utilizador.setFirstName(obj.getUtilizador().getFirstName());
-        utilizador.setLastName(obj.getUtilizador().getLastName());
-        utilizador.setEmail(obj.getUtilizador().getEmail());
-        empresa.setUtilizador(utilizador);
+        empresa.setSede(enderecoService.update(incoming.getSede()));
 
-        empresa.setNome(obj.getNome());
-        empresa.setNif(obj.getNif());
-        empresa.setGerente(obj.getGerente());
-        empresa.setNumeroRegistoComercial(obj.getNumeroRegistoComercial());
-        empresa.setTelefone(obj.getTelefone());
-        empresa.setTelemovel(obj.getTelemovel());
+        if (incoming.getSociedadeComercial() != null) {
+            empresa.setSociedadeComercial(sociedadeComercialRepository.getReferenceById(incoming.getSociedadeComercial().getId()));
+        }
 
-        return empresaRepository.save(empresa);
+        if (incoming.getAcionistas() != null) {
+            syncAcionistas(empresa, incoming.getAcionistas());
+        }
+        if (incoming.getDocumentos() != null) {
+            syncDocumentos(empresa, incoming.getDocumentos());
+        }
+
+        setIfChanged(empresa::setNome, empresa.getNome(), incoming.getNome());
+        setIfChanged(empresa::setNif, empresa.getNif(), incoming.getNif());
+        setIfChanged(empresa::setNumeroRegistoComercial, empresa.getNumeroRegistoComercial(), incoming.getNumeroRegistoComercial());
+        setIfChanged(empresa::setTelefone, empresa.getTelefone(), incoming.getTelefone());
+        setIfChanged(empresa::setTelemovel, empresa.getTelemovel(), incoming.getTelemovel());
+        setIfChanged(empresa::setCapitalSocial, empresa.getCapitalSocial(), incoming.getCapitalSocial());
+        setIfChanged(empresa::setDataRegisto, empresa.getDataRegisto(), incoming.getDataRegisto());
+        setIfChanged(empresa::setTipoPropriedade, empresa.getTipoPropriedade(), incoming.getTipoPropriedade());
+        setIfChanged(empresa::setTotalTrabalhadores, empresa.getTotalTrabalhadores(), incoming.getTotalTrabalhadores());
+        setIfChanged(empresa::setVolumeNegocioAnual, empresa.getVolumeNegocioAnual(), incoming.getVolumeNegocioAnual());
+        setIfChanged(empresa::setBalancoTotalAnual, empresa.getBalancoTotalAnual(), incoming.getBalancoTotalAnual());
+        setIfChanged(empresa::setTipoEmpresa, empresa.getTipoEmpresa(), classificarEmpresa(incoming.getTotalTrabalhadores(), incoming.getVolumeNegocioAnual(), incoming.getBalancoTotalAnual()));
+
+        return empresa;
     }
 
     public Empresa getById(Long id) {
         logger.info("Obtendo empresa pelo id: {}", id);
         return empresaRepository
                 .findById(id).orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
+    }
+
+    public Empresa getByUtilizadorUsername(String username) {
+        logger.info("Obtendo empresa pelo utilizador: {}", username);
+        return empresaRepository.findByUtilizador_Username(username)
+                .orElseThrow(() -> {
+                    logger.error("Empresa nao encontrada");
+                    return new ResourceNotFoundException("Empresa nao encontrada");
+                });
     }
 
     public Page<EmpresaDto> getPageByPageAndSize(int page, int size) {
@@ -340,5 +363,73 @@ public class EmpresaService {
 
         // GRANDE (mais de 50 trab. ou ultrapassa limites)
         return TipoEmpresa.GRANDE_EMPRESA;
+    }
+
+    private void syncAcionistas(Empresa empresa, Set<Acionista> incomingSet) {
+        if (empresa.getAcionistas() == null) {
+            empresa.setAcionistas(new LinkedHashSet<>());
+        }
+
+        Map<Long, Acionista> existingById = empresa.getAcionistas().stream()
+                .filter(a -> a.getId() != null)
+                .collect(Collectors.toMap(Acionista::getId, Function.identity()));
+
+        Set<Long> seenIds = new HashSet<>();
+
+        for (Acionista in : incomingSet) {
+            if (in.getId() == null) {
+                in.setEmpresa(empresa);
+                if (in.getEndereco() != null) {
+                    in.setEndereco(in.getEndereco().getId() == null
+                            ? enderecoService.create(in.getEndereco())
+                            : enderecoService.update(in.getEndereco()));
+                }
+                empresa.getAcionistas().add(in);
+            } else {
+                seenIds.add(in.getId());
+                Acionista ex = existingById.get(in.getId());
+                if (ex == null) {
+                    in.setEmpresa(empresa);
+                    empresa.getAcionistas().add(in);
+                } else {
+                    setIfChanged(ex::setNome, ex.getNome(), in.getNome());
+                    setIfChanged(ex::setNif, ex.getNif(), in.getNif());
+                    setIfChanged(ex::setTipoDocumento, ex.getTipoDocumento(), in.getTipoDocumento());
+                    setIfChanged(ex::setNumeroDocumento, ex.getNumeroDocumento(), in.getNumeroDocumento());
+                    setIfChanged(ex::setEmail, ex.getEmail(), in.getEmail());
+                    setIfChanged(ex::setTelefone, ex.getTelefone(), in.getTelefone());
+                    setIfChanged(ex::setAcoes, ex.getAcoes(), in.getAcoes());
+                    setIfChanged(ex::setAgregadoFamilia, ex.getAgregadoFamilia(), in.getAgregadoFamilia());
+                    setIfChanged(ex::setRelacaoFamilia, ex.getRelacaoFamilia(), in.getRelacaoFamilia());
+
+                    if (in.getEndereco() != null) {
+                        ex.setEndereco(in.getEndereco().getId() == null
+                                ? enderecoService.create(in.getEndereco())
+                                : enderecoService.update(in.getEndereco()));
+                    }
+                }
+            }
+        }
+
+        empresa.getAcionistas().removeIf(a -> a.getId() != null && !seenIds.contains(a.getId()));
+    }
+
+    private void syncDocumentos(Empresa empresa, List<Documento> incomingList) {
+        if (empresa.getDocumentos() == null) {
+            empresa.setDocumentos(new ArrayList<>());
+        }
+
+        for (Documento in : incomingList) {
+            if (in.getId() == null) {
+                in.setEmpresa(empresa);
+                empresa.getDocumentos().add(in);
+            }
+        }
+    }
+
+    private static <T> void setIfChanged(Consumer<T> setter, T current, T next) {
+        if (!Objects.equals(current, next)) {
+            setter.accept(next);
+        }
     }
 }
