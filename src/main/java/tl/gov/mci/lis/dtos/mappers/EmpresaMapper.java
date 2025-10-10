@@ -1,12 +1,16 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
+import tl.gov.mci.lis.dtos.empresa.GerenteDto;
+import tl.gov.mci.lis.dtos.empresa.RepresentanteDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaRequestDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaCreateDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.empresa.Gerente;
+import tl.gov.mci.lis.models.empresa.Representante;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {EnderecoMapper.class, PostoAdministrativoMapper.class})
 public interface EmpresaMapper {
     Empresa toEntity(EmpresaDto empresaDto);
 
@@ -33,4 +37,18 @@ public interface EmpresaMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Empresa partialUpdate(EmpresaRequestDto empresaRequestDto, @MappingTarget Empresa empresa);
+
+    Gerente toEntity(GerenteDto gerenteDto);
+
+    GerenteDto toDto(Gerente gerente);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Gerente partialUpdate(GerenteDto gerenteDto, @MappingTarget Gerente gerente);
+
+    Representante toEntity(RepresentanteDto representanteDto);
+
+    RepresentanteDto toDto(Representante representante);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Representante partialUpdate(RepresentanteDto representanteDto, @MappingTarget Representante representante);
 }

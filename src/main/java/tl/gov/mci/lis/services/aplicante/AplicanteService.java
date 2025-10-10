@@ -153,7 +153,7 @@ public class AplicanteService {
         obj.setEmpresaNumeroRegistoComercial(empresa.getNumeroRegistoComercial());
         obj.setEmpresaTelefone(empresa.getTelefone());
         obj.setEmpresaTelemovel(empresa.getTelemovel());
-        obj.setEmpresaGerente(empresa.getGerente());
+        obj.setEmpresaGerente(empresa.getGerente().getNome());
         obj.setEmpresaEmail(empresa.getUtilizador().getEmail());
 
         obj.setAplicante(aplicante);

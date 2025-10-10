@@ -3,6 +3,8 @@ package tl.gov.mci.lis.models.empresa;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,8 +36,6 @@ public class Empresa extends EntityDB {
     private User utilizador;
 
     @NotNull
-    private String gerente;
-    @NotNull
     private String numeroRegistoComercial;
     private String telefone;
     private String telemovel;
@@ -65,14 +65,30 @@ public class Empresa extends EntityDB {
     @JsonIgnoreProperties(value = "empresa", allowSetters = true)
     private Set<Acionista> acionistas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "sede", allowSetters = true)
     private Endereco sede;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "gerente_id", referencedColumnName = "id")
+    private Gerente gerente;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "representante_id", referencedColumnName = "id")
+    private Representante representante;
+
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "empresa", allowSetters = true)
     private List<Documento> documentos;
+
+    @Min(value = -90, message = "latitude deve estar entre -90 e 90")
+    @Max(value = 90, message = "latitude deve estar entre -90 e 90")
+    private Double latitude;
+
+    @Min(value = -180, message = "longitude deve estar entre -180 e 180")
+    @Max(value = 180, message = "longitude deve estar entre -180 e 180")
+    private Double longitude;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "aplicante", allowSetters = true)

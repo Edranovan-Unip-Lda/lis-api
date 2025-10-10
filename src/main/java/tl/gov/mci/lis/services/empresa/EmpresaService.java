@@ -28,6 +28,8 @@ import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Acionista;
 import tl.gov.mci.lis.models.empresa.Empresa;
+import tl.gov.mci.lis.models.empresa.Gerente;
+import tl.gov.mci.lis.models.empresa.Representante;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
@@ -116,6 +118,12 @@ public class EmpresaService {
         if (incoming.getDocumentos() != null) {
             syncDocumentos(empresa, incoming.getDocumentos());
         }
+        if (incoming.getGerente() != null) {
+            syncGerente(empresa, incoming.getGerente());
+        }
+        if (incoming.getRepresentante() != null) {
+            syncRepresentante(empresa, incoming.getRepresentante());
+        }
 
         setIfChanged(empresa::setNome, empresa.getNome(), incoming.getNome());
         setIfChanged(empresa::setNif, empresa.getNif(), incoming.getNif());
@@ -129,6 +137,8 @@ public class EmpresaService {
         setIfChanged(empresa::setVolumeNegocioAnual, empresa.getVolumeNegocioAnual(), incoming.getVolumeNegocioAnual());
         setIfChanged(empresa::setBalancoTotalAnual, empresa.getBalancoTotalAnual(), incoming.getBalancoTotalAnual());
         setIfChanged(empresa::setTipoEmpresa, empresa.getTipoEmpresa(), classificarEmpresa(incoming.getTotalTrabalhadores(), incoming.getVolumeNegocioAnual(), incoming.getBalancoTotalAnual()));
+        setIfChanged(empresa::setLatitude, empresa.getLatitude(), incoming.getLatitude());
+        setIfChanged(empresa::setLongitude, empresa.getLongitude(), incoming.getLongitude());
 
         return empresa;
     }
@@ -363,6 +373,43 @@ public class EmpresaService {
 
         // GRANDE (mais de 50 trab. ou ultrapassa limites)
         return TipoEmpresa.GRANDE_EMPRESA;
+    }
+
+    private void syncGerente(Empresa empresa, Gerente incomingSet) {
+        if (empresa.getGerente() == null) {
+            empresa.setGerente(incomingSet);
+        } else {
+            setIfChanged(empresa.getGerente()::setNome, empresa.getGerente().getNome(), incomingSet.getNome());
+            setIfChanged(empresa.getGerente()::setMorada, empresa.getGerente().getMorada(), incomingSet.getMorada());
+            setIfChanged(empresa.getGerente()::setTelefone, empresa.getGerente().getTelefone(), incomingSet.getTelefone());
+            setIfChanged(empresa.getGerente()::setEmail, empresa.getGerente().getEmail(), incomingSet.getEmail());
+            setIfChanged(empresa.getGerente()::setTipoDocumento, empresa.getGerente().getTipoDocumento(), incomingSet.getTipoDocumento());
+            setIfChanged(empresa.getGerente()::setNumeroDocumento, empresa.getGerente().getNumeroDocumento(), incomingSet.getNumeroDocumento());
+        }
+    }
+
+    private void syncRepresentante(Empresa empresa, Representante incomingSet) {
+        if (empresa.getRepresentante() == null) {
+            empresa.setRepresentante(incomingSet);
+        } else {
+            Representante representante = empresa.getRepresentante();
+
+            if (representante.getMorada() != null) {
+                representante.setMorada(enderecoService.update(representante.getMorada()));
+            }
+            setIfChanged(representante::setTipo, representante.getTipo(), incomingSet.getTipo());
+            setIfChanged(representante::setNome, representante.getNome(), incomingSet.getNome());
+            setIfChanged(representante::setPai, representante.getPai(), incomingSet.getPai());
+            setIfChanged(representante::setMae, representante.getMae(), incomingSet.getMae());
+            setIfChanged(representante::setDataNascimento, representante.getDataNascimento(), incomingSet.getDataNascimento());
+            setIfChanged(representante::setNacionalidade, representante.getNacionalidade(), incomingSet.getNacionalidade());
+            setIfChanged(representante::setNaturalidade, representante.getNaturalidade(), incomingSet.getNaturalidade());
+            setIfChanged(representante::setEstadoCivil, representante.getEstadoCivil(), incomingSet.getEstadoCivil());
+            setIfChanged(representante::setTipoDocumento, representante.getTipoDocumento(), incomingSet.getTipoDocumento());
+            setIfChanged(representante::setNumeroDocumento, representante.getNumeroDocumento(), incomingSet.getNumeroDocumento());
+            setIfChanged(representante::setTelefone, representante.getTelefone(), incomingSet.getTelefone());
+            setIfChanged(representante::setEmail, representante.getEmail(), incomingSet.getEmail());
+        }
     }
 
     private void syncAcionistas(Empresa empresa, Set<Acionista> incomingSet) {

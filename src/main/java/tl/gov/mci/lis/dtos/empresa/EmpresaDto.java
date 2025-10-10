@@ -31,7 +31,8 @@ public class EmpresaDto implements Serializable {
     String nome;
     String nif;
     UserDto utilizador;
-    String gerente;
+    GerenteDto gerente;
+    RepresentanteDto representante;
     String numeroRegistoComercial;
     String telefone;
     String telemovel;
@@ -46,6 +47,9 @@ public class EmpresaDto implements Serializable {
     private Double volumeNegocioAnual;
     private Double balancoTotalAnual;
     private TipoEmpresa tipoEmpresa;
+    Double longitude;
+    Double latitude;
+
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}

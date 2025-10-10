@@ -3,6 +3,7 @@ package tl.gov.mci.lis.dtos.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
+import tl.gov.mci.lis.dtos.empresa.GerenteDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.TipoPropriedade;
 
@@ -53,8 +54,7 @@ public class UserDetailDto implements Serializable {
         Long id;
         String nome;
         String nif;
-        @NotNull
-        String gerente;
+        GerenteDto gerente;
         @NotNull
         String numeroRegistoComercial;
         String telefone;

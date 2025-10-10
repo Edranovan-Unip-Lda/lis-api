@@ -1,6 +1,7 @@
 package tl.gov.mci.lis.dtos.aplicante;
 
 import lombok.Value;
+import tl.gov.mci.lis.dtos.empresa.GerenteDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class AplicantePageDto implements Serializable {
         Long id;
         String nome;
         String nif;
-        String gerente;
+        GerenteDto gerente;
         String numeroRegistoComercial;
     }
 }
