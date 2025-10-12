@@ -41,6 +41,8 @@ public class PedidoInscricaoCadastroDto implements Serializable {
     QuantoAtividade quantoAtividade;
     String nomeEstabelecimento;
     EnderecoDto localEstabelecimento;
+    Double longitude;
+    Double latitude;
     TipoEstabelecimento tipoEstabelecimento;
     CaraterizacaoEstabelecimento caraterizacaoEstabelecimento;
     NivelRisco risco;

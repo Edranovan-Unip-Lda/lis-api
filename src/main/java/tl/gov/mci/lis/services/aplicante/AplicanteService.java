@@ -213,6 +213,8 @@ public class AplicanteService {
         setIfChanged(entity::setAlteracoes, entity.getAlteracoes(), incoming.getAlteracoes());
         setIfChanged(entity::setDataEmissaoCertAnterior, entity.getDataEmissaoCertAnterior(), incoming.getDataEmissaoCertAnterior());
         setIfChanged(entity::setObservacao, entity.getObservacao(), incoming.getObservacao());
+        setIfChanged(entity::setLongitude, entity.getLongitude(), incoming.getLongitude());
+        setIfChanged(entity::setLatitude, entity.getLatitude(), incoming.getLatitude());
 
         if (incoming.getDocumentos() != null) {
             incoming.getDocumentos().forEach(d -> {

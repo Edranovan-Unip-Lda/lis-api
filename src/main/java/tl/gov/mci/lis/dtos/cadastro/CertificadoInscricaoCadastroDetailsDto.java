@@ -69,6 +69,8 @@ public class CertificadoInscricaoCadastroDetailsDto implements Serializable {
         String dataEmissaoCertAnterior;
         String observacao;
         AplicanteDto aplicante;
+        Double longitude;
+        Double latitude;
 
         /**
          * DTO for {@link tl.gov.mci.lis.models.aplicante.Aplicante}

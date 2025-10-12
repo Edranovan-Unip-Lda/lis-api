@@ -2,6 +2,8 @@ package tl.gov.mci.lis.models.cadastro;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.PedidoStatus;
@@ -13,7 +15,6 @@ import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -53,6 +54,14 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_estabelecimento_id", referencedColumnName = "id")
     private Endereco localEstabelecimento;
+
+    @Min(value = -90, message = "latitude deve estar entre -90 e 90")
+    @Max(value = 90, message = "latitude deve estar entre -90 e 90")
+    private Double latitude;
+
+    @Min(value = -180, message = "longitude deve estar entre -180 e 180")
+    @Max(value = 180, message = "longitude deve estar entre -180 e 180")
+    private Double longitude;
 
     @Enumerated(EnumType.STRING)
     private TipoEstabelecimento tipoEstabelecimento;
