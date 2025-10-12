@@ -9,7 +9,7 @@ import tl.gov.mci.lis.enums.atividade.TipoPedidoAtividade;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
-import tl.gov.mci.lis.models.dadosmestre.atividade.GrupoAtividade;
+import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
@@ -38,9 +38,9 @@ public class PedidoLicencaAtividade extends EntityDB {
     private Endereco empresaSede;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grupo_atividade_id", nullable = false)
+    @JoinColumn(name = "classe_atividade_id", nullable = false)
     @JsonIgnoreProperties(value = "pedidoLicencaAtividadeList", allowSetters = true)
-    private GrupoAtividade tipoAtividade;
+    private ClasseAtividade classeAtividade;
 
     @Enumerated(EnumType.STRING)
     private NivelRisco risco;
@@ -50,6 +50,9 @@ public class PedidoLicencaAtividade extends EntityDB {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "representante_id", referencedColumnName = "id")
     private Pessoa representante;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Arrendador arrendador;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "gerente_id", referencedColumnName = "id")

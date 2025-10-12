@@ -36,8 +36,4 @@ public class GrupoAtividade extends EntityDB {
     @OneToMany(mappedBy = "grupoAtividade", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "grupoAtividade", allowSetters = true)
     private Set<ClasseAtividade> classes;
-
-    @OneToMany(mappedBy = "tipoAtividade", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "tipoAtividade", allowSetters = true)
-    private Set<PedidoLicencaAtividade> pedidoLicencaAtividadeList;
 }

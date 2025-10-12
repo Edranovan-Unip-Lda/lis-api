@@ -2,6 +2,7 @@ package tl.gov.mci.lis.dtos.licenca;
 
 import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
+import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.atividade.GrupoAtividadeDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
@@ -27,7 +28,7 @@ public class PedidoLicencaAtividadeDto implements Serializable {
     String nomeEmpresa;
     String empresaNumeroRegistoComercial;
     EnderecoDto empresaSede;
-    GrupoAtividadeDto tipoAtividade;
+    ClasseAtividadeDto classeAtividade;
     NivelRisco risco;
     boolean estatutoSociedadeComercial;
     String empresaNif;
@@ -47,4 +48,5 @@ public class PedidoLicencaAtividadeDto implements Serializable {
     FaturaDto fatura;
     Set<PedidoVistoriaDto> listaPedidoVistoria;
     CertificadoLicencaAtividadeDto certificadoLicencaAtividade;
+    ArrendadorDto arrendador;
 }

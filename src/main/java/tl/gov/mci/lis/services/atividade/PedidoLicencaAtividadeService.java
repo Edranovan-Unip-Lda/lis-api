@@ -14,6 +14,7 @@ import tl.gov.mci.lis.enums.FaturaStatus;
 import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.Arrendador;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.atividade.Pessoa;
 import tl.gov.mci.lis.models.endereco.Endereco;
@@ -21,7 +22,7 @@ import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.pagamento.Taxa;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
-import tl.gov.mci.lis.repositories.dadosmestre.atividade.GrupoAtividadeRepository;
+import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
 
@@ -42,19 +43,19 @@ public class PedidoLicencaAtividadeService {
     private static final Logger logger = LoggerFactory.getLogger(PedidoLicencaAtividadeService.class);
     private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
     private final LicencaMapper licencaMapper;
-    private final GrupoAtividadeRepository grupoAtividadeRepository;
     private final EntityManager entityManager;
     private final AplicanteRepository aplicanteRepository;
     private final TaxaRepository taxaRepository;
     private final FaturaMapper faturaMapper;
     private final FaturaRepository faturaRepository;
+    private final ClasseAtividadeRepository classeAtividadeRepository;
 
     @Transactional
     public PedidoLicencaAtividade create(Long aplicanteId, PedidoLicencaAtividade reqsObj) {
         logger.info("Criando PedidoLicencaAtividade pelo Aplicante id: {} e PedidoLicencaAtividade: {}", aplicanteId, reqsObj);
 
         reqsObj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
-        reqsObj.setTipoAtividade(grupoAtividadeRepository.getReferenceById(reqsObj.getTipoAtividade().getId()));
+        reqsObj.setClasseAtividade(classeAtividadeRepository.getReferenceById(reqsObj.getClasseAtividade().getId()));
         if (reqsObj.getDocumentos() != null) {
             reqsObj.getDocumentos().forEach(doc -> doc.setPedidoLicencaAtividade(reqsObj));
         }
@@ -81,8 +82,8 @@ public class PedidoLicencaAtividadeService {
 
         upsertEndereco(entity::getEmpresaSede, entity::setEmpresaSede, incoming.getEmpresaSede());
 
-        if (incoming.getTipoAtividade() != null) {
-            entity.setTipoAtividade(grupoAtividadeRepository.getReferenceById(incoming.getTipoAtividade().getId()));
+        if (incoming.getClasseAtividade() != null) {
+            entity.setClasseAtividade(classeAtividadeRepository.getReferenceById(incoming.getClasseAtividade().getId()));
         }
 
         if (incoming.getDocumentos() != null) {
@@ -113,6 +114,7 @@ public class PedidoLicencaAtividadeService {
 
         upsertPessoa(entity::getRepresentante, entity::setRepresentante, incoming.getRepresentante());
         upsertPessoa(entity::getGerente, entity::setGerente, incoming.getGerente());
+        upsertArrendador(entity::getArrendador, entity::setArrendador, incoming.getArrendador());
 
         return entity;
     }
@@ -268,6 +270,53 @@ public class PedidoLicencaAtividadeService {
 
         // Morada (Endereco) — OneToOne cascade + orphanRemoval
         upsertEndereco(target::getMorada, target::setMorada, src.getMorada());
+    }
+
+    private void upsertArrendador(
+            Supplier<Arrendador> getter,
+            Consumer<Arrendador> setter,
+            Arrendador incoming
+    ) {
+        Arrendador current = getter.get();
+
+        // 1) Remove?
+        if (incoming == null) {
+            if (current != null) setter.accept(null); // orphanRemoval apaga Pessoa + Endereco
+            return;
+        }
+
+        Long inId = incoming.getId();
+
+        // 2) Link existing by id (and patch)
+        if (inId != null) {
+            Arrendador target = (current != null && inId.equals(current.getId()))
+                    ? current
+                    : entityManager.getReference(Arrendador.class, inId);
+
+            patchArrendador(target, incoming); // inclui morada
+            if (target != current) {
+                setter.accept(target);     // substitui; orphanRemoval cuida do antigo (se existir)
+            }
+            return;
+        }
+
+        // 3) Create new
+        Arrendador created = new Arrendador();
+        patchArrendador(created, incoming);     // cria/atualiza morada
+        setter.accept(created);             // cascade PERSIST salva tudo
+    }
+
+    private void patchArrendador(Arrendador target, Arrendador src) {
+        target.setNome(src.getNome());
+        target.setAreaTotalTerreno(src.getAreaTotalTerreno());
+        target.setAreaTotalConstrucao(src.getAreaTotalConstrucao());
+        target.setTipoDocumento(src.getTipoDocumento());
+        target.setNumeroDocumento(src.getNumeroDocumento());
+        target.setDataInicio(src.getDataInicio());
+        target.setDataFim(src.getDataFim());
+        target.setValorRendaMensal(src.getValorRendaMensal());
+        // Morada (Endereco) — OneToOne cascade + orphanRemoval
+        upsertEndereco(target::getEndereco, target::setEndereco, src.getEndereco());
     }
 
     /**

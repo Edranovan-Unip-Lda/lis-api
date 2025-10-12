@@ -8,6 +8,7 @@ import org.checkerframework.checker.nonempty.qual.NonEmpty;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.vistoria.AutoVistoria;
 import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
@@ -44,6 +45,10 @@ public class ClasseAtividade extends EntityDB {
     @OneToMany(mappedBy = "classeAtividade")
     @JsonIgnoreProperties(value = "classeAtividade", allowSetters = true)
     private Set<PedidoInscricaoCadastro> listaPedidoInscricaoCadastro;
+
+    @OneToMany(mappedBy = "classeAtividade")
+    @JsonIgnoreProperties(value = "classeAtividade", allowSetters = true)
+    private Set<PedidoLicencaAtividade> listaPedidoLicencaAtividade;
 
     @OneToMany(mappedBy = "classeAtividade")
     @JsonIgnoreProperties(value = "classeAtividade", allowSetters = true)

@@ -130,8 +130,8 @@ public class CertificadoService {
         certificadoLicencaAtividade.setSociedadeComercial(aplicante.getEmpresa().getNome());
         certificadoLicencaAtividade.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
         certificadoLicencaAtividade.setSede(sede);
-        certificadoLicencaAtividade.setAtividade(aplicante.getPedidoLicencaAtividade().getTipoAtividade().getDescricao());
-        certificadoLicencaAtividade.setAtividadeCodigo(aplicante.getPedidoLicencaAtividade().getTipoAtividade().getCodigo());
+        certificadoLicencaAtividade.setAtividade(aplicante.getPedidoLicencaAtividade().getClasseAtividade().getDescricao());
+        certificadoLicencaAtividade.setAtividadeCodigo(aplicante.getPedidoLicencaAtividade().getClasseAtividade().getCodigo());
         certificadoLicencaAtividade.setNivelRisco(aplicante.getPedidoLicencaAtividade().getRisco());
         certificadoLicencaAtividade.setDataEmissao(LocalDate.now().toString());
         certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(2).toString());

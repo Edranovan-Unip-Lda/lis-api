@@ -3,6 +3,7 @@ package tl.gov.mci.lis.dtos.atividade;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.licenca.ArrendadorDto;
 import tl.gov.mci.lis.dtos.licenca.PessoaDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.AplicanteType;
@@ -71,6 +72,8 @@ public class CertificadoLicencaAtividadeDetailDto implements Serializable {
         boolean reciboPagamento;
         String outrosDocumentos;
         AplicanteDto aplicante;
+        ClasseAtividadeDto classeAtividade;
+        ArrendadorDto arrendador;
 
         /**
          * DTO for {@link tl.gov.mci.lis.models.aplicante.Aplicante}

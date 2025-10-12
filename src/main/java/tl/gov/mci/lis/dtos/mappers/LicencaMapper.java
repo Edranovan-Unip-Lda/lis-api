@@ -1,9 +1,11 @@
 package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
+import tl.gov.mci.lis.dtos.licenca.ArrendadorDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
 import tl.gov.mci.lis.dtos.licenca.PessoaDto;
+import tl.gov.mci.lis.models.atividade.Arrendador;
 import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.atividade.Pessoa;
 
@@ -29,4 +31,11 @@ public interface LicencaMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     PedidoLicencaAtividade partialUpdate(PedidoLicencaAtividadeReqsDto pedidoLicencaAtividadeReqsDto, @MappingTarget PedidoLicencaAtividade pedidoLicencaAtividade);
+
+    Arrendador toEntity(ArrendadorDto arrendadorDto);
+
+    ArrendadorDto toDto(Arrendador arrendador);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Arrendador partialUpdate(ArrendadorDto arrendadorDto, @MappingTarget Arrendador arrendador);
 }
