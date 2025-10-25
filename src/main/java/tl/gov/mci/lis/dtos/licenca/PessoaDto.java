@@ -23,4 +23,5 @@ public class PessoaDto implements Serializable {
     EnderecoDto morada;
     String telefone;
     String email;
+    String estadoCivil;
 }

@@ -15,6 +15,9 @@ public class ParticipanteDto implements Serializable {
     String nome;
     String areaRepresentante;
     String cargo;
+    String tipoDocumento;
+    String numeroDocumento;
+    String telemovel;
 
 
 }

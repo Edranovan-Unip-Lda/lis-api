@@ -16,6 +16,9 @@ public class Participante extends EntityDB {
     private String areaRepresentante;
 
     private String cargo;
+    private String tipoDocumento;
+    private String numeroDocumento;
+    private String telemovel;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "auto_vistoria_id", nullable = false)

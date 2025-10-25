@@ -22,6 +22,7 @@ public class EmpresaCreateDto implements Serializable {
     String numeroRegistoComercial;
     String telefone;
     String telemovel;
+    String email;
     EnderecoDto sede;
     Double capitalSocial;
     String dataRegisto;

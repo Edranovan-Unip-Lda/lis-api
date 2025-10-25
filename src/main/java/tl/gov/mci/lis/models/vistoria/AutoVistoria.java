@@ -38,9 +38,12 @@ public class AutoVistoria extends EntityDB {
 
     private String nomeAtuante;
     private boolean legislacaoUrbanistica;
+    private String tipoLocal;
     private boolean accessoEstrada;
+    private Double larguraEstrada;
     private boolean escoamentoAguas;
     private boolean alimentacaoEnergia;
+    private String tipoEletricidade;
     private boolean seperadosSexo;
     private boolean lavatoriosComEspelho;
     private boolean sanitasAutomaticaAgua;

@@ -36,6 +36,7 @@ public class EmpresaDto implements Serializable {
     String numeroRegistoComercial;
     String telefone;
     String telemovel;
+    String email;
     EnderecoDto sede;
     TipoPropriedade tipoPropriedade;
     Double capitalSocial;

@@ -1,7 +1,6 @@
 package tl.gov.mci.lis.controllers.aplicante;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -13,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroReqsDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeDto;
 import tl.gov.mci.lis.dtos.licenca.PedidoLicencaAtividadeReqsDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.LicencaMapper;
+import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
 import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.documento.DocumentoDownload;
@@ -35,6 +36,7 @@ public class AplicanteController {
     private final PedidoLicencaAtividadeService pedidoLicencaAtividadeService;
     private final AplicanteMapper aplicanteMapper;
     private final CertificadoService certificadoService;
+    private final PedidoInscricaoCadastroMapper pedidoInscricaoCadastroMapper;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
     @GetMapping("")
@@ -54,9 +56,11 @@ public class AplicanteController {
     @PostMapping("/{aplicanteId}/pedidos/cadastro")
     ResponseEntity<PedidoInscricaoCadastroDto> createPedidoInscricaoCadastro(
             @PathVariable Long aplicanteId,
-            @RequestBody PedidoInscricaoCadastro obj
+            @RequestBody PedidoInscricaoCadastroReqsDto obj
     ) {
-        return new ResponseEntity<>(aplicanteService.createPedidoInscricaoCadastro(aplicanteId, obj), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                aplicanteService.createPedidoInscricaoCadastro(aplicanteId, pedidoInscricaoCadastroMapper.toEntity(obj)),
+                HttpStatus.CREATED);
     }
 
     @PostMapping("/{aplicanteId}/pedidos/atividade")
@@ -81,7 +85,7 @@ public class AplicanteController {
             @PathVariable Long aplicanteId,
             @PathVariable Long pedidoId,
             @RequestBody PedidoInscricaoCadastro obj
-    ) throws BadRequestException {
+    ) {
         return ResponseEntity.ok(aplicanteService.updatePedidoInscricaoCadastro(aplicanteId, pedidoId, obj));
     }
 
@@ -90,7 +94,7 @@ public class AplicanteController {
             @PathVariable Long aplicanteId,
             @PathVariable Long pedidoId,
             @RequestBody PedidoLicencaAtividadeReqsDto obj
-    ) throws BadRequestException {
+    ) {
         return ResponseEntity.ok(licencaMapper.toDto(pedidoLicencaAtividadeService.updateByIdAndAplicanteId(pedidoId, aplicanteId, licencaMapper.toEntity(obj))));
     }
 

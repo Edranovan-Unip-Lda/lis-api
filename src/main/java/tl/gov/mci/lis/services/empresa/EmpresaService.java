@@ -130,6 +130,7 @@ public class EmpresaService {
         setIfChanged(empresa::setNumeroRegistoComercial, empresa.getNumeroRegistoComercial(), incoming.getNumeroRegistoComercial());
         setIfChanged(empresa::setTelefone, empresa.getTelefone(), incoming.getTelefone());
         setIfChanged(empresa::setTelemovel, empresa.getTelemovel(), incoming.getTelemovel());
+        setIfChanged(empresa::setEmail, empresa.getEmail(), incoming.getEmail());
         setIfChanged(empresa::setCapitalSocial, empresa.getCapitalSocial(), incoming.getCapitalSocial());
         setIfChanged(empresa::setDataRegisto, empresa.getDataRegisto(), incoming.getDataRegisto());
         setIfChanged(empresa::setTipoPropriedade, empresa.getTipoPropriedade(), incoming.getTipoPropriedade());
@@ -341,7 +342,7 @@ public class EmpresaService {
                 if (pedidoVistoria == null) return false;
                 return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
                         && aplicante.getPedidoLicencaAtividade().getStatus() == PedidoStatus.SUBMETIDO
-                        && aplicante.getPedidoLicencaAtividade().getFatura().getStatus() == FaturaStatus.PAGA
+//                      && aplicante.getPedidoLicencaAtividade().getFatura().getStatus() == FaturaStatus.PAGA - Merge Fatura (Pedido and Vistoria)
                         && pedidoVistoria.getStatus() == PedidoStatus.SUBMETIDO
                         && pedidoVistoria.getFatura().getStatus() == FaturaStatus.PAGA;
             }
@@ -385,6 +386,8 @@ public class EmpresaService {
             setIfChanged(empresa.getGerente()::setEmail, empresa.getGerente().getEmail(), incomingSet.getEmail());
             setIfChanged(empresa.getGerente()::setTipoDocumento, empresa.getGerente().getTipoDocumento(), incomingSet.getTipoDocumento());
             setIfChanged(empresa.getGerente()::setNumeroDocumento, empresa.getGerente().getNumeroDocumento(), incomingSet.getNumeroDocumento());
+            setIfChanged(empresa.getGerente()::setNacionalidade, empresa.getGerente().getNacionalidade(), incomingSet.getNacionalidade());
+            setIfChanged(empresa.getGerente()::setNaturalidade, empresa.getGerente().getNaturalidade(), incomingSet.getNaturalidade());
         }
     }
 

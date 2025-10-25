@@ -23,4 +23,5 @@ public class Pessoa extends EntityDB {
 
     private String telefone;
     private String email;
+    private String estadoCivil;
 }

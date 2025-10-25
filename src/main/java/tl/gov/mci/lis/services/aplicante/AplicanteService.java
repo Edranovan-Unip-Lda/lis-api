@@ -109,7 +109,7 @@ public class AplicanteService {
         String nif = empresaRepository.getFromId(empresaId).getNif();
 
         // Format full application code
-        String finalCode = String.format("%s/%s/%02d/%d/%s", PREFIX, categoriaCode, month, year, nif + serial);
+        String finalCode = String.format("%s/%s/%02d/%d/%s-%d", PREFIX, categoriaCode, month, year, nif, serial);
 
         // Save new entry
         AplicanteNumber record = new AplicanteNumber();
@@ -154,14 +154,14 @@ public class AplicanteService {
         obj.setEmpresaTelefone(empresa.getTelefone());
         obj.setEmpresaTelemovel(empresa.getTelemovel());
         obj.setEmpresaGerente(empresa.getGerente().getNome());
-        obj.setEmpresaEmail(empresa.getUtilizador().getEmail());
+        obj.setEmpresaEmail(empresa.getEmail());
 
         obj.setAplicante(aplicante);
         obj.setEmpresaSede(empresaSede);
         obj.setLocalEstabelecimento(enderecoService.create(obj.getLocalEstabelecimento()));
         obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
         obj.setStatus(PedidoStatus.SUBMETIDO);
-        if (obj.getDocumentos() != null) {
+        if (obj.getDocumentos() != null && !obj.getDocumentos().isEmpty()) {
             obj.getDocumentos().forEach(d -> d.setPedidoInscricaoCadastro(obj));
         }
         entityManager.persist(obj);

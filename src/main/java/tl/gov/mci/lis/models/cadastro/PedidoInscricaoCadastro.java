@@ -81,11 +81,12 @@ public class PedidoInscricaoCadastro extends EntityDB {
     @JsonIgnoreProperties(value = "listaPedidoInscricaoCadastro", allowSetters = true)
     private ClasseAtividade classeAtividade;
 
-
+    @Column(columnDefinition = "TEXT")
     private String alteracoes;
 
     private String dataEmissaoCertAnterior;
 
+    @Column(columnDefinition = "TEXT")
     private String observacao;
 
     @OneToMany(mappedBy = "pedidoInscricaoCadastro", cascade = CascadeType.ALL, orphanRemoval = true)

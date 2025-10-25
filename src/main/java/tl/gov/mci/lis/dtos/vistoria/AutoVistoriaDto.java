@@ -23,9 +23,12 @@ public class AutoVistoriaDto implements Serializable {
     Set<ParticipanteDto> membrosEquipaVistoria;
     String nomeAtuante;
     boolean legislacaoUrbanistica;
+    String tipoLocal;
     boolean accessoEstrada;
+    Double larguraEstrada;
     boolean escoamentoAguas;
     boolean alimentacaoEnergia;
+    String tipoEletricidade;
     boolean seperadosSexo;
     boolean lavatoriosComEspelho;
     boolean sanitasAutomaticaAgua;

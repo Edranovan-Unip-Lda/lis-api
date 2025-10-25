@@ -267,6 +267,7 @@ public class PedidoLicencaAtividadeService {
         target.setNaturalidade(src.getNaturalidade());
         target.setTelefone(src.getTelefone());
         target.setEmail(src.getEmail());
+        setIfChanged(target::setEstadoCivil, target.getEstadoCivil(), src.getEstadoCivil());
 
         // Morada (Endereco) — OneToOne cascade + orphanRemoval
         upsertEndereco(target::getMorada, target::setMorada, src.getMorada());

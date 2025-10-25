@@ -39,6 +39,7 @@ public class Empresa extends EntityDB {
     private String numeroRegistoComercial;
     private String telefone;
     private String telemovel;
+    private String email;
 
     @NotNull
     @DecimalMin(value = "0.0", message = "capitalSocial deve ser >= 0")

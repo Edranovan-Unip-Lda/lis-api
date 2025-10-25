@@ -2,10 +2,11 @@ package tl.gov.mci.lis.dtos.mappers;
 
 import org.mapstruct.*;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroReqsDto;
 import tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {FaturaMapper.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {FaturaMapper.class, EnderecoMapper.class, EnderecoMapper.class, AtividadeEconomicaMapper.class})
 public interface PedidoInscricaoCadastroMapper {
     PedidoInscricaoCadastro toEntity(PedidoInscricaoCadastroDto pedidoInscricaoCadastroDto);
 
@@ -21,4 +22,16 @@ public interface PedidoInscricaoCadastroMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     PedidoInscricaoCadastro partialUpdate(PedidoInscricaoCadastroDto pedidoInscricaoCadastroDto, @MappingTarget PedidoInscricaoCadastro pedidoInscricaoCadastro);
+
+    PedidoInscricaoCadastro toEntity(PedidoInscricaoCadastroReqsDto pedidoInscricaoCadastroReqsDto);
+
+    @AfterMapping
+    default void linkDocumentos(@MappingTarget PedidoInscricaoCadastro pedidoInscricaoCadastro) {
+        pedidoInscricaoCadastro.getDocumentos().forEach(documento -> documento.setPedidoInscricaoCadastro(pedidoInscricaoCadastro));
+    }
+
+    PedidoInscricaoCadastroReqsDto toDto1(PedidoInscricaoCadastro pedidoInscricaoCadastro);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    PedidoInscricaoCadastro partialUpdate(PedidoInscricaoCadastroReqsDto pedidoInscricaoCadastroReqsDto, @MappingTarget PedidoInscricaoCadastro pedidoInscricaoCadastro);
 }
