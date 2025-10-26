@@ -30,6 +30,7 @@ import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
+import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
@@ -66,6 +67,7 @@ public class UserServices {
     private final AplicanteService aplicanteService;
     private final CertificadoService certificadoService;
     private final PedidoVistoriaRepository pedidoVistoriaRepository;
+    private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
 
     @Transactional
     public User register(User obj) {
@@ -376,7 +378,7 @@ public class UserServices {
 
     @Transactional
     public Aplicante rejectAplicante(String username, Long aplicanteId, HistoricoEstadoAplicante historico) {
-        logger.info("Rejeitar aplicante com nome do utilizador: {}", username);
+        logger.info("Rejeitar aplicante ID={} com nome do utilizador: {}", aplicanteId, username);
 
         User user = userRepository.queryByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Utilizador com o nome " + username + " não existe"));
@@ -393,11 +395,9 @@ public class UserServices {
         aplicante.setEstado(AplicanteStatus.REJEITADO);
         aplicante.setDirecaoAtribuida(null);
 
-        if (aplicante.getTipo() == AplicanteType.ATIVIDADE) {
-            pedidoVistoriaRepository.findTopByPedidoLicencaAtividade_IdOrderByIdDesc(
-                            aplicante.getPedidoLicencaAtividade().getId()
-                    )
-                    .ifPresent(pedidoVistoria -> pedidoVistoria.setStatus(PedidoStatus.REJEITADO));
+        switch (aplicante.getTipo()) {
+            case CADASTRO -> aplicante.getPedidoInscricaoCadastro().setStatus(PedidoStatus.REJEITADO);
+            case ATIVIDADE -> aplicante.getPedidoLicencaAtividade().setStatus(PedidoStatus.REJEITADO);
         }
 
         return aplicante; // still managed — changes flushed automatically

@@ -196,6 +196,7 @@ public class EmpresaService {
                     if (!isAplicanteReadyForSubmission(aplicante)) {
                         throw new ForbiddenException("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
                     }
+                    aplicante.getPedidoInscricaoCadastro().setStatus(PedidoStatus.SUBMETIDO);
                     aplicante.setEstado(obj.getEstado());
                     entityManager.merge(aplicante);
 
@@ -333,7 +334,7 @@ public class EmpresaService {
         switch (aplicante.getTipo()) {
             case CADASTRO -> {
                 return (aplicante.getEstado() == AplicanteStatus.EM_CURSO || aplicante.getEstado() == AplicanteStatus.REJEITADO)
-                        && aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.SUBMETIDO
+                        && (aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.SUBMETIDO || aplicante.getPedidoInscricaoCadastro().getStatus() == PedidoStatus.REJEITADO)
                         && aplicante.getPedidoInscricaoCadastro().getFatura().getStatus() == FaturaStatus.PAGA;
             }
             case ATIVIDADE -> {
