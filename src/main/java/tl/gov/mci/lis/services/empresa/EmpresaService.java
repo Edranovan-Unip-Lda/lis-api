@@ -24,6 +24,7 @@ import tl.gov.mci.lis.exceptions.ForbiddenException;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Acionista;
@@ -152,6 +153,7 @@ public class EmpresaService {
 
     public Empresa getByUtilizadorUsername(String username) {
         logger.info("Obtendo empresa pelo utilizador: {}", username);
+        authorizationService.assertUserOwnsUtilizador(username);
         return empresaRepository.findByUtilizador_Username(username)
                 .orElseThrow(() -> {
                     logger.error("Empresa nao encontrada");
@@ -196,7 +198,6 @@ public class EmpresaService {
                     if (!isAplicanteReadyForSubmission(aplicante)) {
                         throw new ForbiddenException("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
                     }
-                    aplicante.getPedidoInscricaoCadastro().setStatus(PedidoStatus.SUBMETIDO);
                     aplicante.setEstado(obj.getEstado());
                     entityManager.merge(aplicante);
 
@@ -261,11 +262,29 @@ public class EmpresaService {
     public Long deleteAplicante(Long empresaId, Long aplicanteId) {
         logger.info("Excluindo aplicante: {}", aplicanteId);
 
-        Aplicante aplicante = aplicanteRepository
-                .findByIdAndEmpresa_id(aplicanteId, empresaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Aplicante não encontrado"));
 
-        // ---- Business guardrails ----
+        Aplicante aplicante = entityManager.getReference(Aplicante.class, aplicanteId);
+
+        logger.warn("PLA id: {}", aplicante.getPedidoLicencaAtividade() != null ? aplicante.getPedidoLicencaAtividade().getId() : "null");
+
+        if (aplicante.getPedidoInscricaoCadastro() != null &&
+                Objects.nonNull(aplicante.getPedidoInscricaoCadastro().getId())) {
+            aplicante.setPedidoInscricaoCadastro(null);
+        }
+
+        if (aplicante.getPedidoLicencaAtividade() != null) {
+            PedidoLicencaAtividade pla = aplicante.getPedidoLicencaAtividade();
+            if (pla.getId() == null) {
+                // transient — detach it
+                aplicante.setPedidoLicencaAtividade(null);
+            } else {
+                // managed or persisted — break bidirectional link properly
+                pla.setAplicante(null);
+                aplicante.setPedidoLicencaAtividade(null);
+            }
+        }
+
+
         if (aplicante.getEstado() == AplicanteStatus.SUBMETIDO ||
                 aplicante.getEstado() == AplicanteStatus.APROVADO) {
             throw new ForbiddenException("Aplicante deve estar EM_CURSO para ser excluído.");
@@ -281,7 +300,6 @@ public class EmpresaService {
             throw new ForbiddenException("Aplicante com Certificado de Licença não pode ser excluído.");
         }
 
-        // ---- Clean up associations that cascade won't handle ----
         if (aplicante.getPedidoInscricaoCadastro() != null &&
                 aplicante.getPedidoInscricaoCadastro().getFatura() != null) {
             Fatura fatura = aplicante.getPedidoInscricaoCadastro().getFatura();
@@ -297,14 +315,12 @@ public class EmpresaService {
             }
         }
 
-        // ---- Break link to empresa (optional, keeps bidirectional consistency) ----
         Empresa empresa = aplicante.getEmpresa();
         if (empresa != null && empresa.getListaAplicante() != null) {
             empresa.getListaAplicante().remove(aplicante);
             aplicante.setEmpresa(null);
         }
 
-        // ---- Delete root; cascades will remove children (Pedidos, Faturas, Recibos, Certificados) ----
         aplicanteRepository.delete(aplicante);
 
         logger.info("Aplicante {} removido com sucesso", aplicanteId);

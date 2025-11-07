@@ -2,13 +2,11 @@ package tl.gov.mci.lis.models.vistoria;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.endereco.Endereco;
-import tl.gov.mci.lis.models.endereco.PostoAdministrativo;
 
 @Entity
 @Table(name = "lis_atividade_auto_vistoria_requerente")
@@ -41,10 +39,6 @@ public class Requerente extends EntityDB {
     private String naturalidade;
     private String nacionalidade;
 
-    @ManyToOne
-    @JoinColumn(name = "posto_administrativo_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = "listaRequerente", allowSetters = true)
-    private PostoAdministrativo postoAdministrativo;
     private String regiao;
     private String tipoDocumento;
     private String numeroDocumento;

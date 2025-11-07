@@ -34,6 +34,8 @@ public class CertificadoService {
     private final CertificadoInscricaoCadastroRepository certificadoInscricaoCadastroRepository;
     private final CertificadoMapper certificadoMapper;
     private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
+    protected static final Long ONE_YEAR = 1L;
+    protected static final Long FIVE_YEARS = 5L;
 
     public Optional<?> findById(Long id, AplicanteType aplicanteType, Categoria categoria) {
         logger.info("Buscando certificado pelo id: {}", id);
@@ -104,7 +106,7 @@ public class CertificadoService {
         certificadoInscricaoCadastro.setSede(sede);
         certificadoInscricaoCadastro.setAtividade(aplicante.getPedidoInscricaoCadastro().getClasseAtividade().getDescricao());
         certificadoInscricaoCadastro.setDataEmissao(LocalDate.now().toString());
-        certificadoInscricaoCadastro.setDataValidade(LocalDate.now().plusYears(2).toString());
+        certificadoInscricaoCadastro.setDataValidade(LocalDate.now().plusYears(ONE_YEAR).toString());
         certificadoInscricaoCadastro.setNomeDiretorGeral(nomeDiretor);
 
         entityManager.persist(certificadoInscricaoCadastro);
@@ -134,7 +136,7 @@ public class CertificadoService {
         certificadoLicencaAtividade.setAtividadeCodigo(aplicante.getPedidoLicencaAtividade().getClasseAtividade().getCodigo());
         certificadoLicencaAtividade.setNivelRisco(aplicante.getPedidoLicencaAtividade().getRisco());
         certificadoLicencaAtividade.setDataEmissao(LocalDate.now().toString());
-        certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(2).toString());
+        certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(FIVE_YEARS).toString());
         certificadoLicencaAtividade.setNomeDiretorGeral(nomeDiretor);
 
         entityManager.persist(certificadoLicencaAtividade);

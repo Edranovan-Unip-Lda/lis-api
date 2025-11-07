@@ -32,7 +32,7 @@ public class PedidoLicencaAtividade extends EntityDB {
     private String nomeEmpresa;
     private String empresaNumeroRegistoComercial;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "aplicante")
     private Endereco empresaSede;
@@ -73,7 +73,7 @@ public class PedidoLicencaAtividade extends EntityDB {
     @JsonIgnoreProperties("pedidoLicencaAtividade")
     private Set<Documento> documentos;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "aplicante_id", referencedColumnName = "id", nullable = false)
     private Aplicante aplicante;
 

@@ -79,7 +79,7 @@ public class AutoVistoria extends EntityDB {
     private String recomendacoes;
     private int prazo;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "pedido_vistoria_id", referencedColumnName = "id")
     private PedidoVistoria pedidoVistoria;
 

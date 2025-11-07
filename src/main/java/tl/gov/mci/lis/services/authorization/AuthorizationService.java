@@ -32,7 +32,7 @@ public class AuthorizationService {
 
         return empresa.getId();
     }
-    
+
     public String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
@@ -50,6 +50,13 @@ public class AuthorizationService {
         Long currentEmpresaId = getCurrentEmpresaId();
         if (!currentEmpresaId.equals(targetEmpresaId)) {
             throw new ForbiddenException("Acesso negado: Incompatibilidade da Empresa");
+        }
+    }
+
+    public void assertUserOwnsUtilizador(String targetUtilizadorUsername) {
+        String username = getCurrentUsername();
+        if (!username.equals(targetUtilizadorUsername)) {
+            throw new ForbiddenException("Acesso negado: Incompatibilidade do Utilizador");
         }
     }
 }

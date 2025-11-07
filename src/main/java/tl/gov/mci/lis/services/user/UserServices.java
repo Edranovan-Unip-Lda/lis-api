@@ -307,7 +307,12 @@ public class UserServices {
         Aplicante aplicante = aplicanteRepository.findByIdWithAllForApproval(aplicanteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));
 
-        if (aplicante.getEstado() != AplicanteStatus.REVISAO) {
+        if (aplicante.getTipo().equals(AplicanteType.CADASTRO) && aplicante.getEstado() != AplicanteStatus.REVISAO) {
+            logger.error("O aplicante não está num estado válido para revisao.");
+            throw new BadRequestException("O aplicante não está num estado válido para revisao.");
+        }
+
+        if (aplicante.getTipo().equals(AplicanteType.ATIVIDADE) && aplicante.getEstado() != AplicanteStatus.REVISAO) {
             logger.error("O aplicante não está num estado válido para revisao.");
             throw new BadRequestException("O aplicante não está num estado válido para revisao.");
         }

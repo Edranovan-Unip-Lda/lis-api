@@ -66,9 +66,6 @@ public class AutoVistoriaService {
         if (requerente.getClasseAtividade() != null && requerente.getClasseAtividade().getId() != null) {
             requerente.setClasseAtividade(classAtividadeRepo.getReferenceById(requerente.getClasseAtividade().getId()));
         }
-        if (requerente.getPostoAdministrativo() != null && requerente.getPostoAdministrativo().getId() != null) {
-            requerente.setPostoAdministrativo(postoAdministrativoRepository.getReferenceById(requerente.getPostoAdministrativo().getId()));
-        }
 
         obj.setPedidoVistoria(pedidoVistoriaRepository.getReferenceById(pedidoVistoriaId));
         obj.setFuncionario(userRepository.getReferenceById(obj.getFuncionario().getId()));

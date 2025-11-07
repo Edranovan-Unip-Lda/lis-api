@@ -31,7 +31,6 @@ public class RequerenteDto implements Serializable {
     String estadoCivil;
     String naturalidade;
     String nacionalidade;
-    PostoDto postoAdministrativo;
     String regiao;
     String tipoDocumento;
     String numeroDocumento;

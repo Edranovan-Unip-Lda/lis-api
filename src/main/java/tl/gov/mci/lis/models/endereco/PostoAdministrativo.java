@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.models.EntityDB;
-import tl.gov.mci.lis.models.vistoria.Requerente;
 
 import java.util.Set;
 
@@ -27,10 +26,6 @@ public class PostoAdministrativo extends EntityDB {
     @JsonIgnoreProperties(value = "postoAdministrativo", allowSetters = true)
     @OneToMany(mappedBy = "postoAdministrativo", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Suco> listaSuco;
-
-    @OneToMany(mappedBy = "postoAdministrativo")
-    @JsonIgnoreProperties(value = "postoAdministrativo", allowSetters = true)
-    private Set<Requerente> listaRequerente;
 
     public PostoAdministrativo() {
     }

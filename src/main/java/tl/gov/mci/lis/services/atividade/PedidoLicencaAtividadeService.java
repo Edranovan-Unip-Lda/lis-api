@@ -25,6 +25,7 @@ import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
 import tl.gov.mci.lis.repositories.pagamento.FaturaRepository;
 import tl.gov.mci.lis.repositories.pagamento.TaxaRepository;
+import tl.gov.mci.lis.services.endereco.EnderecoService;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -49,6 +50,7 @@ public class PedidoLicencaAtividadeService {
     private final FaturaMapper faturaMapper;
     private final FaturaRepository faturaRepository;
     private final ClasseAtividadeRepository classeAtividadeRepository;
+    private final EnderecoService enderecoService;
 
     @Transactional
     public PedidoLicencaAtividade create(Long aplicanteId, PedidoLicencaAtividade reqsObj) {
@@ -56,6 +58,7 @@ public class PedidoLicencaAtividadeService {
 
         reqsObj.setAplicante(aplicanteRepository.getReferenceById(aplicanteId));
         reqsObj.setClasseAtividade(classeAtividadeRepository.getReferenceById(reqsObj.getClasseAtividade().getId()));
+        reqsObj.setEmpresaSede(enderecoService.create(reqsObj.getEmpresaSede()));
         if (reqsObj.getDocumentos() != null) {
             reqsObj.getDocumentos().forEach(doc -> doc.setPedidoLicencaAtividade(reqsObj));
         }

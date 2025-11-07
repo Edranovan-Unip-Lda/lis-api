@@ -39,7 +39,7 @@ public class Aplicante extends EntityDB {
     @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
     private PedidoInscricaoCadastro pedidoInscricaoCadastro;
 
-    @OneToOne(mappedBy = "aplicante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "aplicante", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private PedidoLicencaAtividade pedidoLicencaAtividade;
 
     @ManyToOne(fetch = FetchType.LAZY)

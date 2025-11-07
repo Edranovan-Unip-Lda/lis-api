@@ -160,6 +160,7 @@ public class AplicanteService {
         obj.setEmpresaSede(empresaSede);
         obj.setLocalEstabelecimento(enderecoService.create(obj.getLocalEstabelecimento()));
         obj.setClasseAtividade(classeAtividadeRepository.getReferenceById(obj.getClasseAtividade().getId()));
+        obj.setTipoEmpresa(empresa.getTipoEmpresa());
         obj.setStatus(PedidoStatus.SUBMETIDO);
         if (obj.getDocumentos() != null && !obj.getDocumentos().isEmpty()) {
             obj.getDocumentos().forEach(d -> d.setPedidoInscricaoCadastro(obj));

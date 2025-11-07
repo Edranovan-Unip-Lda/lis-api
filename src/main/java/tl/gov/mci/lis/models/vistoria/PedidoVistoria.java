@@ -74,7 +74,7 @@ public class PedidoVistoria extends EntityDB {
     @Column(columnDefinition = "TEXT")
     private String observacao;
 
-    @OneToOne(mappedBy = "pedidoVistoria")
+    @OneToOne(mappedBy = "pedidoVistoria", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private AutoVistoria autoVistoria;
 
 
