@@ -12,6 +12,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 @Setter
 public class Representante extends EntityDB {
     private String tipo;
+    private String nomeEmpresa;
     private String nome;
     private String pai;
     private String mae;

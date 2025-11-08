@@ -418,6 +418,7 @@ public class EmpresaService {
                 representante.setMorada(enderecoService.update(representante.getMorada()));
             }
             setIfChanged(representante::setTipo, representante.getTipo(), incomingSet.getTipo());
+            setIfChanged(representante::setNomeEmpresa, representante.getNomeEmpresa(), incomingSet.getNomeEmpresa());
             setIfChanged(representante::setNome, representante.getNome(), incomingSet.getNome());
             setIfChanged(representante::setPai, representante.getPai(), incomingSet.getPai());
             setIfChanged(representante::setMae, representante.getMae(), incomingSet.getMae());

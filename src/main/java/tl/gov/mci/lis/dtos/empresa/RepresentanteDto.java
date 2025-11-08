@@ -14,6 +14,7 @@ public class RepresentanteDto implements Serializable {
     Long id;
     Instant updatedAt;
     String tipo;
+    String nomeEmpresa;
     String nome;
     String pai;
     String mae;
