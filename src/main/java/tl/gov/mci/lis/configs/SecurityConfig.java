@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users/authenticate", "/api/v1/users/logout", "/api/v1/users/otp/**", "/api/v1/users/activate/**", "/api/v1/empresas").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/authenticate", "/api/v1/users/logout", "/api/v1/users/otp/**", "/api/v1/users/activate/**", "/api/v1/empresas", "/api/v1/users/forgot-password", "/api/v1/users/reset-password").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/otp/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/data/municipios/**", "/data/postos/**", "/data/sucos/**", "/data/aldeias/**", "/data/sociedade-comercial", "/data/roles").permitAll()
                         .anyRequest().authenticated()

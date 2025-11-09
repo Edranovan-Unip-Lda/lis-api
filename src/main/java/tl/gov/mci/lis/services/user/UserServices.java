@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ import tl.gov.mci.lis.configs.email.EmailService;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.user.PasswordResetRequest;
 import tl.gov.mci.lis.enums.*;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
 import tl.gov.mci.lis.exceptions.BadRequestException;
@@ -28,22 +28,20 @@ import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
+import tl.gov.mci.lis.models.user.PasswordResetToken;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
-import tl.gov.mci.lis.repositories.atividade.PedidoLicencaAtividadeRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
+import tl.gov.mci.lis.repositories.user.PasswordResetTokenRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
-import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.cadastro.CertificadoService;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,8 +64,7 @@ public class UserServices {
     private final AplicanteRepository aplicanteRepository;
     private final AplicanteService aplicanteService;
     private final CertificadoService certificadoService;
-    private final PedidoVistoriaRepository pedidoVistoriaRepository;
-    private final PedidoLicencaAtividadeRepository pedidoLicencaAtividadeRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Transactional
     public User register(User obj) {
@@ -200,7 +197,7 @@ public class UserServices {
 
     public Map<String, String> activateFromEmail(User obj) {
         logger.info("Activate user from token {}", obj.getJwtSession());
-        if (jwtUtil.isTokenExpired(obj.getJwtSession())) {
+        if (!jwtUtil.isTokenExpired(obj.getJwtSession())) {
             String username = jwtUtil.extractUsername(obj.getJwtSession());
             return userRepository.findByUsername(username).map(user -> {
                         if (user.getStatus().equals(AccountStatus.pending.toString())) {
@@ -220,9 +217,58 @@ public class UserServices {
                         return new ResourceNotFoundException("User with username " + username + " not found");
                     });
         } else {
-            logger.error("O token é inválido ou expirou.");
-            throw new BadCredentialsException("O token é inválido ou expirou.");
+            logger.error("O token é inválido ou expirado.");
+            throw new BadRequestException("O token é inválido ou expirado.");
         }
+    }
+
+    @Transactional
+    public Map<String, String> sendForgotPasswordEmail(String email) {
+        logger.info("Sending forgot password email to {}", email);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    logger.warn("Utilizador não existe: {}", email);
+                    return new ResourceNotFoundException("Utilizador não existe: " + email);
+                });
+
+        // Check if user already has a token
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByUser(user)
+                .orElse(new PasswordResetToken());
+
+        resetToken.setToken(UUID.randomUUID().toString());
+        resetToken.setUser(user);
+        resetToken.setExpiryDate(Instant.now().plus(1, ChronoUnit.HOURS));
+        entityManager.persist(resetToken);
+        emailService.sendForgotPasswordEmail(resetToken);
+
+        Map<String, String> responseObj = new HashMap<>();
+        responseObj.put("activation", "true");
+        responseObj.put("message", "Email enviado. Por favor, verifique a sua caixa de entrada (e a pasta de spam) para a ligação de recuperação.");
+        return responseObj;
+    }
+
+    @Transactional
+    public Map<String, String> resetPassword(PasswordResetRequest request) {
+        logger.info("Resetting password with token {}", request.getToken());
+        Optional<User> userOpt = this.validatePasswordResetToken(request.getToken());
+
+        if (userOpt.isEmpty()) {
+            throw new BadRequestException("Token inválido ou expirado");
+        }
+
+        User user = userRepository.findById(userOpt.get().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // Encode the new password before saving
+        user.setPassword(bcryptEncoder.encode(request.getNewPassword()));
+
+        // Invalidate token after successful reset
+        this.invalidateToken(request.getToken());
+
+        Map<String, String> responseObj = new HashMap<>();
+        responseObj.put("message", "Password successfully reset");
+        return responseObj;
     }
 
     public User getByUsername(String username) {
@@ -417,6 +463,30 @@ public class UserServices {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private Optional<User> validatePasswordResetToken(String token) {
+        Optional<PasswordResetToken> resetTokenOpt = passwordResetTokenRepository.findByToken(token);
+
+        if (resetTokenOpt.isEmpty()) {
+            return Optional.empty(); // token not found
+        }
+
+        PasswordResetToken resetToken = resetTokenOpt.get();
+
+        // Check expiry
+        if (resetToken.getExpiryDate().isBefore(Instant.now())) {
+            return Optional.empty(); // token expired
+        }
+
+        return Optional.of(resetToken.getUser());
+    }
+
+    /**
+     * Optionally invalidate a token after use
+     */
+    private void invalidateToken(String token) {
+        passwordResetTokenRepository.findByToken(token).ifPresent(passwordResetTokenRepository::delete);
     }
 
 }

@@ -5,6 +5,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tl.gov.mci.lis.models.dadosmestre.Role;
 
@@ -16,6 +18,7 @@ import java.util.Date;
 public class JwtUtil {
     private static final String SECRET_KEY = "aGIpirZikZXNMTmIJUJNFycoFayRWjKH8BeXkHvsl9Jpzvkh5dCxjHqtBxrPvihw";
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     private final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
@@ -89,12 +92,26 @@ public class JwtUtil {
      * @return true if the token has expired, false otherwise
      */
     public boolean isTokenExpired(String token) {
-        return !Jwts.parser()
-                .verifyWith((SecretKey) key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
+        try {
+            Date expiration = Jwts.parser()
+                    .verifyWith((SecretKey) key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration();
+            return expiration.before(new Date());
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            // JWT library throws this when token is expired
+            logger.warn("JWT expired at {}", e.getClaims().getExpiration());
+            return true;
+        } catch (io.jsonwebtoken.JwtException e) {
+            // For all other JWT issues: malformed, invalid signature, etc.
+            logger.error("Invalid JWT: {}", e.getMessage());
+            return true;
+        } catch (Exception e) {
+            // Fallback for any unexpected case
+            logger.error("Unexpected error while checking token: {}", e.getMessage());
+            return true;
+        }
     }
 }

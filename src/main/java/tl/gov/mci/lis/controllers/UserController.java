@@ -17,6 +17,7 @@ import tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
+import tl.gov.mci.lis.dtos.user.PasswordResetRequest;
 import tl.gov.mci.lis.dtos.user.UserDetailDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
 import tl.gov.mci.lis.enums.AplicanteType;
@@ -93,6 +94,16 @@ public class UserController {
     public ResponseEntity<Map<String, String>> activate(@RequestParam String token, @RequestBody User user) {
         user.setJwtSession(token);
         return new ResponseEntity<>(userServices.activateFromEmail(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> sendForgotPasswordEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userServices.sendForgotPasswordEmail(email));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestBody PasswordResetRequest req) {
+        return ResponseEntity.ok(userServices.resetPassword(req));
     }
 
     @PostMapping("/logout")

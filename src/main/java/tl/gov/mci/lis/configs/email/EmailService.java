@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.user.PasswordResetToken;
 import tl.gov.mci.lis.models.user.User;
 
 import java.time.Instant;
@@ -61,7 +62,7 @@ public class EmailService {
     /**
      * Email the given user using the given email template.
      *
-     * @param user           the user to send the email to
+     * @param user          the user to send the email to
      * @param emailTemplate the email template to use
      */
     @Async
@@ -81,6 +82,34 @@ public class EmailService {
             logger.info("Email sent successfully to {}", user.getEmail());
         } catch (Exception e) {
             logger.error("Failed to send email to {}", user.getEmail(), e);
+        }
+    }
+
+    @Async
+    public void sendForgotPasswordEmail(PasswordResetToken passwordResetToken) {
+        logger.info("Enviando reset password email para: {}, {}", passwordResetToken.getUser().getId(), passwordResetToken.getUser().getEmail());
+
+        try {
+            EmailConfig emailConfig = emailConfigRepository.findTopByOrderByIdDesc();
+            if (emailConfig == null) {
+                throw new IllegalStateException("SMTP settings not found in the database");
+            }
+
+            JavaMailSender mailSender = getJavaMailSender(emailConfig);
+
+            Context context = new Context();
+            context.setVariable("passwordResetToken", passwordResetToken);
+            context.setVariable("resetLink", frontEndURL + "/auth/resetpassword?t=" + passwordResetToken.getToken());
+            context.setVariable("loginLink", frontEndURL);
+
+            String emailContent = templateEngine.process(EmailTemplate.RESET_PASSWORD.toString(), context);
+            String subject = EmailTemplate.RESET_PASSWORD.toString().replace("-", " ").toUpperCase();
+
+            MimeMessage message = prepareMimeMessage(mailSender, emailConfig.getFromEmail(), passwordResetToken.getUser(), subject, emailContent);
+            sendMimeMessage(mailSender, message);
+            logger.info("Email foi enviado com sucesso to {}", passwordResetToken.getUser().getEmail());
+        } catch (Exception e) {
+            logger.error("Falhar ao enviar email para {}", passwordResetToken.getUser().getEmail(), e);
         }
     }
 
