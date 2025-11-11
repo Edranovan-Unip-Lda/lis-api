@@ -311,6 +311,7 @@ public class PedidoLicencaAtividadeService {
     }
 
     private void patchArrendador(Arrendador target, Arrendador src) {
+        target.setTipo(src.getTipo());
         target.setNome(src.getNome());
         target.setAreaTotalTerreno(src.getAreaTotalTerreno());
         target.setAreaTotalConstrucao(src.getAreaTotalConstrucao());

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Value
 public class ArrendadorDto implements Serializable {
     Long id;
+    String tipo;
     String nome;
     EnderecoDto endereco;
     String tipoDocumento;

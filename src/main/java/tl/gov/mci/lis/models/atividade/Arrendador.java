@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Arrendador extends EntityDB {
+    private String tipo;
     private String nome;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -55,6 +55,8 @@ public class Empresa extends EntityDB {
     private Long totalTrabalhadores;
     private Double volumeNegocioAnual;
     private Double balancoTotalAnual;
+
+    @Enumerated(EnumType.STRING)
     private TipoEmpresa tipoEmpresa;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -380,17 +380,17 @@ public class EmpresaService {
         // PEQUENA
         if (trabalhadores >= 6 && trabalhadores <= 20 &&
                 (volumeNegocios <= 50000 || balancoTotal <= 200000)) {
-            return TipoEmpresa.PEQUENA_EMPRESA;
+            return TipoEmpresa.PEQUENA;
         }
 
         // MEDIA
         if (trabalhadores >= 21 && trabalhadores <= 50 &&
                 (volumeNegocios <= 1000000 || balancoTotal <= 1240000)) {
-            return TipoEmpresa.MEDIA_EMPRESA;
+            return TipoEmpresa.MÉDIA;
         }
 
         // GRANDE (mais de 50 trab. ou ultrapassa limites)
-        return TipoEmpresa.GRANDE_EMPRESA;
+        return TipoEmpresa.GRANDE;
     }
 
     private void syncGerente(Empresa empresa, Gerente incomingSet) {

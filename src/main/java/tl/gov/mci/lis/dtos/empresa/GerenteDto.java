@@ -19,4 +19,6 @@ public class GerenteDto implements Serializable {
     String email;
     String tipoDocumento;
     String numeroDocumento;
+    String naturalidade;
+    String nacionalidade;
 }
