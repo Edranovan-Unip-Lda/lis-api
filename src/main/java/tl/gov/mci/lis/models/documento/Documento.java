@@ -22,6 +22,7 @@ public class Documento extends EntityDB {
     private String descricao;
     private String tipo;
     private Long tamanho;
+    private String coluna;
 
     @OneToOne()
     @JoinColumn(name = "fatura_id", unique = true)

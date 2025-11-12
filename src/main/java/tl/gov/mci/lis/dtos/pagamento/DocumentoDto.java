@@ -22,4 +22,5 @@ public class DocumentoDto implements Serializable {
     String descricao;
     String tipo;
     Long tamanho;
+    String coluna;
 }
