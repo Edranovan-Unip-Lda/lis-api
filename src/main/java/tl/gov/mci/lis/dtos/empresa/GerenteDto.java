@@ -21,4 +21,5 @@ public class GerenteDto implements Serializable {
     String numeroDocumento;
     String naturalidade;
     String nacionalidade;
+    String estadoCivil;
 }

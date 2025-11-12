@@ -23,4 +23,5 @@ public class Gerente extends EntityDB {
     private String numeroDocumento;
     private String naturalidade;
     private String nacionalidade;
+    private String estadoCivil;
 }

@@ -405,6 +405,7 @@ public class EmpresaService {
             setIfChanged(empresa.getGerente()::setNumeroDocumento, empresa.getGerente().getNumeroDocumento(), incomingSet.getNumeroDocumento());
             setIfChanged(empresa.getGerente()::setNacionalidade, empresa.getGerente().getNacionalidade(), incomingSet.getNacionalidade());
             setIfChanged(empresa.getGerente()::setNaturalidade, empresa.getGerente().getNaturalidade(), incomingSet.getNaturalidade());
+            setIfChanged(empresa.getGerente()::setEstadoCivil, empresa.getGerente().getEstadoCivil(), incomingSet.getEstadoCivil());
         }
     }
 
