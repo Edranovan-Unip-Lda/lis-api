@@ -61,4 +61,36 @@ public class AutoVistoriaDto implements Serializable {
     int prazo;
     List<DocumentoDto> documentos;
     UserDto funcionario;
+
+    String legislacaoUrbanisticaDescricao;
+    String tipoLocalDescricao;
+    String acessoEstradaDescricao;
+    String escoamentoAguasDescricao;
+    String alimentacaoEnergiaDescricao;
+    String tipoEletricidadeDescricao;
+    String separadosSexoDescricao;
+    String lavatoriosComEspelhoDescricao;
+    String sanitasAutomaticaAguaDescricao;
+    String comunicacaoVentilacaoDescricao;
+    String esgotoAguasDescricao;
+    String paredesPavimentosDescricao;
+    String zonasDestinadasDescricao;
+    String instalacoesFrigorificasDescricao;
+    String sectoresLimposDescricao;
+    String pisosParedesDescricao;
+    String pisosResistentesDescricao;
+    String paredesInterioresDescricao;
+    String paredes3metrosDescricao;
+    String unioesParedesDescricao;
+    String ventilacoesNecessariasDescricao;
+    String iluminacaoDescricao;
+    String aguaPotavelDescricao;
+    String distribuicaoAguaDescricao;
+    String redeDistribuicaoDescricao;
+    String redeEsgotosDescricao;
+    String maximoHigieneSegurancaDescricao;
+    String equipamentoUtensiliosDescricao;
+    String equipamentoPrimeirosSocorrosDescricao;
+    String recipientesLixoDescricao;
+    String limpezaDiariaDescricao;
 }

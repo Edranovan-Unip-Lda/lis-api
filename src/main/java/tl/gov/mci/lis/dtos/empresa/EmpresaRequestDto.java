@@ -32,6 +32,7 @@ public class EmpresaRequestDto implements Serializable {
     String numeroRegistoComercial;
     String telefone;
     String telemovel;
+    String email;
     @NotNull
     Double capitalSocial;
     @NotNull

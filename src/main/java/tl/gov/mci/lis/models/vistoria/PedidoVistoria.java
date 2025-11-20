@@ -13,8 +13,6 @@ import tl.gov.mci.lis.models.dadosmestre.atividade.ClasseAtividade;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "lis_atividade_pedido_vistoria")
 @Getter

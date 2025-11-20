@@ -37,43 +37,130 @@ public class AutoVistoria extends EntityDB {
     private Set<Participante> membrosEquipaVistoria;
 
     private String nomeAtuante;
-    private boolean legislacaoUrbanistica;
+
+    private Boolean legislacaoUrbanistica;
+    @Column(columnDefinition = "TEXT")
+    private String legislacaoUrbanisticaDescricao;
     private String tipoLocal;
-    private boolean accessoEstrada;
+
+    private Boolean acessoEstrada;
+    @Column(columnDefinition = "TEXT")
+    private String acessoEstradaDescricao;
     private Double larguraEstrada;
-    private boolean escoamentoAguas;
-    private boolean alimentacaoEnergia;
+
+    private Boolean escoamentoAguas;
+    @Column(columnDefinition = "TEXT")
+    private String escoamentoAguasDescricao;
+
+    private Boolean alimentacaoEnergia;
+    @Column(columnDefinition = "TEXT")
+    private String alimentacaoEnergiaDescricao;
     private String tipoEletricidade;
-    private boolean seperadosSexo;
-    private boolean lavatoriosComEspelho;
-    private boolean sanitasAutomaticaAgua;
-    private boolean comunicacaoVentilacao;
-    private boolean esgotoAguas;
-    private boolean paredesPavimentos;
-    private boolean zonasDestinadas;
-    private boolean instalacoesFrigorificas;
-    private boolean sectoresLimpos;
-    private boolean pisosParedes;
-    private boolean pisosResistentes;
-    private boolean paredesInteriores;
-    private boolean paredes3metros;
-    private boolean unioesParedes;
-    private boolean ventilacoesNecessarias;
-    private boolean iluminacao;
-    private boolean aguaPotavel;
-    private boolean distribuicaoAgua;
-    private boolean redeDistribuicao;
-    private boolean redeEsgotos;
-    private boolean maximoHigieneSeguranca;
-    private boolean equipamentoUtensilios;
-    private boolean equipamentoPrimeirosSocorros;
-    private boolean recipientesLixo;
-    private boolean limpezaDiaria;
+
+    private Boolean separadosSexo;
+    @Column(columnDefinition = "TEXT")
+    private String separadosSexoDescricao;
+
+    private Boolean lavatoriosComEspelho;
+    @Column(columnDefinition = "TEXT")
+    private String lavatoriosComEspelhoDescricao;
+
+    private Boolean sanitasAutomaticaAgua;
+    @Column(columnDefinition = "TEXT")
+    private String sanitasAutomaticaAguaDescricao;
+
+    private Boolean comunicacaoVentilacao;
+    @Column(columnDefinition = "TEXT")
+    private String comunicacaoVentilacaoDescricao;
+
+    private Boolean esgotoAguas;
+    @Column(columnDefinition = "TEXT")
+    private String esgotoAguasDescricao;
+
+    private Boolean paredesPavimentos;
+    @Column(columnDefinition = "TEXT")
+    private String paredesPavimentosDescricao;
+
+    private Boolean zonasDestinadas;
+    @Column(columnDefinition = "TEXT")
+    private String zonasDestinadasDescricao;
+
+    private Boolean instalacoesFrigorificas;
+    @Column(columnDefinition = "TEXT")
+    private String instalacoesFrigorificasDescricao;
+
+    private Boolean sectoresLimpos;
+    @Column(columnDefinition = "TEXT")
+    private String sectoresLimposDescricao;
+
+    private Boolean pisosParedes;
+    @Column(columnDefinition = "TEXT")
+    private String pisosParedesDescricao;
+
+    private Boolean pisosResistentes;
+    @Column(columnDefinition = "TEXT")
+    private String pisosResistentesDescricao;
+
+    private Boolean paredesInteriores;
+    @Column(columnDefinition = "TEXT")
+    private String paredesInterioresDescricao;
+
+    private Boolean paredes3metros;
+    @Column(columnDefinition = "TEXT")
+    private String paredes3metrosDescricao;
+
+    private Boolean unioesParedes;
+    @Column(columnDefinition = "TEXT")
+    private String unioesParedesDescricao;
+
+    private Boolean ventilacoesNecessarias;
+    @Column(columnDefinition = "TEXT")
+    private String ventilacoesNecessariasDescricao;
+
+    private Boolean iluminacao;
+    @Column(columnDefinition = "TEXT")
+    private String iluminacaoDescricao;
+
+    private Boolean aguaPotavel;
+    @Column(columnDefinition = "TEXT")
+    private String aguaPotavelDescricao;
+
+    private Boolean distribuicaoAgua;
+    @Column(columnDefinition = "TEXT")
+    private String distribuicaoAguaDescricao;
+
+    private Boolean redeDistribuicao;
+    @Column(columnDefinition = "TEXT")
+    private String redeDistribuicaoDescricao;
+
+    private Boolean redeEsgotos;
+    @Column(columnDefinition = "TEXT")
+    private String redeEsgotosDescricao;
+
+    private Boolean maximoHigieneSeguranca;
+    @Column(columnDefinition = "TEXT")
+    private String maximoHigieneSegurancaDescricao;
+
+    private Boolean equipamentoUtensilios;
+    @Column(columnDefinition = "TEXT")
+    private String equipamentoUtensiliosDescricao;
+
+    private Boolean equipamentoPrimeirosSocorros;
+    @Column(columnDefinition = "TEXT")
+    private String equipamentoPrimeirosSocorrosDescricao;
+
+    private Boolean recipientesLixo;
+    @Column(columnDefinition = "TEXT")
+    private String recipientesLixoDescricao;
+
+    private Boolean limpezaDiaria;
+    @Column(columnDefinition = "TEXT")
+    private String limpezaDiariaDescricao;
 
     @Column(columnDefinition = "TEXT")
     private String descreverIrregularidades;
-    private boolean aptoAberto;
-    private boolean comDeficiencias;
+    private Boolean aptoAberto;
+    private Boolean comDeficiencias;
 
     @Column(columnDefinition = "TEXT")
     private String recomendacoes;
