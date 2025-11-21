@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/root/.m2 \
 # ============================
 # 🚀 DEPLOY STAGE
 # ============================
-FROM openjdk:21-jdk-slim
+FROM openjdk:21
 
 # Set timezone
 ENV TZ=Asia/Tokyo
