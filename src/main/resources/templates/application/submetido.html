@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificação - Aplicante foi Submetido</title>
+</head>
+<body>
+<h2>
+    Estimado(a) <b th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"></b>,
+</h2>
+
+<div th:switch="${user.getRole().getName()}">
+    <p th:case="'ROLE_CLIENT'">O seu aplicante <strong th:text="${aplicante.getNumero()}"></strong> foi submetido com
+        sucesso na data
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>.
+    </p>
+    <div th:case="'ROLE_CHIEF'">
+        <p th:if="${aplicante.getTipo().name() == 'CADASTRO'}">
+            Informamos que um novo Aplicante <strong th:text="${aplicante.getNumero()}"></strong> foi submetido pela
+            Empresa <strong
+                th:text="${aplicante.getEmpresa().getNome()} +' ' + ${aplicante.getEmpresa().getSociedadeComercial().getNome()}"></strong>
+            e encontra-se a aguardar revisão.
+            Solicita-se a gentileza de proceder com a análise inicial e atualizar o estado do pedido conforme
+            apropriado.
+        </p>
+        <p th:if="${aplicante.getTipo().name() == 'ATIVIDADE'}">
+            Informamos que um novo Aplicante <strong th:text="${aplicante.getNumero()}"></strong> foi submetido pela
+            Empresa
+            <strong th:text="${aplicante.getEmpresa().getNome()} +' ' + ${aplicante.getEmpresa().getSociedadeComercial().getNome()}"></strong>.
+            Solicita-se a gentileza de proceder com a análise inicial,
+            <strong>fazer o despacho para o funcionário responsável</strong>
+            e atualizar o estado do pedido conforme apropriado.
+        </p>
+    </div>
+
+    <p th:case="'ROLE_MANAGER'">
+        Para sua informação, comunicamos que um pedido foi recentemente submetido no sistema pela Empresa
+        <strong th:text="${aplicante.getEmpresa().getNome()} +' ' + ${aplicante.getEmpresa().getSociedadeComercial().getNome()}"></strong>.
+        Neste momento, o pedido encontra-se na fase de revisão pela Chefia. Esta mensagem é apenas informativa; não é
+        necessária qualquer ação da sua parte neste momento.
+    </p>
+</div>
+
+<br/>
+
+<p>
+    Com os melhores cumprimentos,<br/>
+    Equipa do Sistema de Gestão de Licenças Comerciais e Indústriais<br/>
+    Este é um email automático. Por favor, não responda a esta mensagem.
+</p>
+</body>
+</html>

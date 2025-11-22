@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificação - Aplicante Atribuído</title>
+</head>
+<body>
+<h2>
+    Estimado(a) <b th:text="${user.firstName + ' ' + user.lastName}"></b>,
+</h2>
+
+<div th:switch="${user.role.name}">
+
+    <!-- CLIENTE -->
+    <p th:case="'ROLE_CLIENT'">
+        Informamos que o seu aplicante <strong th:text="${aplicante.numero}"></strong> foi atribuído a um responsável
+        para análise.
+        <br/>
+        Por favor, <strong>inicie sessão no sistema</strong> para acompanhar o progresso do seu aplicante.
+        <br/>
+        Data da atribuição:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+    <!-- STAFF / FUNCIONÁRIO -->
+    <p th:case="'ROLE_STAFF'">
+        Foi atribuído a si a tarefa referente ao Aplicante <strong th:text="${aplicante.numero}"></strong>.
+        <br/>
+        Por favor, proceda com a análise e execução de acordo com os procedimentos internos.
+        <br/>
+        Data e hora da atribuição:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+    <!-- CHIEF -->
+    <p th:case="'ROLE_CHIEF'">
+        O Aplicante <strong th:text="${aplicante.numero}"></strong> foi atribuído pelo sistema a um(a) funcionário(a).
+        <br/>
+        Data e hora da atribuição:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+        <br/>
+        Esta mensagem é apenas para sua referência.
+    </p>
+
+    <!-- MANAGER / DIRECTOR -->
+    <p th:case="'ROLE_MANAGER'">
+        Para sua informação, o Aplicante <strong th:text="${aplicante.numero}"></strong> foi atribuído a um responsável
+        pelo Chief.
+        <br/>
+        Data e hora da atribuição:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+        <br/>
+        Não é necessária qualquer ação da sua parte neste momento.
+    </p>
+
+</div>
+
+<br/>
+
+<p>
+    Com os melhores cumprimentos,<br/>
+    Equipa do Sistema de Licenciamento do Ministério do Comércio e Indústria<br/>
+    Este é um email automático. Por favor, não responda a esta mensagem.
+</p>
+</body>
+</html>

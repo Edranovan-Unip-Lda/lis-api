@@ -38,6 +38,7 @@ import tl.gov.mci.lis.repositories.user.PasswordResetTokenRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.cadastro.CertificadoService;
+import tl.gov.mci.lis.services.notificacao.NotificacaoService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -65,6 +66,7 @@ public class UserServices {
     private final AplicanteService aplicanteService;
     private final CertificadoService certificadoService;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final NotificacaoService notificacaoService;
 
     @Transactional
     public User register(User obj) {
@@ -374,6 +376,8 @@ public class UserServices {
         historico.setAlteradoPor(operador.getUsername());
         aplicante.addHistorico(historico);
 
+        notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.REVISTO);
+
         return aplicante;
     }
 
@@ -421,7 +425,7 @@ public class UserServices {
             }
         }
 
-
+        notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.APROVADO);
         // No save/flush necessário: dirty checking + TX commit
         // historicoStatus e certificado já estão anexados ao 'aplicante' carregado
         return aplicante; // serializa com certificado + historicoStatus
@@ -450,6 +454,8 @@ public class UserServices {
             case CADASTRO -> aplicante.getPedidoInscricaoCadastro().setStatus(PedidoStatus.REJEITADO);
             case ATIVIDADE -> aplicante.getPedidoLicencaAtividade().setStatus(PedidoStatus.REJEITADO);
         }
+
+        notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.REJEITADO);
 
         return aplicante; // still managed — changes flushed automatically
     }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.enums.EstadoTarefa;
 import tl.gov.mci.lis.enums.Role;
 import tl.gov.mci.lis.exceptions.AlreadyExistException;
@@ -20,6 +21,7 @@ import tl.gov.mci.lis.repositories.aplicante.AplicanteAssignmentRepository;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
+import tl.gov.mci.lis.services.notificacao.NotificacaoService;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class AssignmentService {
     private final UserRepository staffRepo;
     private final EntityManager entityManager;
     private final AuthorizationService authorizationService;
+    private final NotificacaoService notificacaoService;
 
     @Transactional
     public AplicanteAssignment assign(Long aplicanteId, String chiefUsername, String assigneeStaffUsername, String notes) {
@@ -85,6 +88,8 @@ public class AssignmentService {
         historico.setStatus(aplicante.getEstado());
         historico.setAlteradoPor(authorizationService.getCurrentUsername());
         aplicante.addHistorico(historico);
+
+        notificacaoService.createNotification(assignee.getId(), aplicante, EmailTemplate.ATRIBUIR);
 
         return aa;
     }

@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
+import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.user.PasswordResetToken;
 import tl.gov.mci.lis.models.user.User;
 
@@ -141,6 +142,37 @@ public class EmailService {
             logger.info("Email sent successfully to Admins & Staff");
         } catch (Exception e) {
             logger.error("Failed to send email to Admins & Staff", e);
+        }
+    }
+
+    @Async
+    public void sendNotificacaoEmail(User receptor, Aplicante aplicante, EmailTemplate emailTemplate) {
+        try {
+            EmailConfig emailConfig = emailConfigRepository.findTopByOrderByIdDesc();
+            if (emailConfig == null) {
+                throw new IllegalStateException("SMTP settings not found in the database");
+            }
+
+            JavaMailSender mailSender = getJavaMailSender(emailConfig);
+            Context context = new Context();
+            context.setVariable("user", receptor);
+            context.setVariable("aplicante", aplicante);
+            context.setVariable("insertedDate", Instant.now());
+            String emailContent = templateEngine.process(emailTemplate.toString(), context);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(emailConfig.getFromEmail());
+
+            //Filter only sent to Admin
+            helper.setTo(receptor.getEmail());
+            helper.setSubject("MCI - LIC - Notificação");
+            helper.setText(emailContent, true);
+
+            sendMimeMessage(mailSender, message);
+            logger.info("Notificação foi enviado com sucesso");
+        } catch (Exception e) {
+            logger.error("Falhar ao enviar a Notificação", e);
         }
     }
 

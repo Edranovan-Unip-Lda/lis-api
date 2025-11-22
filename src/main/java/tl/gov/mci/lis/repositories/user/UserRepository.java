@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.user.User;
 
@@ -61,4 +62,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @RestResource(path = "byDirecaoAndRole", rel = "byDirecaoAndRole")
     List<User> findByDirecao_IdAndRole_Name(Long direcaoId, String roleName);
+
+    @Query("SELECT u FROM User u  JOIN FETCH u.role WHERE u.role.name = :roleName AND u.direcao.nome = :direcaoNome AND u.status = :status")
+    Optional<User> findByRole_NameAndDirecao_NomeAndStatusActive(String roleName, Categoria direcaoNome, String status);
+
+    @Query("SELECT u FROM User u JOIN FETCH u.role WHERE u.id = :id")
+    Optional<User> findByIdWithRole(@Param("id") Long id);
+
 }

@@ -45,6 +45,7 @@ import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.cadastro.PedidoInscricaoCadastroService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
+import tl.gov.mci.lis.services.notificacao.NotificacaoService;
 import tl.gov.mci.lis.services.user.UserServices;
 import tl.gov.mci.lis.services.vistoria.PedidoVistoriaService;
 
@@ -76,6 +77,7 @@ public class EmpresaService {
     private final CertificadoLicencaAtividadeRepository certificadoLicencaAtividadeRepository;
     private final MinioService minioService;
     private final SociedadeComercialRepository sociedadeComercialRepository;
+    private final NotificacaoService notificacaoService;
 
     @Transactional
     public Empresa create(Empresa obj, List<MultipartFile> files) {
@@ -211,6 +213,7 @@ public class EmpresaService {
                     aplicante.addHistorico(historico);
 
                     aplicanteService.atribuirDirecao(aplicanteId, direcao.getId());
+                    notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.SUBMETIDO);
 
                     return aplicante;
                 }).orElseThrow(() -> new ResourceNotFoundException("Aplicante nao encontrado"));

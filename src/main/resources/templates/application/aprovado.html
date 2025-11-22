@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificação - Aplicante Aprovado</title>
+</head>
+<body>
+<h2>
+    Estimado(a) <b th:text="${user.firstName + ' ' + user.lastName}"></b>,
+</h2>
+
+<div th:switch="${user.role.name}">
+
+    <!-- CLIENTE -->
+    <p th:case="'ROLE_CLIENT'">
+        O seu Aplicante <strong th:text="${aplicante.numero}"></strong> foi <strong>aprovado</strong>.
+        <span th:if="${aplicante.tipo.name() == 'CADASTRO'}">Pode acessar o seu Certificado no sistema através do seu login.</span>
+        <span th:unless="${aplicante.tipo.name() == 'CADASTRO'}">Pode acessar a sua Licenca no sistema através do seu login.</span>
+        <br/>
+        Data de aprovação: <strong
+            th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+    <!-- CHIEF -->
+    <p th:case="'ROLE_CHIEF'">
+        Informamos que o Aplicante <strong th:text="${aplicante.numero}"></strong> foi aprovado pelo Diretor.
+        Esta mensagem é apenas para sua informação.
+        <br/>
+        Data e hora da aprovação: <strong
+            th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+    <!-- DIRETOR / MANAGER -->
+    <p th:case="'ROLE_MANAGER'">
+        O Aplicante <strong th:text="${aplicante.numero}"></strong> teve a atividade de aprovação concluída.
+        O certificado correspondente foi emitido.
+        <br/>
+        Data e hora de emissão: <strong
+            th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+</div>
+
+<br/>
+
+<p>
+    Com os melhores cumprimentos,<br/>
+    Equipa do Sistema de Gestão de Licenças Comerciais e Indústriais<br/>
+    Este é um email automático. Por favor, não responda a esta mensagem.
+</p>
+</body>
+</html>
