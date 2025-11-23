@@ -75,16 +75,28 @@ public class AutoVistoriaService {
         // atualizar estado do aplicante sem carregar o objeto inteiro:
         Aplicante aplicante = aplicanteRepository.getReferenceById(pedidoVistoria.getPedidoLicencaAtividade().getAplicante().getId());
 
-        aplicante.setEstado(AplicanteStatus.REVISAO);
+        if (obj.getPrazo() != 0) {
+            aplicante.setEstado(AplicanteStatus.SUSPENDE);
 
-        // add history
-        HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
-        historico.setStatus(aplicante.getEstado());
-        historico.setAlteradoPor(authorizationService.getCurrentUsername());
-        aplicante.addHistorico(historico);
+            // add history
+            HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+            historico.setStatus(aplicante.getEstado());
+            historico.setAlteradoPor(authorizationService.getCurrentUsername());
+            aplicante.addHistorico(historico);
+        } else {
 
-        // close assignment
-        assignmentService.closeAssignment(aplicante.getId());
+            aplicante.setEstado(AplicanteStatus.REVISAO);
+
+            // add history
+            HistoricoEstadoAplicante historico = new HistoricoEstadoAplicante();
+            historico.setStatus(aplicante.getEstado());
+            historico.setAlteradoPor(authorizationService.getCurrentUsername());
+            aplicante.addHistorico(historico);
+
+            // close assignment
+            assignmentService.closeAssignment(aplicante.getId());
+        }
+
         return obj;
     }
 }
