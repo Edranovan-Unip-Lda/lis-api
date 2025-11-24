@@ -84,8 +84,13 @@ public class MinioService {
         Objects.requireNonNull(username, "username is required");
         if (files == null || files.isEmpty()) return List.of();
 
+        // ---- CHECK MINIO AVAILABILITY ----
+        if (!isMinioAvailable()) {
+            logger.error("MinIO not available. Skipping file upload completely.");
+            return List.of();  // ⬅ SKIP SAFELY
+        }
+        // ---- BUCKET CHECK ----
         try {
-            // Ensure bucket exists once
             boolean exists = minioClient.bucketExists(
                     BucketExistsArgs.builder().bucket(minioBucketName).build()
             );
@@ -93,19 +98,20 @@ public class MinioService {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioBucketName).build());
             }
         } catch (Exception e) {
-            throw new FileDownloadUploadException("Falha ao preparar o bucket: " + e.getMessage());
+            logger.error("MinIO bucket unavailable: {}. Skipping upload.", e.getMessage());
+            return List.of();  // ⬅ SKIP SAFELY
         }
 
+        // ---- UPLOAD FILES ----
         List<Documento> uploaded = new ArrayList<>();
         for (MultipartFile file : files) {
             if (file == null || file.isEmpty()) continue;
             try {
-                Documento doc = uploadFile(username, file);  // reuse helper below
+                Documento doc = uploadFile(username, file);
                 uploaded.add(doc);
             } catch (Exception e) {
-                logger.error("Falha ao fazer upload de {}: {}",
-                        file.getOriginalFilename(), e.getMessage(), e);
-                // continue with next file
+                logger.error("Failed to upload {}: {}",
+                        file.getOriginalFilename(), e.getMessage());
             }
         }
         return uploaded;
@@ -156,5 +162,15 @@ public class MinioService {
             throw new FileDownloadUploadException("Falha ao arquivar documento: " + documento.getNome());
         }
         logger.info("Documento arquivado no S3 Object: {}", documento.getNome());
+    }
+
+    private boolean isMinioAvailable() {
+        try {
+            minioClient.listBuckets();
+            return true;
+        } catch (Exception e) {
+            logger.error("MinIO connection failed: {}", e.getMessage());
+            return false;
+        }
     }
 }
