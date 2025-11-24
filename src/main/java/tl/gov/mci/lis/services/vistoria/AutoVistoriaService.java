@@ -15,7 +15,6 @@ import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 import tl.gov.mci.lis.models.vistoria.Requerente;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.atividade.ClasseAtividadeRepository;
-import tl.gov.mci.lis.repositories.endereco.PostoAdministrativoRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.aplicante.AssignmentService;
@@ -34,7 +33,6 @@ public class AutoVistoriaService {
     private final UserRepository userRepository;
     private final EnderecoService enderecoService;
     private final ClasseAtividadeRepository classAtividadeRepo;
-    private final PostoAdministrativoRepository postoAdministrativoRepository;
     private final PedidoVistoriaRepository pedidoVistoriaRepository;
     private final AuthorizationService authorizationService;
 

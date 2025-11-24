@@ -89,6 +89,57 @@ public class NotificacaoService {
         logger.info("Notificação criada com sucesso para Cliente, Chefia e Diretor(a).");
     }
 
+    @Transactional
+    public void createAssignNotification(Long staffId, Aplicante aplicante, EmailTemplate template) {
+        logger.info("Criando notificação de atribuição...");
+        // 1. Load Receptor (cliente)
+        User staff = userRepository.findById(staffId)
+                .orElseThrow(() -> new ResourceNotFoundException("Funsionário não existe!"));
+
+        // 2. Load Chief for category
+        User chief = userRepository.findByRole_NameAndDirecao_NomeAndStatusActive(
+                Role.ROLE_CHIEF.name(),
+                aplicante.getCategoria(),
+                AccountStatus.active.name()
+        ).orElseThrow(() ->
+                new ResourceNotFoundException("Utilizador Chefia não existe!")
+        );
+
+        // 3. Load Manager for category
+        User manager = userRepository.findByRole_NameAndDirecao_NomeAndStatusActive(
+                Role.ROLE_MANAGER.name(),
+                aplicante.getCategoria(),
+                AccountStatus.active.name()
+        ).orElseThrow(() ->
+                new ResourceNotFoundException("Utilizador Diretor(a) não existe!")
+        );
+
+        User cliente = userRepository.findByIdWithRole(aplicante.getEmpresa().getUtilizador().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Utilizador cliente não existe!"));
+
+
+        // 4. Create Notificação
+        Notificacao notificacao = new Notificacao();
+        notificacao.setAplicanteStatus(aplicante.getEstado());
+        notificacao.setAplicante(aplicante);
+
+        entityManager.persist(notificacao);
+
+        // 5. Create UserNotificacao (one for each user)
+        criarUserNotificacao(notificacao, staff);
+        criarUserNotificacao(notificacao, chief);
+        criarUserNotificacao(notificacao, manager);
+        criarUserNotificacao(notificacao, cliente);
+
+        // 6. Send Emails
+        emailService.sendNotificacaoEmail(staff, aplicante, template);
+        emailService.sendNotificacaoEmail(chief, aplicante, template);
+        emailService.sendNotificacaoEmail(manager, aplicante, template);
+        emailService.sendNotificacaoEmail(cliente, aplicante, template);
+
+        logger.info("Notificação criada com sucesso para Funcionario, Chefia e Diretor(a).");
+    }
+
 
     private void criarUserNotificacao(Notificacao notificacao, User user) {
         UserNotificacao un = new UserNotificacao();

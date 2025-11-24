@@ -89,7 +89,7 @@ public class AssignmentService {
         historico.setAlteradoPor(authorizationService.getCurrentUsername());
         aplicante.addHistorico(historico);
 
-        notificacaoService.createNotification(assignee.getId(), aplicante, EmailTemplate.ATRIBUIR);
+        notificacaoService.createAssignNotification(assignee.getId(), aplicante, EmailTemplate.ATRIBUIR);
 
         return aa;
     }
