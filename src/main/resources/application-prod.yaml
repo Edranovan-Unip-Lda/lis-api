@@ -72,6 +72,12 @@ sentry:
     minimum-event-level: error
     minimum-breadcrumb-level: info
   exception-resolver-order: -2147483647
+  ignored-exceptions-for-type:
+    - tl.gov.mci.lis.exceptions.ResourceNotFoundException
+    - tl.gov.mci.lis.exceptions.ForbiddenException
+    - tl.gov.mci.lis.exceptions.AlreadyExistException
+    - tl.gov.mci.lis.exceptions.FileDownloadUploadException
+    - tl.gov.mci.lis.exceptions.BadRequestException
 
 management:
   endpoints:
