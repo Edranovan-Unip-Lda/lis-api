@@ -2,6 +2,7 @@ package tl.gov.mci.lis.dtos.atividade;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
+import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
 import tl.gov.mci.lis.dtos.licenca.ArrendadorDto;
 import tl.gov.mci.lis.dtos.licenca.PessoaDto;
@@ -85,6 +86,7 @@ public class CertificadoLicencaAtividadeDetailDto implements Serializable {
             Categoria categoria;
             String numero;
             AplicanteStatus estado;
+            EmpresaDto empresa;
         }
     }
 }
