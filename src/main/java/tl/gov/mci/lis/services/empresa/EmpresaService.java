@@ -32,6 +32,7 @@ import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.empresa.Gerente;
 import tl.gov.mci.lis.models.empresa.Representante;
 import tl.gov.mci.lis.models.pagamento.Fatura;
+import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
 import tl.gov.mci.lis.repositories.aplicante.HistoricoEstadoAplicanteRepository;
 import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
@@ -40,6 +41,7 @@ import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.SociedadeComercialRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
+import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
@@ -78,6 +80,7 @@ public class EmpresaService {
     private final MinioService minioService;
     private final SociedadeComercialRepository sociedadeComercialRepository;
     private final NotificacaoService notificacaoService;
+    private final UserRepository userRepository;
 
     @Transactional
     public Empresa create(Empresa obj, List<MultipartFile> files) {
@@ -155,7 +158,13 @@ public class EmpresaService {
 
     public Empresa getByUtilizadorUsername(String username) {
         logger.info("Obtendo empresa pelo utilizador: {}", username);
-        authorizationService.assertUserOwnsUtilizador(username);
+
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
+
+        if (user.getRole().getName().equals(Role.ROLE_CLIENT.name())) {
+            authorizationService.assertUserOwnsUtilizador(username);
+        }
+
         return empresaRepository.findByUtilizador_Username(username)
                 .orElseThrow(() -> {
                     logger.error("Empresa nao encontrada");
@@ -198,6 +207,7 @@ public class EmpresaService {
         return aplicanteRepository.findByIdAndEmpresa_id(aplicanteId, empresaId)
                 .map(aplicante -> {
                     if (!isAplicanteReadyForSubmission(aplicante)) {
+                        logger.error("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
                         throw new ForbiddenException("Aplicante deve estar EM_CURSO, pedido SUBMETIDO e fatura PAGA para ser submetido.");
                     }
                     aplicante.setEstado(obj.getEstado());

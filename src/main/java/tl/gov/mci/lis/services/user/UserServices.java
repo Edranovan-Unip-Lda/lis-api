@@ -27,6 +27,7 @@ import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
+import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.PasswordResetToken;
 import tl.gov.mci.lis.models.user.User;
@@ -73,7 +74,7 @@ public class UserServices {
         logger.info("Registering user: {}", obj);
 
         if (userRepository.findByUsernameOrEmail(obj.getUsername(), obj.getEmail()).isPresent()) {
-            throw new AlreadyExistException("User with username " + obj.getUsername() + " or email " + obj.getEmail() + " already exists");
+            throw new AlreadyExistException("O utilizador com o email " + obj.getEmail() + " já existe.");
         }
 
         obj.setRole(
@@ -313,6 +314,14 @@ public class UserServices {
                 .orElseThrow(() -> {
                     logger.error("User with username {} not found", username);
                     return new ResourceNotFoundException("User with username " + username + " not found");
+                });
+    }
+
+    public Empresa getEmpresaByUtilizadorUsername(String username) {
+        return empresaRepository.findByUtilizador_Username(username)
+                .orElseThrow(() -> {
+                    logger.error("Empresa nao encontrada");
+                    return new ResourceNotFoundException("Empresa nao encontrada");
                 });
     }
 

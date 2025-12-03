@@ -15,7 +15,9 @@ import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteAssignmentDto;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
+import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
+import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.dtos.mappers.UserMapper;
 import tl.gov.mci.lis.dtos.user.PasswordResetRequest;
 import tl.gov.mci.lis.dtos.user.UserDetailDto;
@@ -44,6 +46,7 @@ public class UserController {
     private final AplicanteMapper aplicanteMapper;
     private final AssignmentService assignmentService;
     private final CertificadoService certificadoService;
+    private final EmpresaMapper empresaMapper;
 
     @PostMapping("")
     public ResponseEntity<UserLoginDto> register(@Valid @RequestBody User user) {
@@ -129,6 +132,14 @@ public class UserController {
         response.setHeader(HttpHeaders.SET_COOKIE, clearedCookie.toString());
 
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
+    @GetMapping("/{username}/empresas/{utilizadorUsername}")
+    public ResponseEntity<EmpresaDto> getEmpresaByUtilizadorUsername(
+            @PathVariable String utilizadorUsername
+    ) {
+        return new ResponseEntity<>(empresaMapper.toDto(userServices.getEmpresaByUtilizadorUsername(utilizadorUsername)), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_CHIEF')")
