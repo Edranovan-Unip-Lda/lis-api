@@ -4,6 +4,7 @@ import org.javers.spring.annotation.JaversSpringDataAuditable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tl.gov.mci.lis.enums.Categoria;
@@ -12,7 +13,7 @@ import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import java.util.Optional;
 
 @JaversSpringDataAuditable
-public interface CertificadoInscricaoCadastroRepository extends JpaRepository<CertificadoInscricaoCadastro, Long> {
+public interface CertificadoInscricaoCadastroRepository extends JpaRepository<CertificadoInscricaoCadastro, Long>, JpaSpecificationExecutor<CertificadoInscricaoCadastro> {
 
     Optional<CertificadoInscricaoCadastro> findByPedidoInscricaoCadastro_Id(Long id);
 
