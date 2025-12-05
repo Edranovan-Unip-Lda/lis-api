@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
@@ -14,7 +15,7 @@ import tl.gov.mci.lis.models.aplicante.Aplicante;
 import java.util.Optional;
 
 @JaversSpringDataAuditable
-public interface AplicanteRepository extends JpaRepository<Aplicante, Long> {
+public interface AplicanteRepository extends JpaRepository<Aplicante, Long>, JpaSpecificationExecutor<Aplicante> {
 
     @Query("""
             SELECT a FROM Aplicante a
