@@ -65,6 +65,27 @@ public class CertificadoInscricaoCadastroSpecification {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtTo()));
             }
 
+            if (filter.getMunicipioId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("municipio").get("id"),
+                        filter.getMunicipioId()
+                ));
+            }
+
+            if (filter.getPostoAdministrativoId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("id"),
+                        filter.getPostoAdministrativoId()
+                ));
+            }
+
+            if (filter.getSucoId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.get("sede").get("aldeia").get("suco").get("id"),
+                        filter.getSucoId()
+                ));
+            }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

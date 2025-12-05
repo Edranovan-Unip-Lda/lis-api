@@ -27,4 +27,7 @@ public class EmpresaReportFilter {
     private Long totalTrabalhadoresMin;
     private Long totalTrabalhadoresMax;
     private Long sociedadeComercialId;
+    private Long municipioId;
+    private Long postoAdministrativoId;
+    private Long sucoId;
 }

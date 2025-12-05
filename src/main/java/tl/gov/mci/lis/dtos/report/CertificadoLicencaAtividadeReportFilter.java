@@ -23,4 +23,7 @@ public class CertificadoLicencaAtividadeReportFilter {
     private Long aplicanteId;
     private Instant createdAtFrom;
     private Instant createdAtTo;
+    private Long municipioId;
+    private Long postoAdministrativoId;
+    private Long sucoId;
 }
