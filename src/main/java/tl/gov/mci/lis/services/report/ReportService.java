@@ -29,6 +29,8 @@ import tl.gov.mci.lis.specifications.CertificadoInscricaoCadastroSpecification;
 import tl.gov.mci.lis.specifications.CertificadoLicencaAtividadeSpecification;
 import tl.gov.mci.lis.specifications.EmpresaSpecification;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReportService {
@@ -44,8 +46,16 @@ public class ReportService {
     private final CertificadoMapper certificadoMapper;
 
     @Transactional(readOnly = true)
-    public Page<EmpresaDto> generateEmpresaReport(EmpresaReportFilter filter, int page, int size) {
+    public List<EmpresaDto> generateEmpresaReport(EmpresaReportFilter filter) {
         logger.info("Generating Empresa report with filter: {}", filter);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return empresaRepository.findAll(EmpresaSpecification.withFilter(filter), sort).stream()
+                .map(empresaMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<EmpresaDto> generateEmpresaReportPagination(EmpresaReportFilter filter, int page, int size) {
+        logger.info("Generating Empresa report with filter pagination: {}", filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return empresaRepository.findAll(EmpresaSpecification.withFilter(filter), pageable)
                 .map(empresaMapper::toDto);
@@ -65,7 +75,7 @@ public class ReportService {
         logger.info("Generating CertificadoInscricaoCadastro report with filter: {}", filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return certificadoInscricaoCadastroRepository.findAll(
-                CertificadoInscricaoCadastroSpecification.withFilter(filter), pageable)
+                        CertificadoInscricaoCadastroSpecification.withFilter(filter), pageable)
                 .map(certificadoMapper::toDto);
     }
 
@@ -75,7 +85,7 @@ public class ReportService {
         logger.info("Generating CertificadoLicencaAtividade report with filter: {}", filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return certificadoLicencaAtividadeRepository.findAll(
-                CertificadoLicencaAtividadeSpecification.withFilter(filter), pageable)
+                        CertificadoLicencaAtividadeSpecification.withFilter(filter), pageable)
                 .map(certificadoMapper::toDto);
     }
 }

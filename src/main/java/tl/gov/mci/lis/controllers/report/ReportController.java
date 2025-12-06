@@ -2,6 +2,9 @@ package tl.gov.mci.lis.controllers.report;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,21 +33,25 @@ public class ReportController {
      * Generate a paginated report of Empresa entities with optional filters.
      *
      * @param filter Filter criteria for the report (all fields optional)
-     * @param page   Page number (0-indexed, default: 0)
-     * @param size   Page size (default: 50)
+     * @param page   Page number
+     * @param size   Page size
      * @return Paginated list of Empresa DTOs matching the filter criteria
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/empresas")
     public ResponseEntity<Page<EmpresaDto>> generateEmpresaReport(
             @RequestBody(required = false) EmpresaReportFilter filter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "50") int size
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
     ) {
         if (filter == null) {
             filter = new EmpresaReportFilter();
         }
-        return ResponseEntity.ok(reportService.generateEmpresaReport(filter, page, size));
+        if (page != null && size != null) {
+            return ResponseEntity.ok(reportService.generateEmpresaReportPagination(filter, page, size));
+        } else {
+            return ResponseEntity.ok(new PageImpl<>(reportService.generateEmpresaReport(filter)));
+        }
     }
 
     /**
@@ -55,7 +62,7 @@ public class ReportController {
      * @param size   Page size (default: 50)
      * @return Paginated list of Aplicante DTOs matching the filter criteria
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/aplicantes")
     public ResponseEntity<Page<AplicanteDto>> generateAplicanteReport(
             @RequestBody(required = false) AplicanteReportFilter filter,
@@ -76,7 +83,7 @@ public class ReportController {
      * @param size   Page size (default: 50)
      * @return Paginated list of CertificadoInscricaoCadastro DTOs matching the filter criteria
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/certificados-inscricao-cadastro")
     public ResponseEntity<Page<CertificadoInscricaoCadastroDto>> generateCertificadoInscricaoCadastroReport(
             @RequestBody(required = false) CertificadoInscricaoCadastroReportFilter filter,
@@ -97,7 +104,7 @@ public class ReportController {
      * @param size   Page size (default: 50)
      * @return Paginated list of CertificadoLicencaAtividade DTOs matching the filter criteria
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF', 'ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/certificados-licenca-atividade")
     public ResponseEntity<Page<CertificadoLicencaAtividadeDto>> generateCertificadoLicencaAtividadeReport(
             @RequestBody(required = false) CertificadoLicencaAtividadeReportFilter filter,
