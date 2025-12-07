@@ -18,7 +18,6 @@ public class AplicanteReportFilter {
     private String numero;
     private AplicanteStatus estado;
     private Long empresaId;
-    private Long direcaoId;
-    private Instant createdAtFrom;
-    private Instant createdAtTo;
+    private Instant updatedAtFrom;
+    private Instant updatedAtTo;
 }

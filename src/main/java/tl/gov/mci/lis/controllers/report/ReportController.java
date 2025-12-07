@@ -58,21 +58,25 @@ public class ReportController {
      * Generate a paginated report of Aplicante entities with optional filters.
      *
      * @param filter Filter criteria for the report (all fields optional)
-     * @param page   Page number (0-indexed, default: 0)
-     * @param size   Page size (default: 50)
+     * @param page   Page number
+     * @param size   Page size
      * @return Paginated list of Aplicante DTOs matching the filter criteria
      */
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/aplicantes")
     public ResponseEntity<Page<AplicanteDto>> generateAplicanteReport(
             @RequestBody(required = false) AplicanteReportFilter filter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "50") int size
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
     ) {
         if (filter == null) {
             filter = new AplicanteReportFilter();
         }
-        return ResponseEntity.ok(reportService.generateAplicanteReport(filter, page, size));
+        if (page != null && size != null) {
+            return ResponseEntity.ok(reportService.generateAplicanteReportPagination(filter, page, size));
+        } else {
+            return ResponseEntity.ok(new PageImpl<>(reportService.generateAplicanteReport(filter)));
+        }
     }
 
     /**

@@ -1,14 +1,16 @@
 package tl.gov.mci.lis.specifications;
 
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import tl.gov.mci.lis.dtos.report.AplicanteReportFilter;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.criteria.Predicate;
 
 public class AplicanteSpecification {
+    public static final String ESTADO_APROVADO = "APROVADO";
+    public static final String ESTADO_REJEITADO = "REJEITADO";
 
     public static Specification<Aplicante> withFilter(AplicanteReportFilter filter) {
         return (root, query, criteriaBuilder) -> {
@@ -31,22 +33,20 @@ public class AplicanteSpecification {
 
             if (filter.getEstado() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("estado"), filter.getEstado()));
+            } else {
+                predicates.add(root.get("estado").in(ESTADO_APROVADO, ESTADO_REJEITADO));
             }
 
             if (filter.getEmpresaId() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("empresa").get("id"), filter.getEmpresaId()));
             }
 
-            if (filter.getDirecaoId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("direcaoAtribuida").get("id"), filter.getDirecaoId()));
+            if (filter.getUpdatedAtFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("updatedAt"), filter.getUpdatedAtFrom()));
             }
 
-            if (filter.getCreatedAtFrom() != null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtFrom()));
-            }
-
-            if (filter.getCreatedAtTo() != null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtTo()));
+            if (filter.getUpdatedAtTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("updatedAt"), filter.getUpdatedAtTo()));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

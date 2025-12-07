@@ -62,8 +62,16 @@ public class ReportService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AplicanteDto> generateAplicanteReport(AplicanteReportFilter filter, int page, int size) {
+    public List<AplicanteDto> generateAplicanteReport(AplicanteReportFilter filter) {
         logger.info("Generating Aplicante report with filter: {}", filter);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return aplicanteRepository.findAll(AplicanteSpecification.withFilter(filter), sort).stream()
+                .map(aplicanteMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AplicanteDto> generateAplicanteReportPagination(AplicanteReportFilter filter, int page, int size) {
+        logger.info("Generating Aplicante report with filter pagination: {}", filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return aplicanteRepository.findAll(AplicanteSpecification.withFilter(filter), pageable)
                 .map(aplicanteMapper::toDto);
