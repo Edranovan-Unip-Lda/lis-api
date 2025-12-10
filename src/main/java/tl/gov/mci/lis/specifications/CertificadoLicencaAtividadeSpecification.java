@@ -1,110 +1,115 @@
 package tl.gov.mci.lis.specifications;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import tl.gov.mci.lis.dtos.report.CertificadoLicencaAtividadeReportFilter;
+import tl.gov.mci.lis.enums.PedidoStatus;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
+import tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade;
+import tl.gov.mci.lis.models.vistoria.PedidoVistoria;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.criteria.Predicate;
+import java.util.Objects;
 
 public class CertificadoLicencaAtividadeSpecification {
 
-    public static Specification<CertificadoLicencaAtividade> withFilter(CertificadoLicencaAtividadeReportFilter filter) {
-        return (root, query, criteriaBuilder) -> {
+    public static Specification<CertificadoLicencaAtividade> withFilter(
+            CertificadoLicencaAtividadeReportFilter filter
+    ) {
+        return (root, query, cb) -> {
+            // Avoid duplicate CLA rows from the to-many join
+            Objects.requireNonNull(query).distinct(true);
+
+            Join<CertificadoLicencaAtividade, PedidoLicencaAtividade> pla =
+                    root.join("pedidoLicencaAtividade", JoinType.INNER);
+
+            // PLA -> PV (restrict join to only APROVADO inspections)
+            Join<PedidoLicencaAtividade, PedidoVistoria> pv =
+                    pla.join("listaPedidoVistoria", JoinType.INNER);
+            pv.on(cb.equal(pv.get("status"), PedidoStatus.SUBMETIDO)); // Only approved Vistoria
+
             List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.getSociedadeComercial() != null && !filter.getSociedadeComercial().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("sociedadeComercial")),
-                        "%" + filter.getSociedadeComercial().toLowerCase() + "%"
-                ));
+            if (filter.getCategoria() != null) {
+                predicates.add(cb.equal(pla.get("aplicante").get("categoria"), filter.getCategoria()));
             }
 
-            if (filter.getNumeroRegistoComercial() != null && !filter.getNumeroRegistoComercial().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("numeroRegistoComercial")),
-                        "%" + filter.getNumeroRegistoComercial().toLowerCase() + "%"
-                ));
+            if (filter.getEmpresaId() != null) {
+                predicates.add(cb.equal(pla.get("aplicante").get("empresa").get("id"), filter.getEmpresaId()));
             }
 
-            if (filter.getNif() != null && !filter.getNif().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("nif")),
-                        "%" + filter.getNif().toLowerCase() + "%"
-                ));
-            }
-
-            if (filter.getNivelRisco() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("nivelRisco"), filter.getNivelRisco()));
-            }
-
-            if (filter.getAtividade() != null && !filter.getAtividade().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("atividade")),
-                        "%" + filter.getAtividade().toLowerCase() + "%"
-                ));
-            }
-
-            if (filter.getAtividadeCodigo() != null && !filter.getAtividadeCodigo().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("atividadeCodigo")),
-                        "%" + filter.getAtividadeCodigo().toLowerCase() + "%"
-                ));
-            }
-
-            if (filter.getDataValidade() != null && !filter.getDataValidade().isBlank()) {
-                predicates.add(criteriaBuilder.equal(root.get("dataValidade"), filter.getDataValidade()));
-            }
-
-            if (filter.getDataEmissao() != null && !filter.getDataEmissao().isBlank()) {
-                predicates.add(criteriaBuilder.equal(root.get("dataEmissao"), filter.getDataEmissao()));
-            }
-
-            if (filter.getNomeDiretorGeral() != null && !filter.getNomeDiretorGeral().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("nomeDiretorGeral")),
-                        "%" + filter.getNomeDiretorGeral().toLowerCase() + "%"
-                ));
-            }
-
-            if (filter.getAplicanteId() != null) {
-                predicates.add(criteriaBuilder.equal(
-                        root.get("pedidoLicencaAtividade").get("aplicante").get("id"),
-                        filter.getAplicanteId()
-                ));
-            }
-
-            if (filter.getCreatedAtFrom() != null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtFrom()));
-            }
-
-            if (filter.getCreatedAtTo() != null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtTo()));
-            }
-
-            if (filter.getMunicipioId() != null) {
-                predicates.add(criteriaBuilder.equal(
+            // CertificadoLicencaAtividade related filters
+            if (Objects.nonNull(filter.getMunicipioId())) {
+                predicates.add(cb.equal(
                         root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("municipio").get("id"),
                         filter.getMunicipioId()
                 ));
             }
 
-            if (filter.getPostoAdministrativoId() != null) {
-                predicates.add(criteriaBuilder.equal(
+            if (Objects.nonNull(filter.getPostoAdministrativoId())) {
+                predicates.add(cb.equal(
                         root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("id"),
                         filter.getPostoAdministrativoId()
                 ));
             }
 
-            if (filter.getSucoId() != null) {
-                predicates.add(criteriaBuilder.equal(
+            if (Objects.nonNull(filter.getSucoId())) {
+                predicates.add(cb.equal(
                         root.get("sede").get("aldeia").get("suco").get("id"),
                         filter.getSucoId()
                 ));
             }
 
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            if (filter.getDataValidadeFrom() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("dataValidade"), filter.getDataValidadeFrom()));
+            }
+
+            if (filter.getDataValidadeTo() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("dataValidade"), filter.getDataValidadeTo()));
+            }
+
+            if (filter.getDataEmissaoFrom() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("dataEmissao"), filter.getDataEmissaoFrom()));
+            }
+
+            if (filter.getDataEmissaoTo() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("dataEmissao"), filter.getDataEmissaoTo()));
+            }
+
+            // PedidoLicencaAtividade related filters
+            if (Objects.nonNull(filter.getClasseAtividadeId())) {
+                predicates.add(cb.equal(
+                        pla.get("classeAtividade").get("id"),
+                        filter.getClasseAtividadeId()
+                ));
+            }
+
+            if (filter.getRisco() != null) {
+                predicates.add(cb.equal(pla.get("risco"), filter.getRisco()));
+            }
+
+            //PedidoVistoria related filters
+
+            if (filter.getTipoVistoria() != null) {
+                predicates.add(cb.equal(pv.get("tipoVistoria"), filter.getTipoVistoria()));
+            }
+
+            if (filter.getTipoEstabelecimento() != null) {
+                predicates.add(cb.equal(pv.get("tipoEstabelecimento"), filter.getTipoEstabelecimento()));
+            }
+
+            if (filter.getAtividade() != null) {
+                predicates.add(cb.equal(pv.get("atividade"), filter.getAtividade()));
+            }
+
+            if (filter.getTipoAtividade() != null) {
+                predicates.add(cb.equal(pv.get("tipoAtividade"), filter.getTipoAtividade()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

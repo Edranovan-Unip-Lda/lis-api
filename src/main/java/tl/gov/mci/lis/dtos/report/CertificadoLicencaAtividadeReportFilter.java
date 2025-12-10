@@ -1,9 +1,12 @@
 package tl.gov.mci.lis.dtos.report;
 
 import lombok.Data;
+import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.cadastro.CaraterizacaoEstabelecimento;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
-
-import java.time.Instant;
+import tl.gov.mci.lis.enums.cadastro.QuantoAtividade;
+import tl.gov.mci.lis.enums.cadastro.TipoAto;
+import tl.gov.mci.lis.enums.vistoria.TipoVistoria;
 
 /**
  * Filter DTO for CertificadoLicencaAtividade report generation.
@@ -11,19 +14,24 @@ import java.time.Instant;
  */
 @Data
 public class CertificadoLicencaAtividadeReportFilter {
-    private String sociedadeComercial;
-    private String numeroRegistoComercial;
-    private String nif;
-    private NivelRisco nivelRisco;
-    private String atividade;
-    private String atividadeCodigo;
-    private String dataValidade;
-    private String dataEmissao;
-    private String nomeDiretorGeral;
-    private Long aplicanteId;
-    private Instant createdAtFrom;
-    private Instant createdAtTo;
+    private Categoria categoria;
+    private Long empresaId;
+    // Certificado Fields
     private Long municipioId;
     private Long postoAdministrativoId;
     private Long sucoId;
+    private NivelRisco risco;
+    private String dataValidadeFrom;
+    private String dataValidadeTo;
+    private String dataEmissaoFrom;
+    private String dataEmissaoTo;
+
+    // Pedido Licenca Atividade fields
+    private Long classeAtividadeId;
+
+    // Pedido Vistoria fields
+    private TipoVistoria tipoVistoria;
+    private CaraterizacaoEstabelecimento tipoEstabelecimento;
+    private TipoAto atividade;
+    private QuantoAtividade tipoAtividade;
 }

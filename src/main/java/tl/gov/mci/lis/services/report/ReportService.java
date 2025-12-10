@@ -10,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
-import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDetailDto;
+import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDetailsDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
@@ -44,19 +44,19 @@ public class ReportService {
     private final EmpresaMapper empresaMapper;
     private final AplicanteMapper aplicanteMapper;
     private final CertificadoMapper certificadoMapper;
+    private final static Sort SORT_DESC_ID = Sort.by(Sort.Direction.DESC, "id");
 
     @Transactional(readOnly = true)
     public List<EmpresaDto> generateEmpresaReport(EmpresaReportFilter filter) {
         logger.info("Generating Empresa report with filter: {}", filter);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        return empresaRepository.findAll(EmpresaSpecification.withFilter(filter), sort).stream()
+        return empresaRepository.findAll(EmpresaSpecification.withFilter(filter), SORT_DESC_ID).stream()
                 .map(empresaMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)
     public Page<EmpresaDto> generateEmpresaReportPagination(EmpresaReportFilter filter, int page, int size) {
         logger.info("Generating Empresa report with filter pagination: {}", filter);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, size, SORT_DESC_ID);
         return empresaRepository.findAll(EmpresaSpecification.withFilter(filter), pageable)
                 .map(empresaMapper::toDto);
     }
@@ -64,36 +64,53 @@ public class ReportService {
     @Transactional(readOnly = true)
     public List<AplicanteDto> generateAplicanteReport(AplicanteReportFilter filter) {
         logger.info("Generating Aplicante report with filter: {}", filter);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        return aplicanteRepository.findAll(AplicanteSpecification.withFilter(filter), sort).stream()
+        return aplicanteRepository.findAll(AplicanteSpecification.withFilter(filter), SORT_DESC_ID).stream()
                 .map(aplicanteMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)
     public Page<AplicanteDto> generateAplicanteReportPagination(AplicanteReportFilter filter, int page, int size) {
         logger.info("Generating Aplicante report with filter pagination: {}", filter);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, size, SORT_DESC_ID);
         return aplicanteRepository.findAll(AplicanteSpecification.withFilter(filter), pageable)
                 .map(aplicanteMapper::toDto);
     }
 
     @Transactional(readOnly = true)
-    public Page<CertificadoInscricaoCadastroDto> generateCertificadoInscricaoCadastroReport(
-            CertificadoInscricaoCadastroReportFilter filter, int page, int size) {
+    public List<CertificadoInscricaoCadastroDetailsDto> generateCertificadoInscricaoCadastroReport(
+            CertificadoInscricaoCadastroReportFilter filter) {
         logger.info("Generating CertificadoInscricaoCadastro report with filter: {}", filter);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return certificadoInscricaoCadastroRepository.findAll(
-                        CertificadoInscricaoCadastroSpecification.withFilter(filter), pageable)
-                .map(certificadoMapper::toDto);
+                        CertificadoInscricaoCadastroSpecification.withFilter(filter), SORT_DESC_ID)
+                .stream().map(certificadoMapper::toDto1).toList();
     }
 
     @Transactional(readOnly = true)
-    public Page<CertificadoLicencaAtividadeDto> generateCertificadoLicencaAtividadeReport(
-            CertificadoLicencaAtividadeReportFilter filter, int page, int size) {
+    public Page<CertificadoInscricaoCadastroDetailsDto> generateCertificadoInscricaoCadastroReportPagination(
+            CertificadoInscricaoCadastroReportFilter filter, int page, int size) {
+        logger.info("Generating CertificadoInscricaoCadastro report with filter pagination: {}", filter);
+        Pageable pageable = PageRequest.of(page, size, SORT_DESC_ID);
+        return certificadoInscricaoCadastroRepository.findAll(
+                        CertificadoInscricaoCadastroSpecification.withFilter(filter), pageable)
+                .map(certificadoMapper::toDto1);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CertificadoLicencaAtividadeDetailDto> generateCertificadoLicencaAtividadeReport(
+            CertificadoLicencaAtividadeReportFilter filter) {
         logger.info("Generating CertificadoLicencaAtividade report with filter: {}", filter);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return certificadoLicencaAtividadeRepository.findAll(
+                        CertificadoLicencaAtividadeSpecification.withFilter(filter), SORT_DESC_ID)
+                .stream().map(certificadoMapper::toDto1).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CertificadoLicencaAtividadeDetailDto> generateCertificadoLicencaAtividadeReportPagination(
+            CertificadoLicencaAtividadeReportFilter filter, int page, int size) {
+        logger.info("Generating CertificadoLicencaAtividade report with filter pagination: {}", filter);
+        Pageable pageable = PageRequest.of(page, size, SORT_DESC_ID);
         return certificadoLicencaAtividadeRepository.findAll(
                         CertificadoLicencaAtividadeSpecification.withFilter(filter), pageable)
-                .map(certificadoMapper::toDto);
+                .map(certificadoMapper::toDto1);
     }
 }

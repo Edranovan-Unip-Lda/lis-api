@@ -1,12 +1,13 @@
 package tl.gov.mci.lis.specifications;
 
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import tl.gov.mci.lis.dtos.report.CertificadoInscricaoCadastroReportFilter;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.criteria.Predicate;
+import java.util.Objects;
 
 public class CertificadoInscricaoCadastroSpecification {
 
@@ -14,76 +15,73 @@ public class CertificadoInscricaoCadastroSpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.getSociedadeComercial() != null && !filter.getSociedadeComercial().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("sociedadeComercial")),
-                        "%" + filter.getSociedadeComercial().toLowerCase() + "%"
-                ));
+            if (filter.getCategoria() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("aplicante").get("categoria"), filter.getCategoria()));
             }
 
-            if (filter.getNumeroRegistoComercial() != null && !filter.getNumeroRegistoComercial().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("numeroRegistoComercial")),
-                        "%" + filter.getNumeroRegistoComercial().toLowerCase() + "%"
-                ));
+            if (filter.getEmpresaId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("aplicante").get("empresa").get("id"), filter.getEmpresaId()));
             }
 
-            if (filter.getAtividade() != null && !filter.getAtividade().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("atividade")),
-                        "%" + filter.getAtividade().toLowerCase() + "%"
-                ));
+
+            if (filter.getTipoEstabelecimento() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("tipoEstabelecimento"), filter.getTipoEstabelecimento()));
             }
 
-            if (filter.getDataValidade() != null && !filter.getDataValidade().isBlank()) {
-                predicates.add(criteriaBuilder.equal(root.get("dataValidade"), filter.getDataValidade()));
+            if (filter.getCaraterizacaoEstabelecimento() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("caraterizacaoEstabelecimento"), filter.getCaraterizacaoEstabelecimento()));
             }
 
-            if (filter.getDataEmissao() != null && !filter.getDataEmissao().isBlank()) {
-                predicates.add(criteriaBuilder.equal(root.get("dataEmissao"), filter.getDataEmissao()));
+            if (filter.getRisco() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("risco"), filter.getRisco()));
             }
 
-            if (filter.getNomeDiretorGeral() != null && !filter.getNomeDiretorGeral().isBlank()) {
-                predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("nomeDiretorGeral")),
-                        "%" + filter.getNomeDiretorGeral().toLowerCase() + "%"
-                ));
+            if (filter.getAto() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("pedidoInscricaoCadastro").get("ato"), filter.getAto()));
             }
 
-            if (filter.getAplicanteId() != null) {
+            if (Objects.nonNull(filter.getClasseAtividadeId())) {
                 predicates.add(criteriaBuilder.equal(
-                        root.get("pedidoInscricaoCadastro").get("aplicante").get("id"),
-                        filter.getAplicanteId()
+                        root.get("pedidoInscricaoCadastro").get("classeAtividade").get("id"),
+                        filter.getClasseAtividadeId()
                 ));
             }
 
-            if (filter.getCreatedAtFrom() != null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtFrom()));
-            }
-
-            if (filter.getCreatedAtTo() != null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtTo()));
-            }
-
-            if (filter.getMunicipioId() != null) {
+            if (Objects.nonNull(filter.getMunicipioId())) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("municipio").get("id"),
                         filter.getMunicipioId()
                 ));
             }
 
-            if (filter.getPostoAdministrativoId() != null) {
+            if (Objects.nonNull(filter.getPostoAdministrativoId())) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("sede").get("aldeia").get("suco").get("postoAdministrativo").get("id"),
                         filter.getPostoAdministrativoId()
                 ));
             }
 
-            if (filter.getSucoId() != null) {
+            if (Objects.nonNull(filter.getSucoId())) {
                 predicates.add(criteriaBuilder.equal(
                         root.get("sede").get("aldeia").get("suco").get("id"),
                         filter.getSucoId()
                 ));
+            }
+
+            if (filter.getDataValidadeFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataValidade"), filter.getDataValidadeFrom()));
+            }
+
+            if (filter.getDataValidadeTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataValidade"), filter.getDataValidadeTo()));
+            }
+
+            if (filter.getDataEmissaoFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataEmissao"), filter.getDataEmissaoFrom()));
+            }
+
+            if (filter.getDataEmissaoTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataEmissao"), filter.getDataEmissaoTo()));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

@@ -1,6 +1,8 @@
 package tl.gov.mci.lis.dtos.report;
 
 import lombok.Data;
+import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.cadastro.*;
 
 import java.time.Instant;
 
@@ -10,15 +12,19 @@ import java.time.Instant;
  */
 @Data
 public class CertificadoInscricaoCadastroReportFilter {
-    private String sociedadeComercial;
-    private String numeroRegistoComercial;
-    private String atividade;
-    private String dataValidade;
-    private String dataEmissao;
-    private String nomeDiretorGeral;
-    private Long aplicanteId;
-    private Instant createdAtFrom;
-    private Instant createdAtTo;
+    private Categoria categoria;
+    private Long empresaId;
+    private TipoEstabelecimento tipoEstabelecimento;
+    private CaraterizacaoEstabelecimento caraterizacaoEstabelecimento;
+    private NivelRisco risco;
+    private TipoAto ato;
+    private Long classeAtividadeId;
+
+    private String dataValidadeFrom;
+    private String dataValidadeTo;
+    private String dataEmissaoFrom;
+    private String dataEmissaoTo;
+
     private Long municipioId;
     private Long postoAdministrativoId;
     private Long sucoId;

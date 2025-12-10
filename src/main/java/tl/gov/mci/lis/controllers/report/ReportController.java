@@ -3,14 +3,12 @@ package tl.gov.mci.lis.controllers.report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
-import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDto;
-import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDto;
+import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeDetailDto;
+import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroDetailsDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.report.AplicanteReportFilter;
 import tl.gov.mci.lis.dtos.report.CertificadoInscricaoCadastroReportFilter;
@@ -89,35 +87,43 @@ public class ReportController {
      */
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/certificados-inscricao-cadastro")
-    public ResponseEntity<Page<CertificadoInscricaoCadastroDto>> generateCertificadoInscricaoCadastroReport(
+    public ResponseEntity<Page<CertificadoInscricaoCadastroDetailsDto>> generateCertificadoInscricaoCadastroReport(
             @RequestBody(required = false) CertificadoInscricaoCadastroReportFilter filter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "50") int size
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
     ) {
         if (filter == null) {
             filter = new CertificadoInscricaoCadastroReportFilter();
         }
-        return ResponseEntity.ok(reportService.generateCertificadoInscricaoCadastroReport(filter, page, size));
+        if (page != null && size != null) {
+            return ResponseEntity.ok(reportService.generateCertificadoInscricaoCadastroReportPagination(filter, page, size));
+        } else {
+            return ResponseEntity.ok(new PageImpl<>(reportService.generateCertificadoInscricaoCadastroReport(filter)));
+        }
     }
 
     /**
      * Generate a paginated report of CertificadoLicencaAtividade entities with optional filters.
      *
      * @param filter Filter criteria for the report (all fields optional)
-     * @param page   Page number (0-indexed, default: 0)
-     * @param size   Page size (default: 50)
+     * @param page   Page number (0-indexed)
+     * @param size   Page size
      * @return Paginated list of CertificadoLicencaAtividade DTOs matching the filter criteria
      */
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CHIEF')")
     @PostMapping("/certificados-licenca-atividade")
-    public ResponseEntity<Page<CertificadoLicencaAtividadeDto>> generateCertificadoLicencaAtividadeReport(
+    public ResponseEntity<Page<CertificadoLicencaAtividadeDetailDto>> generateCertificadoLicencaAtividadeReport(
             @RequestBody(required = false) CertificadoLicencaAtividadeReportFilter filter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "50") int size
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
     ) {
         if (filter == null) {
             filter = new CertificadoLicencaAtividadeReportFilter();
         }
-        return ResponseEntity.ok(reportService.generateCertificadoLicencaAtividadeReport(filter, page, size));
+        if (page != null && size != null) {
+            return ResponseEntity.ok(reportService.generateCertificadoLicencaAtividadeReportPagination(filter, page, size));
+        } else {
+            return ResponseEntity.ok(new PageImpl<>(reportService.generateCertificadoLicencaAtividadeReport(filter)));
+        }
     }
 }
