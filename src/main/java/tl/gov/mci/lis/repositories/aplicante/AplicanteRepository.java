@@ -71,4 +71,14 @@ public interface AplicanteRepository extends JpaRepository<Aplicante, Long>, Jpa
                 where a.id = :id
             """)
     Optional<Aplicante> findByIdWithAllForApproval(@Param("id") Long id);
+
+    // If status is a String:
+    long countByEstado(AplicanteStatus estado);
+
+    // If status is an enum, switch to:
+    // long countByStatus(AplicanteStatus status);
+    // and update service accordingly.
+
+    @Query("select count(a) from Aplicante a where a.estado = 'EM_CURSO'")
+    long countInProgressFallback();
 }
