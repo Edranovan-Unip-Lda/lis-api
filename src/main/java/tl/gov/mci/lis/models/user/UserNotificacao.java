@@ -13,6 +13,9 @@ import java.time.Instant;
 @Getter
 @Setter
 public class UserNotificacao extends EntityDB {
+    private String title;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notificacao_id", nullable = false)
     private Notificacao notificacao;
