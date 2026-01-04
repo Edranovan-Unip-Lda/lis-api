@@ -22,4 +22,6 @@ public class GerenteDto implements Serializable {
     String naturalidade;
     String nacionalidade;
     String estadoCivil;
+    String numeroVisto;
+    String validadeVisto;
 }

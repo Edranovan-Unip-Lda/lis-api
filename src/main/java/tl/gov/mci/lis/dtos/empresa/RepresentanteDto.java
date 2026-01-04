@@ -28,4 +28,6 @@ public class RepresentanteDto implements Serializable {
     String numeroDocumento;
     String telefone;
     String email;
+    String numeroVisto;
+    String validadeVisto;
 }

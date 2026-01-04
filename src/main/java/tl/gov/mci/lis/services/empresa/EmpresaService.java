@@ -31,6 +31,7 @@ import tl.gov.mci.lis.models.empresa.Acionista;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.empresa.Gerente;
 import tl.gov.mci.lis.models.empresa.Representante;
+import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.pagamento.Fatura;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.aplicante.AplicanteRepository;
@@ -41,6 +42,7 @@ import tl.gov.mci.lis.repositories.dadosmestre.DirecaoRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.RoleRepository;
 import tl.gov.mci.lis.repositories.dadosmestre.SociedadeComercialRepository;
 import tl.gov.mci.lis.repositories.empresa.EmpresaRepository;
+import tl.gov.mci.lis.repositories.endereco.AldeiaRepository;
 import tl.gov.mci.lis.repositories.user.UserRepository;
 import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.atividade.PedidoLicencaAtividadeService;
@@ -81,6 +83,7 @@ public class EmpresaService {
     private final SociedadeComercialRepository sociedadeComercialRepository;
     private final NotificacaoService notificacaoService;
     private final UserRepository userRepository;
+    private final AldeiaRepository aldeiaRepository;
 
     @Transactional
     public Empresa create(Empresa obj, List<MultipartFile> files) {
@@ -112,7 +115,13 @@ public class EmpresaService {
             authorizationService.assertUserOwnsEmpresa(incoming.getId());
         }
 
-        empresa.setSede(enderecoService.update(incoming.getSede()));
+        if (incoming.getSede() != null) {
+            if (empresa.getSede() == null) {
+                empresa.setSede(enderecoService.create(incoming.getSede()));
+            } else {
+                updateEndereco(empresa.getSede(), incoming.getSede());
+            }
+        }
 
         if (incoming.getSociedadeComercial() != null) {
             empresa.setSociedadeComercial(sociedadeComercialRepository.getReferenceById(incoming.getSociedadeComercial().getId()));
@@ -146,6 +155,15 @@ public class EmpresaService {
         setIfChanged(empresa::setTipoEmpresa, empresa.getTipoEmpresa(), classificarEmpresa(incoming.getTotalTrabalhadores(), incoming.getVolumeNegocioAnual(), incoming.getBalancoTotalAnual()));
         setIfChanged(empresa::setLatitude, empresa.getLatitude(), incoming.getLatitude());
         setIfChanged(empresa::setLongitude, empresa.getLongitude(), incoming.getLongitude());
+
+        if (incoming.getDocumentos() != null) {
+            incoming.getDocumentos().forEach(d -> {
+                if (Objects.isNull(d.getId())) {
+                    d.setEmpresa(empresa);
+                    empresa.getDocumentos().add(d);
+                }
+            });
+        }
 
         return empresa;
     }
@@ -406,12 +424,30 @@ public class EmpresaService {
         return TipoEmpresa.GRANDE;
     }
 
+    private void updateEndereco(Endereco existing, Endereco incoming) {
+        if (incoming.getAldeia() != null && incoming.getAldeia().getId() != null) {
+            existing.setAldeia(aldeiaRepository.getReferenceById(incoming.getAldeia().getId()));
+        }
+        setIfChanged(existing::setLocal, existing.getLocal(), incoming.getLocal());
+    }
+
     private void syncGerente(Empresa empresa, Gerente incomingSet) {
         if (empresa.getGerente() == null) {
             empresa.setGerente(incomingSet);
+            if (incomingSet.getMorada() != null) {
+                incomingSet.setMorada(enderecoService.create(incomingSet.getMorada()));
+            }
         } else {
+            Gerente gerente = empresa.getGerente();
+            if (incomingSet.getMorada() != null) {
+                if (gerente.getMorada() == null) {
+                    gerente.setMorada(enderecoService.create(incomingSet.getMorada()));
+                } else {
+                    updateEndereco(gerente.getMorada(), incomingSet.getMorada());
+                }
+            }
+
             setIfChanged(empresa.getGerente()::setNome, empresa.getGerente().getNome(), incomingSet.getNome());
-            setIfChanged(empresa.getGerente()::setMorada, empresa.getGerente().getMorada(), incomingSet.getMorada());
             setIfChanged(empresa.getGerente()::setTelefone, empresa.getGerente().getTelefone(), incomingSet.getTelefone());
             setIfChanged(empresa.getGerente()::setEmail, empresa.getGerente().getEmail(), incomingSet.getEmail());
             setIfChanged(empresa.getGerente()::setTipoDocumento, empresa.getGerente().getTipoDocumento(), incomingSet.getTipoDocumento());
@@ -425,12 +461,19 @@ public class EmpresaService {
     private void syncRepresentante(Empresa empresa, Representante incomingSet) {
         if (empresa.getRepresentante() == null) {
             empresa.setRepresentante(incomingSet);
+            if (incomingSet.getMorada() != null) {
+                incomingSet.setMorada(enderecoService.create(incomingSet.getMorada()));
+            }
         } else {
             Representante representante = empresa.getRepresentante();
-
-            if (representante.getMorada() != null) {
-                representante.setMorada(enderecoService.update(representante.getMorada()));
+            if (incomingSet.getMorada() != null) {
+                if (representante.getMorada() == null) {
+                    representante.setMorada(enderecoService.create(incomingSet.getMorada()));
+                } else {
+                    updateEndereco(representante.getMorada(), incomingSet.getMorada());
+                }
             }
+
             setIfChanged(representante::setTipo, representante.getTipo(), incomingSet.getTipo());
             setIfChanged(representante::setNomeEmpresa, representante.getNomeEmpresa(), incomingSet.getNomeEmpresa());
             setIfChanged(representante::setNome, representante.getNome(), incomingSet.getNome());

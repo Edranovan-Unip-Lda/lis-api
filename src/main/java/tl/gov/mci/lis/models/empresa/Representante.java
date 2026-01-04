@@ -28,4 +28,6 @@ public class Representante extends EntityDB {
     private String numeroDocumento;
     private String telefone;
     private String email;
+    private String numeroVisto;
+    private String validadeVisto;
 }
