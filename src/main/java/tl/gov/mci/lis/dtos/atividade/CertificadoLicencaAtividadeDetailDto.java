@@ -6,6 +6,7 @@ import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
 import tl.gov.mci.lis.dtos.licenca.ArrendadorDto;
 import tl.gov.mci.lis.dtos.licenca.PessoaDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
@@ -30,6 +31,7 @@ public class CertificadoLicencaAtividadeDetailDto implements Serializable {
     PedidoLicencaAtividadeDto pedidoLicencaAtividade;
     @NotNull
     String sociedadeComercial;
+    String tipoSociedadeComercial;
     @NotNull
     String numeroRegistoComercial;
     String nif;
@@ -46,6 +48,7 @@ public class CertificadoLicencaAtividadeDetailDto implements Serializable {
     String dataEmissao;
     @NotNull
     String nomeDiretorGeral;
+    DocumentoDto assinatura;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.atividade.PedidoLicencaAtividade}

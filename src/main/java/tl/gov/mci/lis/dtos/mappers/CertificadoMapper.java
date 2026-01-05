@@ -26,6 +26,7 @@ public interface CertificadoMapper {
 
     CertificadoInscricaoCadastro toEntity(CertificadoInscricaoCadastroDetailsDto certificadoInscricaoCadastroDetailsDto);
 
+    @Mapping(target = "pedidoInscricaoCadastro.aplicante.empresa", ignore = true)
     CertificadoInscricaoCadastroDetailsDto toDto1(CertificadoInscricaoCadastro certificadoInscricaoCadastro);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -33,6 +34,7 @@ public interface CertificadoMapper {
 
     CertificadoLicencaAtividade toEntity(CertificadoLicencaAtividadeDetailDto certificadoLicencaAtividadeDetailDto);
 
+    @Mapping(target = "pedidoLicencaAtividade.aplicante.empresa", ignore = true)
     CertificadoLicencaAtividadeDetailDto toDto1(CertificadoLicencaAtividade certificadoLicencaAtividade);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

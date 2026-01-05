@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroListDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
-import tl.gov.mci.lis.repositories.projection.MonthCountProjection;
 import tl.gov.mci.lis.repositories.projection.MonthTypeCountProjection;
 import tl.gov.mci.lis.repositories.projection.MunicipioCountProjection;
 
@@ -30,19 +30,51 @@ public interface CertificadoInscricaoCadastroRepository extends JpaRepository<Ce
     Optional<CertificadoInscricaoCadastro> findByIdAndAplicanteIdAndCategoria(Long id, Categoria categoria);
 
     @Query("""
-            SELECT cert FROM CertificadoInscricaoCadastro cert
-                        WHERE cert.pedidoInscricaoCadastro.aplicante.categoria = :categoria
-                        AND cert.pedidoInscricaoCadastro.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
+             SELECT new tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroListDto(
+                cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
+                 cert.sociedadeComercial, cert.numeroRegistoComercial, cert.atividade,
+                 cert.dataValidade, cert.dataEmissao, cert.nomeDiretorGeral,
+                 cert.sede.local,
+                 cert.sede.aldeia.nome,
+                 cert.sede.aldeia.suco.nome,
+                 cert.sede.aldeia.suco.postoAdministrativo.nome,
+                 cert.sede.aldeia.suco.postoAdministrativo.municipio.nome,
+                 cert.pedidoInscricaoCadastro.aplicante.numero
+             )
+             FROM CertificadoInscricaoCadastro cert
+             LEFT JOIN cert.sede
+             LEFT JOIN cert.sede.aldeia
+             LEFT JOIN cert.sede.aldeia.suco
+             LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo
+             LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo.municipio
+             WHERE cert.pedidoInscricaoCadastro.aplicante.categoria = :categoria
+             AND cert.pedidoInscricaoCadastro.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
             """)
-    Page<CertificadoInscricaoCadastro> findApprovedByCategoria(Categoria categoria, Pageable pageable);
+    Page<CertificadoInscricaoCadastroListDto> findApprovedByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
 
     @Query("""
-            SELECT cert FROM CertificadoInscricaoCadastro cert
-                        WHERE cert.pedidoInscricaoCadastro.aplicante.categoria = :categoria
-                        AND cert.pedidoInscricaoCadastro.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
-                        AND cert.pedidoInscricaoCadastro.aplicante.empresa.id = :empresaId
+            SELECT new tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroListDto(
+                cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
+                cert.sociedadeComercial, cert.numeroRegistoComercial, cert.atividade,
+                cert.dataValidade, cert.dataEmissao, cert.nomeDiretorGeral,
+                cert.sede.local,
+                cert.sede.aldeia.nome,
+                cert.sede.aldeia.suco.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.municipio.nome,
+                cert.pedidoInscricaoCadastro.aplicante.numero
+            )
+            FROM CertificadoInscricaoCadastro cert
+            LEFT JOIN cert.sede
+            LEFT JOIN cert.sede.aldeia
+            LEFT JOIN cert.sede.aldeia.suco
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo.municipio
+            WHERE cert.pedidoInscricaoCadastro.aplicante.categoria = :categoria
+            AND cert.pedidoInscricaoCadastro.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
+            AND cert.pedidoInscricaoCadastro.aplicante.empresa.id = :empresaId
             """)
-    Page<CertificadoInscricaoCadastro> findApprovedByEmpresaIdAndCategoria(@Param("empresaId") Long empresaId, @Param("categoria") Categoria categoria, Pageable pageable);
+    Page<CertificadoInscricaoCadastroListDto> findApprovedByEmpresaIdAndCategoria(@Param("empresaId") Long empresaId, @Param("categoria") Categoria categoria, Pageable pageable);
 
     //Repositories for Dashboard Service
 

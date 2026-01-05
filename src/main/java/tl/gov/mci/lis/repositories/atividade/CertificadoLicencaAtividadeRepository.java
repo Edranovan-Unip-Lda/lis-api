@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeListDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.repositories.projection.MonthCountProjection;
@@ -30,19 +31,51 @@ public interface CertificadoLicencaAtividadeRepository extends JpaRepository<Cer
     Optional<CertificadoLicencaAtividade> findByIdAndAplicanteIdAndCategoria(Long id, Categoria categoria);
 
     @Query("""
-            SELECT cert FROM CertificadoLicencaAtividade cert
+            SELECT new tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeListDto(
+                cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
+                cert.sociedadeComercial, cert.numeroRegistoComercial, cert.nif, cert.nivelRisco,
+                cert.atividade, cert.atividadeCodigo, cert.dataValidade, cert.dataEmissao, cert.nomeDiretorGeral,
+                cert.sede.local, 
+                cert.sede.aldeia.nome, 
+                cert.sede.aldeia.suco.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.municipio.nome,
+                cert.pedidoLicencaAtividade.aplicante.numero
+            )
+            FROM CertificadoLicencaAtividade cert
+            LEFT JOIN cert.sede
+            LEFT JOIN cert.sede.aldeia
+            LEFT JOIN cert.sede.aldeia.suco
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo.municipio
             WHERE cert.pedidoLicencaAtividade.aplicante.categoria = :categoria
             AND cert.pedidoLicencaAtividade.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
             """)
-    Page<CertificadoLicencaAtividade> findApprovedByCategoria(Categoria categoria, Pageable pageable);
+    Page<CertificadoLicencaAtividadeListDto> findApprovedByCategoria(@Param("categoria") Categoria categoria, Pageable pageable);
 
     @Query("""
-            SELECT cert FROM CertificadoLicencaAtividade cert
+            SELECT new tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeListDto(
+                cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
+                cert.sociedadeComercial, cert.numeroRegistoComercial, cert.nif, cert.nivelRisco,
+                cert.atividade, cert.atividadeCodigo, cert.dataValidade, cert.dataEmissao, cert.nomeDiretorGeral,
+                cert.sede.local, 
+                cert.sede.aldeia.nome, 
+                cert.sede.aldeia.suco.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.nome,
+                cert.sede.aldeia.suco.postoAdministrativo.municipio.nome,
+                cert.pedidoLicencaAtividade.aplicante.numero
+            )
+            FROM CertificadoLicencaAtividade cert
+            LEFT JOIN cert.sede
+            LEFT JOIN cert.sede.aldeia
+            LEFT JOIN cert.sede.aldeia.suco
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo
+            LEFT JOIN cert.sede.aldeia.suco.postoAdministrativo.municipio
             WHERE cert.pedidoLicencaAtividade.aplicante.empresa.id = :empresaId
             AND cert.pedidoLicencaAtividade.aplicante.categoria = :categoria
             AND cert.pedidoLicencaAtividade.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
             """)
-    Page<CertificadoLicencaAtividade> findApprovedByEmpresaIdAndCategoria(Long empresaId, Categoria categoria, Pageable pageable);
+    Page<CertificadoLicencaAtividadeListDto> findApprovedByEmpresaIdAndCategoria(@Param("empresaId") Long empresaId, @Param("categoria") Categoria categoria, Pageable pageable);
 
     //Repositories for Dashboard Service
 

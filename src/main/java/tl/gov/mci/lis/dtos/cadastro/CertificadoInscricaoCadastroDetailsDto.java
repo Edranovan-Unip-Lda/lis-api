@@ -5,6 +5,7 @@ import lombok.Value;
 import tl.gov.mci.lis.dtos.atividade.ClasseAtividadeDto;
 import tl.gov.mci.lis.dtos.empresa.EmpresaDto;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
@@ -28,6 +29,7 @@ public class CertificadoInscricaoCadastroDetailsDto implements Serializable {
     PedidoInscricaoCadastroDto pedidoInscricaoCadastro;
     @NotNull
     String sociedadeComercial;
+    String tipoSociedadeComercial;
     @NotNull
     String numeroRegistoComercial;
     EnderecoDto sede;
@@ -39,6 +41,7 @@ public class CertificadoInscricaoCadastroDetailsDto implements Serializable {
     String dataEmissao;
     @NotNull
     String nomeDiretorGeral;
+    DocumentoDto documento;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro}

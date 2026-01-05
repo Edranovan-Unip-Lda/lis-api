@@ -49,6 +49,20 @@ public class AplicanteDto implements Serializable {
         this.estado = estado;
     }
 
+    public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, Long empresaId, String empresaNome) {
+        this.id = id;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.tipo = tipo;
+        this.categoria = categoria;
+        this.numero = numero;
+        this.estado = estado;
+        this.empresa = new EmpresaDto(empresaId, empresaNome);
+    }
+
     public AplicanteDto(Long id, Boolean isDeleted, Instant createdAt, Instant updatedAt, String createdBy, String updatedBy, AplicanteType tipo, Categoria categoria, String numero, AplicanteStatus estado, PedidoStatus pedidoStatus, FaturaStatus faturaStatus, Long empresaId, Long pedidoInscricaoCadastroId) {
         this.id = id;
         this.isDeleted = isDeleted;

@@ -18,11 +18,14 @@ import java.util.Optional;
 public interface AplicanteRepository extends JpaRepository<Aplicante, Long>, JpaSpecificationExecutor<Aplicante> {
 
     @Query("""
-            SELECT a FROM Aplicante a
-                   LEFT JOIN a.empresa e
-                   WHERE a.estado = :estado
+            SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(
+                a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy,
+                a.tipo, a.categoria, a.numero, a.estado, a.empresa.id, a.empresa.nome
+            )
+            FROM Aplicante a
+            WHERE a.estado = :estado
             """)
-    Page<Aplicante> getPageApprovedAplicante(AplicanteStatus estado, Pageable pageable);
+    Page<AplicanteDto> getPageApprovedAplicante(AplicanteStatus estado, Pageable pageable);
 
     @Query("""
             SELECT new tl.gov.mci.lis.dtos.aplicante.AplicanteDto(a.id, a.isDeleted, a.createdAt, a.updatedAt, a.createdBy, a.updatedBy, a.tipo, a.categoria, a.numero, a.estado) FROM Aplicante a

@@ -1,14 +1,12 @@
 package tl.gov.mci.lis.models.atividade;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.cadastro.NivelRisco;
 import tl.gov.mci.lis.models.EntityDB;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 
 @Entity
@@ -22,6 +20,7 @@ public class CertificadoLicencaAtividade extends EntityDB {
 
     @NotNull
     private String sociedadeComercial;
+    private String tipoSociedadeComercial;
 
     @NotNull
     private String numeroRegistoComercial;
@@ -49,4 +48,8 @@ public class CertificadoLicencaAtividade extends EntityDB {
 
     @NotNull
     private String nomeDiretorGeral;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "assinatura_id", referencedColumnName = "id")
+    private Documento assinatura;
 }

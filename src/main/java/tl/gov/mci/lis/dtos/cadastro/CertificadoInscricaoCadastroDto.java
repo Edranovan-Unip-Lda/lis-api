@@ -15,6 +15,7 @@ public class CertificadoInscricaoCadastroDto implements Serializable {
     AplicanteDto aplicante;
     @NotNull
     String sociedadeComercial;
+    String tipoSociedadeComercial;
     @NotNull
     String numeroRegistoComercial;
     EnderecoDto sede;

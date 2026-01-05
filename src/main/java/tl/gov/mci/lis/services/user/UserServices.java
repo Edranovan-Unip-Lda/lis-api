@@ -307,6 +307,10 @@ public class UserServices {
                         );
                     }
 
+                    if (obj.getSignature() != null) {
+                        user.setSignature(obj.getSignature());
+                    }
+
                     user.setStatus(obj.getStatus());
                     return user;
                 })

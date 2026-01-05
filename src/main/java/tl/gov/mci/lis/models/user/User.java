@@ -10,6 +10,7 @@ import tl.gov.mci.lis.models.EntityDB;
 import tl.gov.mci.lis.models.aplicante.AplicanteAssignment;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
 import tl.gov.mci.lis.models.dadosmestre.Role;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Empresa;
 
 import java.time.Instant;
@@ -54,6 +55,10 @@ public class User extends EntityDB {
     @JoinColumn(name = "direcao_id")
     @JsonIgnoreProperties("users")
     private Direcao direcao;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "signature_id", referencedColumnName = "id")
+    private Documento signature;
 
     // Assignments where this staff is the assignee (responsável)
     @OneToMany(mappedBy = "assignee")

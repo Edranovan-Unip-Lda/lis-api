@@ -365,10 +365,12 @@ public class EmpresaService {
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
         switch (aplicanteType) {
             case CADASTRO -> {
-                return certificadoInscricaoCadastroRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging).map(certificadoMapper::toDto1);
+                // Repository returns DTO directly - no mapping needed
+                return certificadoInscricaoCadastroRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging);
             }
             case ATIVIDADE -> {
-                return certificadoLicencaAtividadeRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging).map(certificadoMapper::toDto1);
+                // Repository returns DTO directly - no mapping needed
+                return certificadoLicencaAtividadeRepository.findApprovedByEmpresaIdAndCategoria(empresaId, categoria, paging);
             }
             default -> {
                 return null;

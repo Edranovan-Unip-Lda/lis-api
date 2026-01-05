@@ -74,10 +74,12 @@ public class CertificadoService {
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
         switch (aplicanteType) {
             case CADASTRO -> {
-                return certificadoInscricaoCadastroRepository.findApprovedByCategoria(categoria, paging).map(certificadoMapper::toDto1);
+                // Repository returns DTO directly - no mapping needed
+                return certificadoInscricaoCadastroRepository.findApprovedByCategoria(categoria, paging);
             }
             case ATIVIDADE -> {
-                return certificadoLicencaAtividadeRepository.findApprovedByCategoria(categoria, paging).map(certificadoMapper::toDto1);
+                // Repository returns DTO directly - no mapping needed
+                return certificadoLicencaAtividadeRepository.findApprovedByCategoria(categoria, paging);
             }
             default -> {
                 return null;
@@ -102,12 +104,14 @@ public class CertificadoService {
         CertificadoInscricaoCadastro certificadoInscricaoCadastro = new CertificadoInscricaoCadastro();
         certificadoInscricaoCadastro.setPedidoInscricaoCadastro(aplicante.getPedidoInscricaoCadastro());
         certificadoInscricaoCadastro.setSociedadeComercial(aplicante.getEmpresa().getNome());
+        certificadoInscricaoCadastro.setTipoSociedadeComercial(aplicante.getEmpresa().getSociedadeComercial().getNome());
         certificadoInscricaoCadastro.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
         certificadoInscricaoCadastro.setSede(sede);
         certificadoInscricaoCadastro.setAtividade(aplicante.getPedidoInscricaoCadastro().getClasseAtividade().getDescricao());
         certificadoInscricaoCadastro.setDataEmissao(LocalDate.now().toString());
         certificadoInscricaoCadastro.setDataValidade(LocalDate.now().plusYears(ONE_YEAR).toString());
         certificadoInscricaoCadastro.setNomeDiretorGeral(nomeDiretor);
+        certificadoInscricaoCadastro.setAssinatura(diretor.getSignature());
 
         entityManager.persist(certificadoInscricaoCadastro);
         return certificadoInscricaoCadastro;
@@ -130,6 +134,7 @@ public class CertificadoService {
         CertificadoLicencaAtividade certificadoLicencaAtividade = new CertificadoLicencaAtividade();
         certificadoLicencaAtividade.setPedidoLicencaAtividade(aplicante.getPedidoLicencaAtividade());
         certificadoLicencaAtividade.setSociedadeComercial(aplicante.getEmpresa().getNome());
+        certificadoLicencaAtividade.setTipoSociedadeComercial(aplicante.getEmpresa().getSociedadeComercial().getNome());
         certificadoLicencaAtividade.setNumeroRegistoComercial(aplicante.getEmpresa().getNumeroRegistoComercial());
         certificadoLicencaAtividade.setSede(sede);
         certificadoLicencaAtividade.setAtividade(aplicante.getPedidoLicencaAtividade().getClasseAtividade().getDescricao());
@@ -138,6 +143,7 @@ public class CertificadoService {
         certificadoLicencaAtividade.setDataEmissao(LocalDate.now().toString());
         certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(FIVE_YEARS).toString());
         certificadoLicencaAtividade.setNomeDiretorGeral(nomeDiretor);
+        certificadoLicencaAtividade.setAssinatura(diretor.getSignature());
 
         entityManager.persist(certificadoLicencaAtividade);
         return certificadoLicencaAtividade;

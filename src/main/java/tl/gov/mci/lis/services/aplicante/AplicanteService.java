@@ -68,7 +68,7 @@ public class AplicanteService {
     public Page<AplicanteDto> getPage(int page, int size) {
         logger.info("Getting page: {} and size {}", page, size);
         Pageable paging = PageRequest.of(page, size, Sort.by("id").descending());
-        return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging).map(aplicanteMapper::toDto);
+        return aplicanteRepository.getPageApprovedAplicante(AplicanteStatus.APROVADO, paging);
     }
 
     public Aplicante getById(Long id) {

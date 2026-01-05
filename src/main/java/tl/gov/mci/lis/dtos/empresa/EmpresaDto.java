@@ -131,4 +131,9 @@ public class EmpresaDto implements Serializable {
     public EmpresaDto(Long id) {
         this.id = id;
     }
+
+    public EmpresaDto(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
 }
