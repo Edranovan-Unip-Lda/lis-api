@@ -3,6 +3,7 @@ package tl.gov.mci.lis.dtos.cadastro;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import tl.gov.mci.lis.dtos.endereco.EnderecoDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 
 import java.io.Serializable;
 
@@ -27,6 +28,7 @@ public class CertificadoInscricaoCadastroDto implements Serializable {
     String dataEmissao;
     @NotNull
     String nomeDiretorGeral;
+    DocumentoDto assinatura;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.aplicante.Aplicante}

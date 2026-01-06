@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import tl.gov.mci.lis.dtos.empresa.GerenteDto;
+import tl.gov.mci.lis.dtos.pagamento.DocumentoDto;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.enums.TipoPropriedade;
-import tl.gov.mci.lis.models.documento.Documento;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -37,7 +37,7 @@ public class UserDetailDto implements Serializable {
     String status;
     EmpresaDto empresa;
     DirecaoDto direcao;
-    Documento signature;
+    DocumentoDto signature;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.dadosmestre.Role}

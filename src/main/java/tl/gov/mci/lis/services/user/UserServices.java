@@ -321,6 +321,17 @@ public class UserServices {
                 });
     }
 
+    @Transactional
+    public void removeSignature(String username) {
+        logger.info("Removing signature with username {}", username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+                    logger.error("Username {} not found", username);
+                    return new ResourceNotFoundException("User with username " + username + " not found");
+                });
+        user.setSignature(null);
+    }
+
     public Empresa getEmpresaByUtilizadorUsername(String username) {
         return empresaRepository.findByUtilizador_Username(username)
                 .orElseThrow(() -> {

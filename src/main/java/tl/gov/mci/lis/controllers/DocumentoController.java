@@ -32,23 +32,27 @@ public class DocumentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InputStreamResource> downloadRecibo(
-            @PathVariable Long id
-    ) {
+    public ResponseEntity<InputStreamResource> getDocumento(@PathVariable Long id) {
 
-        Documento documento = documentoRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Documento nao encontrado com ID: " + id));
+        Documento documento = documentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Documento not found"));
 
         InputStreamResource stream = minioService.downloadFileAsStream(documento);
 
-        DocumentoDownload documentoDownload = new DocumentoDownload(stream, documento.getNome(), documento.getTipo());
+        String contentType = documento.getTipo() != null
+                ? documento.getTipo()
+                : "application/octet-stream";
+
+        boolean isImage = contentType.startsWith("image/");
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + documentoDownload.fileName() + "\"")
-                .contentType(MediaType.parseMediaType(
-                        documentoDownload.contentType() != null ? documentoDownload.contentType() : "application/octet-stream"))
-                .body(new InputStreamResource(documentoDownload.stream()));
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        (isImage ? "inline" : "attachment") +
+                                "; filename=\"" + documento.getNome() + "\""
+                )
+                .body(stream);
     }
 
     @DeleteMapping("/{id}")

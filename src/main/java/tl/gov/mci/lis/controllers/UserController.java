@@ -68,6 +68,12 @@ public class UserController {
         return new ResponseEntity<>(userMapper.toDto1(userServices.updateByUsername(username, user)), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{username}/signature")
+    public ResponseEntity<Void> deleteSignature(@PathVariable String username) {
+        userServices.removeSignature(username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<UserLoginDto> authenticate(@RequestBody User user, HttpServletRequest request) {
         return new ResponseEntity<>(userMapper.toLoginDto(userServices.authenticate(user.getUsername(), user.getPassword(), request)), HttpStatus.OK);

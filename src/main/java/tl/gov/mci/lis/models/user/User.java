@@ -56,8 +56,8 @@ public class User extends EntityDB {
     @JsonIgnoreProperties("users")
     private Direcao direcao;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "signature_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "signature_id", referencedColumnName = "id", unique = true)
     private Documento signature;
 
     // Assignments where this staff is the assignee (responsável)

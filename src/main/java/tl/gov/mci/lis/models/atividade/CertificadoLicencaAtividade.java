@@ -14,7 +14,7 @@ import tl.gov.mci.lis.models.endereco.Endereco;
 @Getter
 @Setter
 public class CertificadoLicencaAtividade extends EntityDB {
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pedido_licenca_atividade_id", referencedColumnName = "id")
     private PedidoLicencaAtividade pedidoLicencaAtividade;
 

@@ -16,6 +16,7 @@ import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.endereco.Endereco;
 import tl.gov.mci.lis.models.user.User;
 import tl.gov.mci.lis.repositories.atividade.CertificadoLicencaAtividadeRepository;
@@ -99,6 +100,7 @@ public class CertificadoService {
         sede = enderecoService.create(sede);
 
         String nomeDiretor = diretor.getFirstName() + " " + diretor.getLastName();
+        Documento newSignature = cloneSignature(diretor.getSignature());
 
         // Emitir certificado
         CertificadoInscricaoCadastro certificadoInscricaoCadastro = new CertificadoInscricaoCadastro();
@@ -111,7 +113,7 @@ public class CertificadoService {
         certificadoInscricaoCadastro.setDataEmissao(LocalDate.now().toString());
         certificadoInscricaoCadastro.setDataValidade(LocalDate.now().plusYears(ONE_YEAR).toString());
         certificadoInscricaoCadastro.setNomeDiretorGeral(nomeDiretor);
-        certificadoInscricaoCadastro.setAssinatura(diretor.getSignature());
+        certificadoInscricaoCadastro.setAssinatura(newSignature);
 
         entityManager.persist(certificadoInscricaoCadastro);
         return certificadoInscricaoCadastro;
@@ -129,6 +131,7 @@ public class CertificadoService {
         sede = enderecoService.create(sede);
 
         String nomeDiretor = diretor.getFirstName() + " " + diretor.getLastName();
+        Documento newSignature = cloneSignature(diretor.getSignature());
 
         // Emitir certificado
         CertificadoLicencaAtividade certificadoLicencaAtividade = new CertificadoLicencaAtividade();
@@ -143,9 +146,30 @@ public class CertificadoService {
         certificadoLicencaAtividade.setDataEmissao(LocalDate.now().toString());
         certificadoLicencaAtividade.setDataValidade(LocalDate.now().plusYears(FIVE_YEARS).toString());
         certificadoLicencaAtividade.setNomeDiretorGeral(nomeDiretor);
-        certificadoLicencaAtividade.setAssinatura(diretor.getSignature());
+        certificadoLicencaAtividade.setAssinatura(newSignature);
 
         entityManager.persist(certificadoLicencaAtividade);
         return certificadoLicencaAtividade;
+    }
+
+    /**
+     * Creates a new Document record by copying the signature data.
+     * This ensures each certificado has its own unique signature reference.
+     *
+     * @param originalSignature the original signature document to clone
+     * @return a new persisted Document with a new ID
+     */
+    private Documento cloneSignature(Documento originalSignature) {
+        logger.debug("Clonando assinatura: {}", originalSignature.getNome());
+
+        Documento newSignature = new Documento();
+        newSignature.setNome(originalSignature.getNome());
+        newSignature.setTipo(originalSignature.getTipo());
+        newSignature.setCaminho(originalSignature.getCaminho());
+        newSignature.setTamanho(originalSignature.getTamanho());
+        newSignature.setExtensao(originalSignature.getExtensao());
+
+        entityManager.persist(newSignature);
+        return newSignature;
     }
 }

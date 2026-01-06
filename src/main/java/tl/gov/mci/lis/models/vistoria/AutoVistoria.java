@@ -166,7 +166,7 @@ public class AutoVistoria extends EntityDB {
     private String recomendacoes;
     private int prazo;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pedido_vistoria_id", referencedColumnName = "id")
     private PedidoVistoria pedidoVistoria;
 

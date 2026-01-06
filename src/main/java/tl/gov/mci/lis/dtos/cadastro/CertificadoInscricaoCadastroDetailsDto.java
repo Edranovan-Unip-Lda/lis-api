@@ -41,7 +41,7 @@ public class CertificadoInscricaoCadastroDetailsDto implements Serializable {
     String dataEmissao;
     @NotNull
     String nomeDiretorGeral;
-    DocumentoDto documento;
+    DocumentoDto assinatura;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.cadastro.PedidoInscricaoCadastro}
