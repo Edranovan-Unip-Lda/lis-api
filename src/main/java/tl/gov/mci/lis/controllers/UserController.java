@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tl.gov.mci.lis.configs.jwt.JwtSessionService;
 import tl.gov.mci.lis.configs.jwt.JwtUtil;
@@ -22,6 +24,7 @@ import tl.gov.mci.lis.dtos.mappers.UserMapper;
 import tl.gov.mci.lis.dtos.user.PasswordResetRequest;
 import tl.gov.mci.lis.dtos.user.UserDetailDto;
 import tl.gov.mci.lis.dtos.user.UserLoginDto;
+import tl.gov.mci.lis.dtos.user.UserProfileUpdateDto;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
@@ -72,6 +75,28 @@ public class UserController {
     public ResponseEntity<Void> deleteSignature(@PathVariable String username) {
         userServices.removeSignature(username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{username}/profile")
+    public ResponseEntity<UserDetailDto> updateOwnProfile(
+            @PathVariable String username,
+            @Valid @RequestBody UserProfileUpdateDto profileUpdate
+    ) {
+        // Get the currently authenticated user from security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUsername = authentication.getName();
+
+        User updatedUser = userServices.updateOwnProfile(
+                authenticatedUsername,
+                username,
+                profileUpdate.getFirstName(),
+                profileUpdate.getLastName(),
+                profileUpdate.getEmail(),
+                profileUpdate.getCurrentPassword(),
+                profileUpdate.getNewPassword()
+        );
+
+        return new ResponseEntity<>(userMapper.toDto1(updatedUser), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")

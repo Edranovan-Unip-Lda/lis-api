@@ -519,4 +519,52 @@ public class UserServices {
         passwordResetTokenRepository.findByToken(token).ifPresent(passwordResetTokenRepository::delete);
     }
 
+    @Transactional
+    public User updateOwnProfile(String authenticatedUsername, String targetUsername, String firstName, String lastName, String email, String currentPassword, String newPassword) {
+        logger.info("User {} attempting to update profile for {}", authenticatedUsername, targetUsername);
+
+        // Verify that user can only update their own profile
+        if (!authenticatedUsername.equals(targetUsername)) {
+            logger.error("User {} attempted to update profile for different user {}", authenticatedUsername, targetUsername);
+            throw new ForbiddenException("Você só pode atualizar o seu próprio perfil");
+        }
+
+        return userRepository.queryByUsername(targetUsername)
+                .map(user -> {
+                    // Check if email is being changed and if it's already taken by another user
+                    if (!user.getEmail().equals(email)) {
+                        userRepository.findByEmail(email).ifPresent(existingUser -> {
+                            if (!existingUser.getId().equals(user.getId())) {
+                                throw new AlreadyExistException("O email " + email + " já está em uso por outro utilizador");
+                            }
+                        });
+                    }
+
+                    // Update basic info
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setEmail(email);
+
+                    // Update password if provided
+                    if (currentPassword != null && !currentPassword.isEmpty() && newPassword != null && !newPassword.isEmpty()) {
+                        // Verify current password
+                        if (!bcryptEncoder.matches(currentPassword, user.getPassword())) {
+                            logger.error("Current password verification failed for user {}", targetUsername);
+                            throw new BadRequestException("A palavra-passe atual está incorreta");
+                        }
+
+                        // Set new password
+                        user.setPassword(bcryptEncoder.encode(newPassword));
+                        logger.info("Password updated for user {}", targetUsername);
+                    }
+
+                    logger.info("Profile updated successfully for user {}", targetUsername);
+                    return user;
+                })
+                .orElseThrow(() -> {
+                    logger.error("Username {} not found", targetUsername);
+                    return new ResourceNotFoundException("Utilizador com o nome " + targetUsername + " não encontrado");
+                });
+    }
+
 }
