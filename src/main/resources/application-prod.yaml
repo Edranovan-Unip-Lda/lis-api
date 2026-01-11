@@ -52,7 +52,7 @@ jwt:
 
 
 frontend:
-  url: http://lic.mci.gov.tl
+  url: https://lic.mci.gov.tl
 logging:
   level:
     tl.gov.mci.lic: DEBUG
