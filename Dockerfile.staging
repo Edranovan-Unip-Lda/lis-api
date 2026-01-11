@@ -48,7 +48,7 @@ RUN chown spring:spring /app/app.jar
 USER spring
 
 # Expose application port
-EXPOSE 8000
+EXPOSE 80
 
 # Add volume for persistent logs
 VOLUME ["/var/log/spring"]
