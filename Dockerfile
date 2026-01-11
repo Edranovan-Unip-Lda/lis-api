@@ -48,14 +48,14 @@ RUN chown spring:spring /app/app.jar
 USER spring
 
 # Expose application port
-EXPOSE 8000
+EXPOSE 8081
 
 # Add volume for persistent logs
 VOLUME ["/var/log/spring"]
 
 # Health check to monitor application status
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/follow/health || exit 1
+    CMD curl -f http://localhost:8081/follow/health || exit 1
 
 # Start the application
 ENTRYPOINT ["java", \

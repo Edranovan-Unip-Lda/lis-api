@@ -14,12 +14,12 @@ spring:
       password: administrator
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/master.yaml
+    change-log: classpath:db/changelog/changelog-master.yaml
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/lis_dbms
-    username: geovanniovinhas
-    password:
+    url: jdbc:postgresql://licapp-postgres:5432/lis_dbms
+    username: licuser
+    password: h4IK98KGFgcF
   jpa:
     hibernate:
       ddl-auto: none
@@ -34,9 +34,8 @@ spring:
       max-request-size: 20MB
   data:
     redis:
-      host: localhost
+      host: licapp-redis
       port: 6379
-      password: P@ssw0rd
     rest:
       default-page-size: 100000
       base-path: /data
@@ -53,14 +52,11 @@ jwt:
 
 
 frontend:
-  url: http://localhost:4200
+  url: http://lic.mci.gov.tl
 logging:
   level:
-    tl.bctl.cris: DEBUG
+    tl.gov.mci.lic: DEBUG
     org.springframework: ERROR
-    org:
-      springframework:
-        ldap: DEBUG
 
 sentry:
   dsn: https://78cf24ba710171f500db72b2f924b9b1@o4509671470006272.ingest.de.sentry.io/4509671477084240

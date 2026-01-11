@@ -17,7 +17,7 @@ public class OneTimePasswordService {
 
     public String generateOTP(String key) {
         String otp = String.format("%06d", random.nextInt(1_000_000));
-        redisTemplate.opsForValue().set(key, "111111", OTP_EXPIRATION_MINUTES, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(key, otp, OTP_EXPIRATION_MINUTES, TimeUnit.MINUTES);
         return otp;
     }
 

@@ -188,3 +188,40 @@ databaseChangeLog:
                 r.id
               FROM lis_dm_role r
               WHERE r.name = 'ROLE_ADMIN';
+              
+
+  - changeSet:
+      id: seed-021-email-config
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_email_config"
+      changes:
+        - insert:
+            tableName: lis_email_config
+            columns:
+              - column:
+                  name: from_email
+                  value: "noreply@mci.gov.tl"
+
+              - column:
+                  name: username
+                  value: "licenciamentomci@gmail.com"
+
+              - column:
+                  name: password
+                  value: "CHANGE_ME"
+
+              - column:
+                  name: smtp_host
+                  value: "smtp.gmail.com"
+
+              - column:
+                  name: smtp_port
+                  valueNumeric: 587
+
+              - column:
+                  name: is_active
+                  valueBoolean: true

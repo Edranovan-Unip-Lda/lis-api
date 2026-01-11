@@ -144,7 +144,7 @@ public class UserServices {
         }
 
         user.setOneTimePassword(oneTimePasswordService.generateOTP(username));
-//        emailService.sendEmail(user, EmailTemplate.OTP);
+        emailService.sendEmail(user, EmailTemplate.OTP);
 
         logger.info("Successfully login with credential: {}", username);
         return user;
