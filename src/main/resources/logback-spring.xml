@@ -1,0 +1,31 @@
+<springProfile name="default,dev,testing">
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</springProfile>
+
+<springProfile name="prod,staging">
+<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+<appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/spring/app.log</file>
+    <encoder>
+        <pattern>%d [%thread] %-5level %-50logger{40} - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>/var/log/spring/archived/app.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+        <maxFileSize>50MB</maxFileSize>
+        <maxHistory>30</maxHistory>
+        <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+</appender>
+
+<logger name="org.springframework" level="INFO"/>
+<logger name="tl.gov.mci.lis" level="DEBUG"/>
+
+<root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE-ROLLING"/>
+</root>
+</springProfile>

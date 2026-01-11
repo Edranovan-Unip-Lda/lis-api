@@ -40,6 +40,12 @@ public class NotificacaoService {
     private final NotificationTemplateResolver templateResolver;
     private final NotificationMessageRenderer messageRenderer;
 
+    /**
+     * Create notification for receiver, chief and manager
+     * @param receiverId ID of the receiver (cliente)
+     * @param aplicante The aplicante related to the notification
+     * @param template The email template to use {@link EmailTemplate}
+     */
     @Transactional
     public void createNotification(Long receiverId, Aplicante aplicante, EmailTemplate template) {
         logger.info("Criando notificação...");
@@ -123,7 +129,7 @@ public class NotificacaoService {
 
         // 1. Load Receptor (staff)
         User staff = userRepository.findById(staffId)
-                .orElseThrow(() -> new ResourceNotFoundException("Funsionário não existe!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não existe!"));
 
         String responsavel = staff.getFirstName() + ' ' + staff.getLastName();
         // Build notification context with responsavel

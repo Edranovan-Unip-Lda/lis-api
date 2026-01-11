@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.enums.AplicanteStatus;
+import tl.gov.mci.lis.enums.EmailTemplate;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.models.aplicante.Aplicante;
 import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
@@ -20,6 +21,7 @@ import tl.gov.mci.lis.repositories.vistoria.PedidoVistoriaRepository;
 import tl.gov.mci.lis.services.aplicante.AssignmentService;
 import tl.gov.mci.lis.services.authorization.AuthorizationService;
 import tl.gov.mci.lis.services.endereco.EnderecoService;
+import tl.gov.mci.lis.services.notificacao.NotificacaoService;
 
 import java.util.Objects;
 
@@ -35,6 +37,7 @@ public class AutoVistoriaService {
     private final ClasseAtividadeRepository classAtividadeRepo;
     private final PedidoVistoriaRepository pedidoVistoriaRepository;
     private final AuthorizationService authorizationService;
+    private final NotificacaoService notificacaoService;
 
     @Transactional
     public AutoVistoria create(Long pedidoVistoriaId, AutoVistoria obj) {
@@ -81,6 +84,8 @@ public class AutoVistoriaService {
             historico.setStatus(aplicante.getEstado());
             historico.setAlteradoPor(authorizationService.getCurrentUsername());
             aplicante.addHistorico(historico);
+            // send notification
+            notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.SUSPENSO);
         } else {
 
             aplicante.setEstado(AplicanteStatus.REVISAO);
@@ -93,6 +98,8 @@ public class AutoVistoriaService {
 
             // close assignment
             assignmentService.closeAssignment(aplicante.getId());
+            // send notification
+            notificacaoService.createNotification(aplicante.getEmpresa().getUtilizador().getId(), aplicante, EmailTemplate.REVISTO);
         }
 
         return obj;

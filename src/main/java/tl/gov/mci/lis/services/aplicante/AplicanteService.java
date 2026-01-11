@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import tl.gov.mci.lis.dtos.aplicante.AplicanteDto;
 import tl.gov.mci.lis.dtos.cadastro.PedidoInscricaoCadastroDto;
-import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.PedidoInscricaoCadastroMapper;
 import tl.gov.mci.lis.enums.AplicanteStatus;
 import tl.gov.mci.lis.enums.Categoria;
@@ -62,7 +61,6 @@ public class AplicanteService {
     private final HistoricoEstadoAplicanteRepository historicoEstadoAplicanteRepository;
     private final AplicanteAssignmentRepository aplicanteAssignmentRepository;
     private final UserRepository userRepository;
-    private final AplicanteMapper aplicanteMapper;
 
 
     public Page<AplicanteDto> getPage(int page, int size) {

@@ -1,7 +1,7 @@
 package tl.gov.mci.lis.enums;
 
 public enum EmailTemplate {
-    ACTIVATION, OTP, RESET_PASSWORD, SUBMETIDO, ATRIBUIR, REVISTO, APROVADO, REJEITADO;
+    ACTIVATION, OTP, RESET_PASSWORD, SUBMETIDO, ATRIBUIR, REVISTO, APROVADO, REJEITADO, SUSPENSO;
 
     @Override
     public String toString() {
@@ -15,6 +15,7 @@ public enum EmailTemplate {
             case REVISTO -> "application/revisto";
             case APROVADO -> "application/aprovado";
             case REJEITADO -> "application/rejeitado";
+            case SUSPENSO -> "application/suspenso";
         };
     }
 }

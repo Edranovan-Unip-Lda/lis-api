@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificação - Aplicante Suspenso</title>
+</head>
+<body>
+<h2>
+    Estimado(a) <b th:text="${user.firstName + ' ' + user.lastName}"></b>,
+</h2>
+
+<div th:switch="${user.role.name}">
+
+    <!-- CLIENTE -->
+    <p th:case="'ROLE_CLIENT'">
+        Informamos que o seu aplicante <strong th:text="${aplicante.numero}"></strong> foi
+        <strong>suspenso</strong>.
+        <br/>
+        Data da suspensão:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+        <br/>
+        Por favor, <strong>inicie sessão no sistema</strong> para consultar os detalhes relativos à suspensão
+        do aplicante e as ações necessárias.
+    </p>
+
+    <!-- CHIEF -->
+    <p th:case="'ROLE_CHIEF'">
+        O Aplicante <strong th:text="${aplicante.numero}"></strong> foi suspenso.
+        Esta mensagem é apenas para sua informação.
+        <br/>
+        Data e hora da suspensão:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+    <!-- MANAGER -->
+    <p th:case="'ROLE_MANAGER'">
+        O Aplicante <strong th:text="${aplicante.numero}"></strong> foi revisado e suspenso.
+        Esta mensagem é apenas informativa.
+        <br/>
+        Data e hora da suspensão:
+        <strong th:text="${#temporals.format(aplicante.updatedAt.atZone(T(java.time.ZoneId).of('Asia/Tokyo')), 'dd/MM/yyyy HH:mm')}"></strong>
+    </p>
+
+</div>
+
+<br/>
+
+<p>
+    Com os melhores cumprimentos,<br/>
+    Equipa do Sistema de Licenciamento do Ministério do Comércio e Indústria<br/>
+    Este é um email automático. Por favor, não responda a esta mensagem.
+</p>
+</body>
+</html>
