@@ -76,9 +76,10 @@ sentry:
     - tl.gov.mci.lis.exceptions.BadRequestException
 minio:
   url: http://licapp-minio:9000
-  accessKey: 3Lg5yNGElnTNerWDn8Jo
-  secretKey: xbPUvoaMSp8f83XLABkza35f5FSheJD4ySo4Nr2V
+  accessKey: licapp-user
+  secretKey: 2WVEyRSKiUsF
   bucket: mci-lis
+  region: us-east-1
 management:
   endpoints:
     web:
