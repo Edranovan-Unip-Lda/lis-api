@@ -77,8 +77,9 @@ public class EmailService {
             }
 
             JavaMailSender mailSender = getJavaMailSender(emailConfig);
+            String subject = "MCI - LIC - " + emailTemplate.toString().toUpperCase();
             String emailContent = generateEmailContent(emailTemplate, user);
-            MimeMessage message = prepareMimeMessage(mailSender, emailConfig.getFromEmail(), user, emailTemplate.toString(), emailContent);
+            MimeMessage message = prepareMimeMessage(mailSender, emailConfig.getFromEmail(), user, subject, emailContent);
             sendMimeMessage(mailSender, message);
             logger.info("Email sent successfully to {}", user.getEmail());
         } catch (Exception e) {
@@ -104,7 +105,7 @@ public class EmailService {
             context.setVariable("loginLink", frontEndURL);
 
             String emailContent = templateEngine.process(EmailTemplate.RESET_PASSWORD.toString(), context);
-            String subject = EmailTemplate.RESET_PASSWORD.toString().replace("-", " ").toUpperCase();
+            String subject = "MCI - LIC" + EmailTemplate.RESET_PASSWORD.toString().replace("-", " ").toUpperCase();
 
             MimeMessage message = prepareMimeMessage(mailSender, emailConfig.getFromEmail(), passwordResetToken.getUser(), subject, emailContent);
             sendMimeMessage(mailSender, message);
