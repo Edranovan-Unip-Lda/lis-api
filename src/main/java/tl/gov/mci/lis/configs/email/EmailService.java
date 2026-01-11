@@ -105,7 +105,7 @@ public class EmailService {
             context.setVariable("loginLink", frontEndURL);
 
             String emailContent = templateEngine.process(EmailTemplate.RESET_PASSWORD.toString(), context);
-            String subject = "MCI - LIC" + EmailTemplate.RESET_PASSWORD.toString().replace("-", " ").toUpperCase();
+            String subject = "MCI - LIC - " + EmailTemplate.RESET_PASSWORD.toString().replace("-", " ").toUpperCase();
 
             MimeMessage message = prepareMimeMessage(mailSender, emailConfig.getFromEmail(), passwordResetToken.getUser(), subject, emailContent);
             sendMimeMessage(mailSender, message);
