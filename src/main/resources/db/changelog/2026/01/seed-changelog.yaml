@@ -1,0 +1,190 @@
+databaseChangeLog:
+
+  # 1) Municipio
+  - changeSet:
+      id: seed-001-municipio
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_municipio"
+      changes:
+        - loadData:
+            file: classpath:db/data/lis_dm_municipio.csv
+            tableName: lis_dm_municipio
+            separator: ","
+            encoding: UTF-8
+            quotchar: '"'
+
+  # 2) Posto Administrativo
+  - changeSet:
+      id: seed-002-posto
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_postoadministrativo"
+      changes:
+        - loadData:
+            file: classpath:db/data/lis_dm_postoadministrativo.csv
+            tableName: lis_dm_postoadministrativo
+            separator: ","
+            encoding: UTF-8
+            quotchar: '"'
+
+  # 3) Suku (Suco)
+  - changeSet:
+      id: seed-003-suku
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_suco"
+      changes:
+        - loadData:
+            file: classpath:db/data/lis_dm_suco.csv
+            tableName: lis_dm_suco
+            separator: ","
+            encoding: UTF-8
+            quotchar: '"'
+
+  # 4) Aldeia
+  - changeSet:
+      id: seed-004-aldeia
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_aldeia"
+      changes:
+        - loadData:
+            file: classpath:db/data/lis_dm_aldeia.csv
+            tableName: lis_dm_aldeia
+            separator: ","
+            encoding: UTF-8
+            quotchar: '"'
+
+  - changeSet:
+      id: seed-005-direcao
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_direcao"
+      changes:
+        - insert:
+            tableName: lis_dm_direcao
+            columns:
+              - column:
+                  name: nome
+                  value: "COMERCIAL"
+        - insert:
+            tableName: lis_dm_direcao
+            columns:
+              - column:
+                  name: nome
+                  value: "INDUSTRIAL"
+
+  - changeSet:
+      id: seed-006-role
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_dm_role"
+      changes:
+        - insert:
+            tableName: lis_dm_role
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_ADMIN"
+
+        - insert:
+            tableName: lis_dm_role
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_MANAGER"
+
+        - insert:
+            tableName: lis_dm_role
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_CHIEF"
+
+        - insert:
+            tableName: lis_dm_role
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_STAFF"
+
+        - insert:
+            tableName: lis_dm_role
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_CLIENT"
+
+  # Sync sequences (PostgreSQL only) - IMPORTANT if you load explicit IDs
+  - changeSet:
+      id: seed-999-sync-sequences
+      author: geovannio
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: |
+              SELECT setval(
+                pg_get_serial_sequence('lis_dm_municipio','id'),
+                COALESCE((SELECT MAX(id) FROM lis_dm_municipio), 1),
+                true
+              );
+
+              SELECT setval(
+                pg_get_serial_sequence('lis_dm_postoadministrativo','id'),
+                COALESCE((SELECT MAX(id) FROM lis_dm_postoadministrativo), 1),
+                true
+              );
+
+              SELECT setval(
+                pg_get_serial_sequence('lis_dm_suco','id'),
+                COALESCE((SELECT MAX(id) FROM lis_dm_suco), 1),
+                true
+              );
+
+              SELECT setval(
+                pg_get_serial_sequence('lis_dm_aldeia','id'),
+                COALESCE((SELECT MAX(id) FROM lis_dm_aldeia), 1),
+                true
+              );
+
+  - changeSet:
+      id: seed-020-initial-admin-user
+      author: geovannio
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: "0"
+          sql: "select count(*) from lis_user"
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO lis_user (status, first_name, last_name, username, email, password, role_id)
+              SELECT
+                'active',
+                'Administrator',
+                'User',
+                'administrator',
+                'licenciamentomci@gmail.com',
+                '$2a$10$0PQdcDDiLqs9rIZ9XhMTeOELHohwKVORLM.x.9TycKpD6kKxxgFca',
+                r.id
+              FROM lis_dm_role r
+              WHERE r.name = 'ROLE_ADMIN';

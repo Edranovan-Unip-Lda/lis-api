@@ -13,16 +13,16 @@ spring:
       name: administrator
       password: administrator
   liquibase:
-    enabled: false
-    change-log: classpath:db/changelog/master.yaml
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.yaml
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://mci-postgresql-tbu02f:5432/lic_staging_dbms
+    url: jdbc:postgresql://mci-postgresql-tbu02f:5432/lic_staging_dbms_liquibase
     username: postgres
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

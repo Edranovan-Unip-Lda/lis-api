@@ -1,0 +1,3928 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1768109268723-1
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lic_notificacao_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-2
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lic_user_notificacao_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-3
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_aplicante_assignment_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-4
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_aplicante_historico_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-5
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_aplicante_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-6
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_aplicante_number_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-7
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_auto_vistoria_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-8
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_auto_vistoria_participante_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-9
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_auto_vistoria_requerente_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-10
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_certificado_licenca_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-11
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_pedido_licenca_arrendador_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-12
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_pedido_licenca_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-13
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_pedido_licenca_pessoa_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-14
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_atividade_pedido_vistoria_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-15
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_cadastro_certificado_inscricao_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-16
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_cadastro_pedido_inscricao_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-17
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_aldeia_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-18
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_atividade_classe_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-19
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_atividade_grupo_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-20
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_direcao_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-21
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_endereco_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-22
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_municipio_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-23
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_postoadministrativo_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-24
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_role_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-25
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_sociedade_comercial_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-26
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_dm_suco_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-27
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_documento_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-28
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_email_config_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-29
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_empresa_acionistas_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-30
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_empresa_gerentes_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-31
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_empresa_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-32
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_empresa_representantes_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-33
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_fatura_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-34
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_password_reset_token_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-35
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_taxa_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-36
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: lis_user_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1768109268723-37
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: aplicante_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lic_notificacao_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: aplicante_status
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lic_notificacao
+  - changeSet:
+      id: 1768109268723-38
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: visto
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lic_user_notificacao_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: notificacao_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: visto_em
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: CLOB
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lic_user_notificacao
+  - changeSet:
+      id: 1768109268723-39
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: direcao_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: empresa_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_aplicante_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: categoria
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: estado
+                  type: VARCHAR(255)
+              - column:
+                  name: numero
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_aplicante
+  - changeSet:
+      id: 1768109268723-40
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: active
+                  type: BOOLEAN
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: aplicante_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: assigned_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: assigned_by_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: assignee_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_aplicante_assignment_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(24)
+              - column:
+                  name: notes
+                  type: VARCHAR(500)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_aplicante_assignment
+  - changeSet:
+      id: 1768109268723-41
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: aplicante_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: data_alteracao
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_aplicante_historico_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: alterado_por
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: descricao
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_aplicante_historico
+  - changeSet:
+      id: 1768109268723-42
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: month
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: year
+                  type: INT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_aplicante_number_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: categoria_code
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: formatted_code
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_aplicante_number
+  - changeSet:
+      id: 1768109268723-43
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: acesso_estrada
+                  type: BOOLEAN
+              - column:
+                  name: agua_potavel
+                  type: BOOLEAN
+              - column:
+                  name: alimentacao_energia
+                  type: BOOLEAN
+              - column:
+                  name: apto_aberto
+                  type: BOOLEAN
+              - column:
+                  name: com_deficiencias
+                  type: BOOLEAN
+              - column:
+                  name: comunicacao_ventilacao
+                  type: BOOLEAN
+              - column:
+                  name: distribuicao_agua
+                  type: BOOLEAN
+              - column:
+                  name: equipamento_primeiros_socorros
+                  type: BOOLEAN
+              - column:
+                  name: equipamento_utensilios
+                  type: BOOLEAN
+              - column:
+                  name: escoamento_aguas
+                  type: BOOLEAN
+              - column:
+                  name: esgoto_aguas
+                  type: BOOLEAN
+              - column:
+                  name: iluminacao
+                  type: BOOLEAN
+              - column:
+                  name: instalacoes_frigorificas
+                  type: BOOLEAN
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: largura_estrada
+                  type: DOUBLE precision
+              - column:
+                  name: lavatorios_com_espelho
+                  type: BOOLEAN
+              - column:
+                  name: legislacao_urbanistica
+                  type: BOOLEAN
+              - column:
+                  name: limpeza_diaria
+                  type: BOOLEAN
+              - column:
+                  name: maximo_higiene_seguranca
+                  type: BOOLEAN
+              - column:
+                  name: paredes3metros
+                  type: BOOLEAN
+              - column:
+                  name: paredes_interiores
+                  type: BOOLEAN
+              - column:
+                  name: paredes_pavimentos
+                  type: BOOLEAN
+              - column:
+                  name: pisos_paredes
+                  type: BOOLEAN
+              - column:
+                  name: pisos_resistentes
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: prazo
+                  type: INT
+              - column:
+                  name: recipientes_lixo
+                  type: BOOLEAN
+              - column:
+                  name: rede_distribuicao
+                  type: BOOLEAN
+              - column:
+                  name: rede_esgotos
+                  type: BOOLEAN
+              - column:
+                  name: sanitas_automatica_agua
+                  type: BOOLEAN
+              - column:
+                  name: sectores_limpos
+                  type: BOOLEAN
+              - column:
+                  name: separados_sexo
+                  type: BOOLEAN
+              - column:
+                  name: unioes_paredes
+                  type: BOOLEAN
+              - column:
+                  name: ventilacoes_necessarias
+                  type: BOOLEAN
+              - column:
+                  name: zonas_destinadas
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: funcionario_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_auto_vistoria_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: local_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pedido_vistoria_id
+                  type: BIGINT
+              - column:
+                  name: requerente_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: acesso_estrada_descricao
+                  type: CLOB
+              - column:
+                  name: agua_potavel_descricao
+                  type: CLOB
+              - column:
+                  name: alimentacao_energia_descricao
+                  type: CLOB
+              - column:
+                  name: comunicacao_ventilacao_descricao
+                  type: CLOB
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: descrever_irregularidades
+                  type: CLOB
+              - column:
+                  name: distribuicao_agua_descricao
+                  type: CLOB
+              - column:
+                  name: equipamento_primeiros_socorros_descricao
+                  type: CLOB
+              - column:
+                  name: equipamento_utensilios_descricao
+                  type: CLOB
+              - column:
+                  name: escoamento_aguas_descricao
+                  type: CLOB
+              - column:
+                  name: esgoto_aguas_descricao
+                  type: CLOB
+              - column:
+                  name: iluminacao_descricao
+                  type: CLOB
+              - column:
+                  name: instalacoes_frigorificas_descricao
+                  type: CLOB
+              - column:
+                  name: lavatorios_com_espelho_descricao
+                  type: CLOB
+              - column:
+                  name: legislacao_urbanistica_descricao
+                  type: CLOB
+              - column:
+                  name: limpeza_diaria_descricao
+                  type: CLOB
+              - column:
+                  name: maximo_higiene_seguranca_descricao
+                  type: CLOB
+              - column:
+                  name: nome_atuante
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_processo
+                  type: VARCHAR(255)
+              - column:
+                  name: paredes3metros_descricao
+                  type: CLOB
+              - column:
+                  name: paredes_interiores_descricao
+                  type: CLOB
+              - column:
+                  name: paredes_pavimentos_descricao
+                  type: CLOB
+              - column:
+                  name: pisos_paredes_descricao
+                  type: CLOB
+              - column:
+                  name: pisos_resistentes_descricao
+                  type: CLOB
+              - column:
+                  name: recipientes_lixo_descricao
+                  type: CLOB
+              - column:
+                  name: recomendacoes
+                  type: CLOB
+              - column:
+                  name: rede_distribuicao_descricao
+                  type: CLOB
+              - column:
+                  name: rede_esgotos_descricao
+                  type: CLOB
+              - column:
+                  name: sanitas_automatica_agua_descricao
+                  type: CLOB
+              - column:
+                  name: sectores_limpos_descricao
+                  type: CLOB
+              - column:
+                  name: separados_sexo_descricao
+                  type: CLOB
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_eletricidade
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_local
+                  type: VARCHAR(255)
+              - column:
+                  name: unioes_paredes_descricao
+                  type: CLOB
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  name: ventilacoes_necessarias_descricao
+                  type: CLOB
+              - column:
+                  name: zonas_destinadas_descricao
+                  type: CLOB
+            tableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-44
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auto_vistoria_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_auto_vistoria_participante_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: area_representante
+                  type: VARCHAR(255)
+              - column:
+                  name: cargo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: telemovel
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_auto_vistoria_participante
+  - changeSet:
+      id: 1768109268723-45
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: classe_atividade_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_auto_vistoria_requerente_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: residencia_id
+                  type: BIGINT
+              - column:
+                  name: sede_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: data_nascimento
+                  type: VARCHAR(255)
+              - column:
+                  name: denominacao_social
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: estado_civil
+                  type: VARCHAR(255)
+              - column:
+                  name: gerente
+                  type: VARCHAR(255)
+              - column:
+                  name: mae
+                  type: VARCHAR(255)
+              - column:
+                  name: nacionalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: naturalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: nif
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_representante
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: pai
+                  type: VARCHAR(255)
+              - column:
+                  name: regiao
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_auto_vistoria_requerente
+  - changeSet:
+      id: 1768109268723-46
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nivel_risco
+                  type: SMALLINT
+              - column:
+                  name: assinatura_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_certificado_licenca_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pedido_licenca_atividade_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: atividade
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: atividade_codigo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data_emissao
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data_validade
+                  type: VARCHAR(255)
+              - column:
+                  name: nif
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome_diretor_geral
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sociedade_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_sociedade_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_certificado_licenca
+  - changeSet:
+      id: 1768109268723-47
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: contrato_arrendamento
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: documento_imovel
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: documento_propriedade
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: estatuto_sociedade_comercial
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: estudo_ambiental
+                  type: BOOLEAN
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: num_empregados_criar
+                  type: DOUBLE precision
+              - column:
+                  name: num_empregos_criados
+                  type: DOUBLE precision
+              - column:
+                  constraints:
+                    nullable: false
+                  name: plano_emergencia
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: planta
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: recibo_pagamento
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: aplicante_id
+                  type: BIGINT
+              - column:
+                  name: arrendador_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: classe_atividade_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  name: fatura_id
+                  type: BIGINT
+              - column:
+                  name: gerente_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_pedido_licenca_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: representante_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_nif
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: outros_documentos
+                  type: VARCHAR(255)
+              - column:
+                  name: risco
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-48
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: area_total_construcao
+                  type: DOUBLE precision
+              - column:
+                  name: area_total_terreno
+                  type: DOUBLE precision
+              - column:
+                  name: data_fim
+                  type: date
+              - column:
+                  name: data_inicio
+                  type: date
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: valor_renda_mensal
+                  type: DOUBLE precision
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_pedido_licenca_arrendador_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_pedido_licenca_arrendador
+  - changeSet:
+      id: 1768109268723-49
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_pedido_licenca_pessoa_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: estado_civil
+                  type: VARCHAR(255)
+              - column:
+                  name: nacionalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: naturalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_pedido_licenca_pessoa
+  - changeSet:
+      id: 1768109268723-50
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: jornada
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: classe_atividade_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: empresa_sede_id
+                  type: BIGINT
+              - column:
+                  name: fatura_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_atividade_pedido_vistoria_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: local_estabelecimento_id
+                  type: BIGINT
+              - column:
+                  name: pedido_licenca_atividade_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: alteracoes
+                  type: CLOB
+              - column:
+                  name: atividade
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_email
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_gerente
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_nif
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_telemovel
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_estabelecimento
+                  type: VARCHAR(255)
+              - column:
+                  name: observacao
+                  type: CLOB
+              - column:
+                  name: risco
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_atividade
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_estabelecimento
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_vistoria
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_atividade_pedido_vistoria
+  - changeSet:
+      id: 1768109268723-51
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: assinatura_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_cadastro_certificado_inscricao_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: pedido_inscricao_cadastro_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: atividade
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data_emissao
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data_validade
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome_diretor_geral
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sociedade_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_sociedade_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_cadastro_certificado_inscricao
+  - changeSet:
+      id: 1768109268723-52
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: latitude
+                  type: DOUBLE precision
+              - column:
+                  name: longitude
+                  type: DOUBLE precision
+              - column:
+                  name: aplicante_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: classe_atividade_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_estabelecimento_id
+                  type: BIGINT
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_cadastro_pedido_inscricao_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: alteracoes
+                  type: CLOB
+              - column:
+                  name: ato
+                  type: VARCHAR(255)
+              - column:
+                  name: caraterizacao_estabelecimento
+                  type: VARCHAR(255)
+              - column:
+                  name: categoria
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: data_emissao_cert_anterior
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_email
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_gerente
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_nif
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: empresa_telemovel
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_estabelecimento
+                  type: VARCHAR(255)
+              - column:
+                  name: observacao
+                  type: CLOB
+              - column:
+                  name: quanto_atividade
+                  type: VARCHAR(255)
+              - column:
+                  name: risco
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_estabelecimento
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_pedido_cadastro
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-53
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_aldeia_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: suco_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_aldeia
+  - changeSet:
+      id: 1768109268723-54
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: grupo_atividade_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_atividade_classe_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: codigo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: descricao
+                  type: CLOB
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_risco
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_atividade_classe
+  - changeSet:
+      id: 1768109268723-55
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_atividade_grupo_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: codigo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: descricao
+                  type: CLOB
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_risco
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_atividade_grupo
+  - changeSet:
+      id: 1768109268723-56
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_direcao_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: codigo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_direcao
+  - changeSet:
+      id: 1768109268723-57
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: aldeia_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_endereco_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: local
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-58
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_municipio_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_municipio
+  - changeSet:
+      id: 1768109268723-59
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_postoadministrativo_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: municipio_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_postoadministrativo
+  - changeSet:
+      id: 1768109268723-60
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_role_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_role
+  - changeSet:
+      id: 1768109268723-61
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_sociedade_comercial_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: acronimo
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_sociedade_comercial
+  - changeSet:
+      id: 1768109268723-62
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_dm_suco_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: posto_administrativo_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_dm_suco
+  - changeSet:
+      id: 1768109268723-63
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: auto_vistoria_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: empresa_id
+                  type: BIGINT
+              - column:
+                  name: fatura_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_documento_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: pedido_inscricao_cadastro_id
+                  type: BIGINT
+              - column:
+                  name: pedido_licenca_atividade_id
+                  type: BIGINT
+              - column:
+                  name: tamanho
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: caminho
+                  type: VARCHAR(255)
+              - column:
+                  name: coluna
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: descricao
+                  type: VARCHAR(255)
+              - column:
+                  name: extensao
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_documento
+  - changeSet:
+      id: 1768109268723-64
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: smtp_port
+                  type: INT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_email_config_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: from_email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: smtp_host
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+            tableName: lis_email_config
+  - changeSet:
+      id: 1768109268723-65
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: balanco_total_anual
+                  type: DOUBLE precision
+              - column:
+                  constraints:
+                    nullable: false
+                  name: capital_social
+                  type: DOUBLE precision
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data_registo
+                  type: date
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: latitude
+                  type: DOUBLE precision
+              - column:
+                  name: longitude
+                  type: DOUBLE precision
+              - column:
+                  name: volume_negocio_anual
+                  type: DOUBLE precision
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  name: gerente_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_empresa_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: representante_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sociedade_comercial_id
+                  type: BIGINT
+              - column:
+                  name: total_trabalhadores
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: nif
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: numero_registo_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: telemovel
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_empresa
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tipo_propriedade
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-66
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: acoes
+                  type: DOUBLE precision
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: empresa_id
+                  type: BIGINT
+              - column:
+                  name: endereco_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_empresa_acionistas_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: agregado_familia
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nif
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: relacao_familia
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_empresa_acionistas
+  - changeSet:
+      id: 1768109268723-67
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_empresa_gerentes_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: morada_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: estado_civil
+                  type: VARCHAR(255)
+              - column:
+                  name: nacionalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: naturalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_visto
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  name: validade_visto
+                  type: VARCHAR(255)
+            tableName: lis_empresa_gerentes
+  - changeSet:
+      id: 1768109268723-68
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_empresa_representantes_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: morada_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: data_nascimento
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: estado_civil
+                  type: VARCHAR(255)
+              - column:
+                  name: mae
+                  type: VARCHAR(255)
+              - column:
+                  name: nacionalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: naturalidade
+                  type: VARCHAR(255)
+              - column:
+                  name: nome
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: numero_visto
+                  type: VARCHAR(255)
+              - column:
+                  name: pai
+                  type: VARCHAR(255)
+              - column:
+                  name: telefone
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: tipo_documento
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  name: validade_visto
+                  type: VARCHAR(255)
+            tableName: lis_empresa_representantes
+  - changeSet:
+      id: 1768109268723-69
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: superficie
+                  type: DOUBLE precision
+              - column:
+                  name: total
+                  type: DOUBLE precision
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_fatura_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: pedido_inscricao_cadastro_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: nif
+                  type: VARCHAR(255)
+              - column:
+                  name: nivel_risco
+                  type: VARCHAR(255)
+              - column:
+                  name: nome_empresa
+                  type: VARCHAR(255)
+              - column:
+                  name: sede
+                  type: VARCHAR(255)
+              - column:
+                  name: sociedade_comercial
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-70
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_fatura_taxa_pkey
+                  name: fatura_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_fatura_taxa_pkey
+                  name: taxa_id
+                  type: BIGINT
+            tableName: lis_fatura_taxa
+  - changeSet:
+      id: 1768109268723-71
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: expiry_date
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_password_reset_token_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: token
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_password_reset_token
+  - changeSet:
+      id: 1768109268723-72
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: montante_maximo
+                  type: DOUBLE precision
+              - column:
+                  constraints:
+                    nullable: false
+                  name: montante_minimo
+                  type: DOUBLE precision
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_taxa_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ato
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: categoria
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tipo
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+            tableName: lis_taxa
+  - changeSet:
+      id: 1768109268723-73
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: direcao_id
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lis_user_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  name: signature_id
+                  type: BIGINT
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: jwt_session
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(255)
+            tableName: lis_user
+  - changeSet:
+      id: 1768109268723-74
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: formatted_code
+            constraintName: lis_aplicante_number_formatted_code_key
+            tableName: lis_aplicante_number
+  - changeSet:
+      id: 1768109268723-75
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: local_id
+            constraintName: lis_atividade_auto_vistoria_local_id_key
+            tableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-76
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: pedido_vistoria_id
+            constraintName: lis_atividade_auto_vistoria_pedido_vistoria_id_key
+            tableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-77
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: requerente_id
+            constraintName: lis_atividade_auto_vistoria_requerente_id_key
+            tableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-78
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: residencia_id
+            constraintName: lis_atividade_auto_vistoria_requerente_residencia_id_key
+            tableName: lis_atividade_auto_vistoria_requerente
+  - changeSet:
+      id: 1768109268723-79
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: sede_id
+            constraintName: lis_atividade_auto_vistoria_requerente_sede_id_key
+            tableName: lis_atividade_auto_vistoria_requerente
+  - changeSet:
+      id: 1768109268723-80
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: pedido_licenca_atividade_id
+            constraintName: lis_atividade_certificado_licen_pedido_licenca_atividade_id_key
+            tableName: lis_atividade_certificado_licenca
+  - changeSet:
+      id: 1768109268723-81
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: assinatura_id
+            constraintName: lis_atividade_certificado_licenca_assinatura_id_key
+            tableName: lis_atividade_certificado_licenca
+  - changeSet:
+      id: 1768109268723-82
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_atividade_certificado_licenca_endereco_id_key
+            tableName: lis_atividade_certificado_licenca
+  - changeSet:
+      id: 1768109268723-83
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: aplicante_id
+            constraintName: lis_atividade_pedido_licenca_aplicante_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-84
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_atividade_pedido_licenca_arrendador_endereco_id_key
+            tableName: lis_atividade_pedido_licenca_arrendador
+  - changeSet:
+      id: 1768109268723-85
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: arrendador_id
+            constraintName: lis_atividade_pedido_licenca_arrendador_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-86
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_atividade_pedido_licenca_endereco_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-87
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: fatura_id
+            constraintName: lis_atividade_pedido_licenca_fatura_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-88
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: gerente_id
+            constraintName: lis_atividade_pedido_licenca_gerente_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-89
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_atividade_pedido_licenca_pessoa_endereco_id_key
+            tableName: lis_atividade_pedido_licenca_pessoa
+  - changeSet:
+      id: 1768109268723-90
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: representante_id
+            constraintName: lis_atividade_pedido_licenca_representante_id_key
+            tableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-91
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: empresa_sede_id
+            constraintName: lis_atividade_pedido_vistoria_empresa_sede_id_key
+            tableName: lis_atividade_pedido_vistoria
+  - changeSet:
+      id: 1768109268723-92
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: fatura_id
+            constraintName: lis_atividade_pedido_vistoria_fatura_id_key
+            tableName: lis_atividade_pedido_vistoria
+  - changeSet:
+      id: 1768109268723-93
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: local_estabelecimento_id
+            constraintName: lis_atividade_pedido_vistoria_local_estabelecimento_id_key
+            tableName: lis_atividade_pedido_vistoria
+  - changeSet:
+      id: 1768109268723-94
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: pedido_inscricao_cadastro_id
+            constraintName: lis_cadastro_certificado_inscr_pedido_inscricao_cadastro_id_key
+            tableName: lis_cadastro_certificado_inscricao
+  - changeSet:
+      id: 1768109268723-95
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: assinatura_id
+            constraintName: lis_cadastro_certificado_inscricao_assinatura_id_key
+            tableName: lis_cadastro_certificado_inscricao
+  - changeSet:
+      id: 1768109268723-96
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_cadastro_certificado_inscricao_endereco_id_key
+            tableName: lis_cadastro_certificado_inscricao
+  - changeSet:
+      id: 1768109268723-97
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: aplicante_id
+            constraintName: lis_cadastro_pedido_inscricao_aplicante_id_key
+            tableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-98
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_estabelecimento_id
+            constraintName: lis_cadastro_pedido_inscricao_endereco_estabelecimento_id_key
+            tableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-99
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_cadastro_pedido_inscricao_endereco_id_key
+            tableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-100
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: nome
+            constraintName: lis_dm_direcao_nome_key
+            tableName: lis_dm_direcao
+  - changeSet:
+      id: 1768109268723-101
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: fatura_id
+            constraintName: lis_documento_fatura_id_key
+            tableName: lis_documento
+  - changeSet:
+      id: 1768109268723-102
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_empresa_acionistas_endereco_id_key
+            tableName: lis_empresa_acionistas
+  - changeSet:
+      id: 1768109268723-103
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: endereco_id
+            constraintName: lis_empresa_endereco_id_key
+            tableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-104
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: gerente_id
+            constraintName: lis_empresa_gerente_id_key
+            tableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-105
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: morada_id
+            constraintName: lis_empresa_gerentes_morada_id_key
+            tableName: lis_empresa_gerentes
+  - changeSet:
+      id: 1768109268723-106
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: representante_id
+            constraintName: lis_empresa_representante_id_key
+            tableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-107
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: morada_id
+            constraintName: lis_empresa_representantes_morada_id_key
+            tableName: lis_empresa_representantes
+  - changeSet:
+      id: 1768109268723-108
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id
+            constraintName: lis_empresa_user_id_key
+            tableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-109
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: pedido_inscricao_cadastro_id
+            constraintName: lis_fatura_pedido_inscricao_cadastro_id_key
+            tableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-110
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id
+            constraintName: lis_password_reset_token_user_id_key
+            tableName: lis_password_reset_token
+  - changeSet:
+      id: 1768109268723-111
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: lis_user_email_key
+            tableName: lis_user
+  - changeSet:
+      id: 1768109268723-112
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: signature_id
+            constraintName: lis_user_signature_id_key
+            tableName: lis_user
+  - changeSet:
+      id: 1768109268723-113
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: lis_user_username_key
+            tableName: lis_user
+  - changeSet:
+      id: 1768109268723-114
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: aplicante_id
+              - column:
+                  name: active
+            indexName: ix_assignment_active
+            tableName: lis_aplicante_assignment
+  - changeSet:
+      id: 1768109268723-117
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assinatura_id
+            baseTableName: lis_cadastro_certificado_inscricao
+            constraintName: fk12oyl85t4gvy4c7vg0sb2lk5a
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_documento
+  - changeSet:
+      id: 1768109268723-118
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fatura_id
+            baseTableName: lis_atividade_pedido_vistoria
+            constraintName: fk1i4yel418k47o92qd86r0sjnr
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-119
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fk238pdcvu4gauqrh0p716swa50
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-120
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_licenca_atividade_id
+            baseTableName: lis_atividade_pedido_vistoria
+            constraintName: fk3iwmxskxqh8h98lvbjch6maxl
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-121
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: representante_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fk3mwvspqraj5qo6no1sb418nsa
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca_pessoa
+  - changeSet:
+      id: 1768109268723-122
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: morada_id
+            baseTableName: lis_empresa_representantes
+            constraintName: fk3qhwao1eye9pd2j0jtngms69u
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-123
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: representante_id
+            baseTableName: lis_empresa
+            constraintName: fk3yqpr33b2awmgb73tfdkwgxto
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_empresa_representantes
+  - changeSet:
+      id: 1768109268723-124
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gerente_id
+            baseTableName: lis_empresa
+            constraintName: fk42hxbfr2cdgirhyqstqi6nvwe
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_empresa_gerentes
+  - changeSet:
+      id: 1768109268723-125
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: lis_empresa
+            constraintName: fk4itrx5qpnsn2ac76gxwu5ytto
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+  - changeSet:
+      id: 1768109268723-126
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_inscricao_cadastro_id
+            baseTableName: lis_documento
+            constraintName: fk6psj8ymnqapaf8hnc95yea521
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-127
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: signature_id
+            baseTableName: lis_user
+            constraintName: fk6ynnf32ijhd8q386wwfe13wun
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_documento
+  - changeSet:
+      id: 1768109268723-128
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: local_id
+            baseTableName: lis_atividade_auto_vistoria
+            constraintName: fk77xqsm2o78or962m3ovw05m6l
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-129
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_cadastro_certificado_inscricao
+            constraintName: fk79pltm69ha6uf88dldegtu8if
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-130
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: lis_user
+            constraintName: fk7h5rurnbumjc2wu72arxn7i3x
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_role
+  - changeSet:
+      id: 1768109268723-131
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: morada_id
+            baseTableName: lis_empresa_gerentes
+            constraintName: fk8832irkii3a6ke20urnq1vihw
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-132
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: posto_administrativo_id
+            baseTableName: lis_dm_suco
+            constraintName: fk8c0aptn4p4pai9gyxnc42vfc8
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_postoadministrativo
+  - changeSet:
+      id: 1768109268723-133
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fatura_id
+            baseTableName: lis_documento
+            constraintName: fk8hvwed0u7wvj51vv0am4odx45
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-134
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_empresa_acionistas
+            constraintName: fk8nq64s1vifcytc13dhsgo495e
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-135
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_vistoria_id
+            baseTableName: lis_atividade_auto_vistoria
+            constraintName: fk8tvttehvc54l1eu46yf76pae
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_vistoria
+  - changeSet:
+      id: 1768109268723-136
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: taxa_id
+            baseTableName: lis_fatura_taxa
+            constraintName: fk96qg3qtvd8f9moejnkispf7nj
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_taxa
+  - changeSet:
+      id: 1768109268723-137
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: local_estabelecimento_id
+            baseTableName: lis_atividade_pedido_vistoria
+            constraintName: fk98v148up22b3vy07csus75i0p
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-138
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: requerente_id
+            baseTableName: lis_atividade_auto_vistoria
+            constraintName: fk9n9t7ahrhjg2n4pcu42ju2aqy
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_auto_vistoria_requerente
+  - changeSet:
+      id: 1768109268723-139
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fatura_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fk9pw1knwlrs77aqpm60ip1o9bu
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-140
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: empresa_id
+            baseTableName: lis_aplicante
+            constraintName: fka0upmnotiofngqea69q9nj8sl
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-141
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: empresa_id
+            baseTableName: lis_empresa_acionistas
+            constraintName: fka995ho76ur98hnndp8wvtwr80
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-142
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_atividade_pedido_licenca_arrendador
+            constraintName: fkadnmbnk168v4ehrjrgqpd8jg9
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-143
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: funcionario_id
+            baseTableName: lis_atividade_auto_vistoria
+            constraintName: fkaq396v0ymh6fr4a4jj6kq8npr
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+  - changeSet:
+      id: 1768109268723-144
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: municipio_id
+            baseTableName: lis_dm_postoadministrativo
+            constraintName: fkb3w45q6cqn1pn60dxelyj464s
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_municipio
+  - changeSet:
+      id: 1768109268723-145
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_licenca_atividade_id
+            baseTableName: lis_atividade_certificado_licenca
+            constraintName: fkb6rwpbcirrw8lm29ijdfp726k
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-146
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sociedade_comercial_id
+            baseTableName: lis_empresa
+            constraintName: fkbndv0d56bjkg9jg9ltyi6nvif
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_sociedade_comercial
+  - changeSet:
+      id: 1768109268723-147
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_inscricao_cadastro_id
+            baseTableName: lis_fatura
+            constraintName: fkcqxh1rwhxkj4q5l3r4xsebvef
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-148
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assigned_by_id
+            baseTableName: lis_aplicante_assignment
+            constraintName: fkcx2a37im5k1vma2vg0d2y378b
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+  - changeSet:
+      id: 1768109268723-149
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aplicante_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fke68e5rav44w9v07lk98xa9tms
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_aplicante
+  - changeSet:
+      id: 1768109268723-150
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: classe_atividade_id
+            baseTableName: lis_atividade_auto_vistoria_requerente
+            constraintName: fkeb7m1rv2if7heluome2suh585
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_atividade_classe
+  - changeSet:
+      id: 1768109268723-151
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auto_vistoria_id
+            baseTableName: lis_atividade_auto_vistoria_participante
+            constraintName: fkeh09ckd55ltrgbmm7eyuedy3o
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-152
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: lis_password_reset_token
+            constraintName: fkfru5uetw0t32d0fgably569v0
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+  - changeSet:
+      id: 1768109268723-153
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: empresa_sede_id
+            baseTableName: lis_atividade_pedido_vistoria
+            constraintName: fkfub3ggwlij7cwyu8obxailocs
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-154
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: fatura_id
+            baseTableName: lis_fatura_taxa
+            constraintName: fkg7208xw0juq0ov2vyd3122000
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_fatura
+  - changeSet:
+      id: 1768109268723-155
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: notificacao_id
+            baseTableName: lic_user_notificacao
+            constraintName: fkg7jxsgvn9lgt6ffdsl9v8ac6e
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lic_notificacao
+  - changeSet:
+      id: 1768109268723-156
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: classe_atividade_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fkgimdke1ojlm0bro4i0utqf1n1
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_atividade_classe
+  - changeSet:
+      id: 1768109268723-157
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: direcao_id
+            baseTableName: lis_user
+            constraintName: fkgtpri27emp6h8x4lsotccdphe
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_direcao
+  - changeSet:
+      id: 1768109268723-158
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_atividade_pedido_licenca_pessoa
+            constraintName: fkh2s38mjocdr5gjpq5qhl0uy5g
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-159
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: residencia_id
+            baseTableName: lis_atividade_auto_vistoria_requerente
+            constraintName: fkh30g1yaab7p7n7wglrpq9oen4
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-160
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: suco_id
+            baseTableName: lis_dm_aldeia
+            constraintName: fkhiq71jot2aqx61rv4wetiyx69
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_suco
+  - changeSet:
+      id: 1768109268723-161
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: classe_atividade_id
+            baseTableName: lis_cadastro_pedido_inscricao
+            constraintName: fkhxth2qct3kn4ouy9nbdqqrfrl
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_atividade_classe
+  - changeSet:
+      id: 1768109268723-162
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_cadastro_pedido_inscricao
+            constraintName: fki5v1f79r7h4umv17ek8r1jpeh
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-163
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assinatura_id
+            baseTableName: lis_atividade_certificado_licenca
+            constraintName: fkitpaqf1gimp2n6r9gtaiqcsvh
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_documento
+  - changeSet:
+      id: 1768109268723-164
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gerente_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fkjybr3qwq8yll7pa1gwrvyh9jg
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca_pessoa
+  - changeSet:
+      id: 1768109268723-165
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_atividade_certificado_licenca
+            constraintName: fkkt9cum8mf6w07s474xtjqpdqk
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-166
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aldeia_id
+            baseTableName: lis_dm_endereco
+            constraintName: fkkyvyv6hi0x8istbqhpkewdvbi
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_aldeia
+  - changeSet:
+      id: 1768109268723-167
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_estabelecimento_id
+            baseTableName: lis_cadastro_pedido_inscricao
+            constraintName: fklicv58m28rw0wlvsh7y0qhlwd
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-168
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auto_vistoria_id
+            baseTableName: lis_documento
+            constraintName: fklkfc9tee7s5u6svdjhuwveb9h
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_auto_vistoria
+  - changeSet:
+      id: 1768109268723-169
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aplicante_id
+            baseTableName: lic_notificacao
+            constraintName: fklys7vxn3p0prcslcq2l0wg2vy
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: lis_aplicante
+  - changeSet:
+      id: 1768109268723-170
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: grupo_atividade_id
+            baseTableName: lis_dm_atividade_classe
+            constraintName: fkm1fst0r2i75re2ry59x8bmog2
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_atividade_grupo
+  - changeSet:
+      id: 1768109268723-171
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aplicante_id
+            baseTableName: lis_aplicante_historico
+            constraintName: fkmm8at6ylogeps0o9p35ubpavb
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_aplicante
+  - changeSet:
+      id: 1768109268723-172
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_inscricao_cadastro_id
+            baseTableName: lis_cadastro_certificado_inscricao
+            constraintName: fkn2p0o6qu4n5getvy68npik8p6
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_cadastro_pedido_inscricao
+  - changeSet:
+      id: 1768109268723-173
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: lic_user_notificacao
+            constraintName: fknkxhalukwybjejbvbs0s06snp
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+  - changeSet:
+      id: 1768109268723-174
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sede_id
+            baseTableName: lis_atividade_auto_vistoria_requerente
+            constraintName: fkp9iom2jbea8girfyxftcj2qow
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-175
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: endereco_id
+            baseTableName: lis_empresa
+            constraintName: fkpc65mf01a4okrf4c2240gkv2g
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_endereco
+  - changeSet:
+      id: 1768109268723-176
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: arrendador_id
+            baseTableName: lis_atividade_pedido_licenca
+            constraintName: fkpsejiryx6arddep1nqnjq084t
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca_arrendador
+  - changeSet:
+      id: 1768109268723-177
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pedido_licenca_atividade_id
+            baseTableName: lis_documento
+            constraintName: fkpwvig470ou8yjtpcdjow2ysrh
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_atividade_pedido_licenca
+  - changeSet:
+      id: 1768109268723-178
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aplicante_id
+            baseTableName: lis_aplicante_assignment
+            constraintName: fkpwymye96abv99exr0cplf8p0r
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_aplicante
+        - createIndex:
+            columns:
+              - column:
+                  name: aplicante_id
+            indexName: ix_assignment_aplicante
+            tableName: lis_aplicante_assignment
+  - changeSet:
+      id: 1768109268723-179
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: aplicante_id
+            baseTableName: lis_cadastro_pedido_inscricao
+            constraintName: fkq8b7ksv97nk0e40967ctmjr8o
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_aplicante
+  - changeSet:
+      id: 1768109268723-180
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: classe_atividade_id
+            baseTableName: lis_atividade_pedido_vistoria
+            constraintName: fkrn24vrm19u8ashnkewrjcw1fx
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_atividade_classe
+  - changeSet:
+      id: 1768109268723-181
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: empresa_id
+            baseTableName: lis_documento
+            constraintName: fks8xoc7isnrrtkeo35tc9eb5nm
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_empresa
+  - changeSet:
+      id: 1768109268723-182
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assignee_id
+            baseTableName: lis_aplicante_assignment
+            constraintName: fksmh536br1h15k4ttpnfi09y8i
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_user
+        - createIndex:
+            columns:
+              - column:
+                  name: assignee_id
+            indexName: ix_assignment_assignee
+            tableName: lis_aplicante_assignment
+  - changeSet:
+      id: 1768109268723-183
+      author: geovanniovinhas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: direcao_id
+            baseTableName: lis_aplicante
+            constraintName: fkta44cubpv1cvry818cg36dm1x
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: lis_dm_direcao

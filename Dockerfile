@@ -21,13 +21,17 @@ RUN --mount=type=cache,target=/root/.m2 \
 # ============================
 # 🚀 DEPLOY STAGE
 # ============================
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre
 
-# Set timezone
-ENV TZ=Asia/Tokyo
+# Set timezone (Timor-Leste)
+ENV TZ=Asia/Dili
 
-# Create directory for Logback logs
-RUN mkdir -p /var/log/spring
+# Create non-root user for security
+RUN groupadd -r spring && useradd -r -g spring spring
+
+# Create directories for Logback logs
+RUN mkdir -p /var/log/spring/archived && \
+    chown -R spring:spring /var/log/spring
 
 WORKDIR /app
 
@@ -37,13 +41,26 @@ COPY --from=build /app/target/*.jar app.jar
 # Configure container timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Change ownership of the application
+RUN chown spring:spring /app/app.jar
+
+# Switch to non-root user
+USER spring
+
 # Expose application port
 EXPOSE 8000
+
+# Add volume for persistent logs
+VOLUME ["/var/log/spring"]
+
+# Health check to monitor application status
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/follow/health || exit 1
 
 # Start the application
 ENTRYPOINT ["java", \
             "-XX:+UseContainerSupport", \
             "-XX:MaxRAMPercentage=75.0", \
-            "-Dspring.profiles.active=staging", \
-            "-Duser.timezone=Asia/Tokyo", \
+            "-Dspring.profiles.active=prod", \
+            "-Duser.timezone=Asia/Dili", \
             "-jar", "/app/app.jar"]

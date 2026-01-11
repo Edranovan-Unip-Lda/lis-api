@@ -14,7 +14,7 @@ spring:
       password: administrator
   liquibase:
     enabled: false
-    change-log: classpath:db/changelog/master.yaml
+    change-log: classpath:db/changelog/changelog-master.yaml
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/lic_dbms

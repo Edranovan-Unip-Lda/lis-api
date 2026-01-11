@@ -1,0 +1,2239 @@
+id,nome,suco_id
+1,Hudi  laran ,1
+2,Aitohu laran,1
+3,Berekati,1
+4,Ercoatun,1
+5,Bessilau,1
+6,Raelete,2
+7,Dailor,2
+8,Taiblor ,2
+9,Erluli,3
+10,Riheun,3
+11,Lequitura ,3
+12,Rairema,3
+13,Sidole,4
+14,Fahiria,4
+15,Manulete,4
+16,Fatu Buti,4
+17,Daulala,4
+18,Sarin,4
+19,Fatubosa,5
+20,Liclaukana,5
+21,Hoholete,5
+22,Coulau,5
+23,Caicasa,5
+24,Erhetu ,5
+25,Manubata,6
+26,Mau uluria,6
+27,Saharia,6
+28,Aslimhati,6
+29,Hatulai,6
+30,Lahae,7
+31,Denhuni,7
+32,Eralolo,7
+33,Lacasori,7
+34,Riatelo,7
+35,Lausi,8
+36,Riafusun,8
+37,Erbuti,8
+38,Bermanuleu,9
+39,Lerulete,9
+40,Saboria,9
+41,Casamou,10
+42,Lio,10
+43,Leobraudu,10
+44,Colihoho,10
+45,Tabulasi,10
+46,Faularan,10
+47,Raicoalefa,10
+48,Halalmeta,10
+49,Talifurleu,10
+50,Fatumane ,10
+51,Cotbauru,11
+52,Hularema,11
+53,Maurusa,11
+54,Taratihi,11
+55,Malere,11
+56,Kabasfatin,11
+57,Banderahun,12
+58,Coulaudo,12
+59,Fatulmau ,12
+60,Fatubessi,12
+61,Laclo,12
+62,Quirilelo ,12
+63,Raimansu ,12
+64,Rairema ,12
+65,Cotolau,13
+66,Ornai,13
+67,Binona,13
+68,Ramerlau,13
+69,Lebucucu,13
+70,Umanlau,14
+71,Maubouc,14
+72,Banro,14
+73,Manehalo,15
+74,Lismori,15
+75,Manufoni,15
+76,Desmanhata,15
+77,Remapati,15
+78,Belumhatu,15
+79,Talitu,16
+80,Quelae,16
+81,Casmantutu,16
+82,Fatuc-hun,16
+83,Tohumeta,17
+84,Berlihu-Meta,17
+85,Acadiro,17
+86,Kuncin,18
+87,Mauberhatan,18
+88,Emerqui,18
+89,Donfonamo,18
+90,Acumata,19
+91,Biiloco,19
+92,Hautoho,19
+93,Bereleu,20
+94,Lebumetan,20
+95,Lebutu,20
+96,Riamori,20
+97,Tataresi,20
+98,Lebutun,21
+99,Naumata,21
+100,Sarabere,21
+101,Cairema,22
+102,Lebumeran,22
+103,Dailorluta,23
+104,Locotoi,23
+105,Tatilisame,23
+106,Manutai,24
+107,Fatumerin,24
+108,Aitoin,25
+109,Lacabou,25
+110,Maucurunamo,25
+111,Serema,25
+112,LeroliÃ§a,26
+113,Aimerahun,26
+114,Fatumanro,26
+115,Lilitei,27
+116,Raifatu,27
+117,Lequisa,27
+118,Rileu,27
+119,Mautoba ,28
+120,Deruti,28
+121,Bereliurai,28
+122,Tuqueu,29
+123,Aibana,29
+124,Aitoi,29
+125,Samalete,30
+126,Roluli,30
+127,Aicurus,30
+128,Decilelo,30
+129,Manutane ,31
+130,Laraluha,31
+131,Cotomori,31
+132,Faculau,32
+133,Caitaso,32
+134,Raemerhei,32
+135,BereliÃ§o,32
+136,Lebutu,33
+137,Aibutihun,33
+138,Lebutu Ramerhei,33
+139,Teliga ,34
+140,Nugufu  ,34
+141,Sebagulau,34
+142,Lugatu,34
+143,Builico,34
+144,Ainaro ,34
+145,Hato-Mera,34
+146,Hato-meta-udo,35
+147,Bau-hati-lau,35
+148,Rae-buti-udo,35
+149,Canudo,35
+150,Poe-Lau,36
+151,Guer-udo,36
+152,Leo-Lala,36
+153,Terlora,36
+154,Ailau,37
+155,Bazar,37
+156,No-Ulu,37
+157,Ria-mori,37
+158,Dagamessa,38
+159,Mau-Ulo-Pu,38
+160,Mau-Ulo-Lau,38
+161,Hato-Lau,38
+162,Hato-Lelo,38
+163,Boltama,39
+164,QueÃ§a-Mau,39
+165,Civil,39
+166,Lailima,39
+167,Mau-Suca Bemoris,39
+168,Mau-Suca,40
+169,Mama-Lau,40
+170,Aileu,40
+171,Mulo,41
+172,Hautio,41
+173,Tatiri,41
+174,Aituto,41
+175,Mano-mera,41
+176,Maulahulo,41
+177,Bleheto,41
+178,Queorudo,41
+179,Hato-Builico,42
+180,Mausoromata,42
+181,Laqueco,42
+182,Qeorema,42
+183,Tucaro,42
+184,Lebu-Lau,42
+185,Nuno-Mogue,42
+186,Hato-Seraquei,42
+187,Goulora,43
+188,Leotelo I,43
+189,Leotelo II,43
+190,Hato-Quero,43
+191,Mauchiga,43
+192,Maleria,44
+193,Rita,44
+194,Ussululi,44
+195,Hahi-Mau,44
+196,Aihosan,44
+197,Tara-Bula,44
+198,Hato-Lete,44
+199,Laca-Mali-Cau,44
+200,Lumo-Luli,44
+201,Hato-Cade,44
+202,Mau-Mude,45
+203,Bere-Tai,45
+204,Erbean,45
+205,Hoho-Naro,45
+206,Hato-Fae,46
+207,Liqui-Tei,46
+208,Vila,46
+209,Teli-Tuco,46
+210,Hato-Luli,46
+211,Ria-Mori,46
+212,Ura-Hou,46
+213,Sarilala,46
+214,Hautado,46
+215,Ria-Leco,46
+216,Goulala,46
+217,Cano-Rema,46
+218,Hohulo,47
+219,Cassimidei,47
+220,Caitara,47
+221,Rae-Buti-lau,47
+222,Titibauria,47
+223,Tutu-Fili,47
+224,Demutete,48
+225,Hebau,48
+226,Lobibo,48
+227,Rai-Mera,48
+228,Talale,48
+229,Tali-Felo,48
+230,Hautei,49
+231,Ernaro,49
+232,Hautilo,49
+233,Cotomata,49
+234,Boro-Ulo,50
+235,Dau-Lelo,50
+236,Hahi-Tali,50
+237,Lebo-Luli,50
+238,Mau-Lai,50
+239,Quiri-Coli,50
+240,Russulau,50
+241,Aihou,51
+242,Airaca-Lau,51
+243,Betulala,51
+244,Goulolo,51
+245,Hato-Buti,51
+246,Lebututo,51
+247,Lientuto,51
+248,Mau-Lefo,51
+249,Russulau,51
+250,Cartolo,52
+251,Gourema,52
+252,HatussÃ£o,52
+253,Lau-Heli,52
+254,Luro,53
+255,Groto,53
+256,Suro-Craic,53
+257,Aimerleu,53
+258,Dausur,53
+259,HutSeo,53
+260,Nuno-Boco,53
+261,Goulau,53
+262,Lesse,53
+263,Rae-Soro,53
+264,Ailora,54
+265,Ainaro-QUiC,54
+266,Baha,54
+267,Lebo-mera,54
+268,Lesso,54
+269,Raimerlau,54
+270,Ae Afa,55
+271,Alaua,55
+272,Bibilalari,55
+273,Maurubi-Assa,55
+274,Selibere,55
+275,Afaguia,56
+276,Alaua,56
+277,Neo-Olidae,56
+278,Sorucama,56
+279,Ua-Sufa,56
+280,Defawasi,57
+281,Lari-Bere,57
+282,Sae-Meta,57
+283,Uarou,57
+284,Fanalolo,58
+285,Ledana,58
+286,Onortibalari,58
+287,Osso Isi Lari,58
+288,Uabubo,58
+289,Betulari,59
+290,Uaicade,59
+291,Uaibuitai,59
+292,Baboro,60
+293,Baiafa,60
+294,Betu-Muto,60
+295,Buibela,61
+296,Lena,61
+297,Oqui-Lari,61
+298,Uai-Mata,61
+299,Afalari,62
+300,Bahatata,62
+301,Basarauai,62
+302,Lari Gua,62
+303,Lari Sula,62
+304,Uaiboro,62
+305,Baiana,63
+306,Bibidae,63
+307,Bubu-Ha,63
+308,Lauhare,63
+309,Tirifalo,63
+310,Uata Tefo,63
+311,Uro,63
+312,Daraloi Leten,64
+313,Daraloi Craik,64
+314,Ira osso,64
+315,Taubere,64
+316,Ana -Ulo,65
+317,Bui-Le,65
+318,Lamegua,65
+319,Macadai,65
+320,Ro-Ulo,65
+321,Alala,66
+322,Buibau,66
+323,Builai,66
+324,Loidua,66
+325,Manulai,66
+326,Samalaculiba,66
+327,Casmuto,67
+328,Ono-Sere,67
+329,Suli-Ua,67
+330,Taci,67
+331,Aubaca,68
+332,Lequi  Loi Uato,68
+333,Luliheni,68
+334,Macadai de Baixo,68
+335,Macadai de Cima,68
+336,Uaisemo,68
+337,Ana-Uaro,69
+338,Boru-Baha,69
+339,Caiobilsle,69
+340,Data-Ua,69
+341,Haurobu,69
+342,Maulame,69
+343,Uani-Uma,69
+344,Bahamori,70
+345,Cairiri,70
+346,Darasula,70
+347,Gariuai,70
+348,Maucale,70
+349,Uaibehana,70
+350,Uatu-ua,70
+351,Uaturau,70
+352,Festau,71
+353,Ossoluga,71
+354,Samalari,71
+355,Sorulai,71
+356,Ague,72
+357,Hene-Uabubo,72
+358,Lacoda,72
+359,Loiborouai,72
+360,Umaquerek,72
+361,Betulale,73
+362,Caisido,73
+363,Lialailesso,73
+364,Lutumuto,73
+365,Osso-Ua,73
+366,Parlamento,73
+367,Aubaca,74
+368,Bado-HoÃ³,74
+369,Lequiloi-Uato,74
+370,Macadai,74
+371,Afacaimau,75
+372,Afagua,75
+373,Alala,75
+374,Ledatame,75
+375,Manulai,75
+376,Samalaculiba,75
+377,Uaimanuboe,75
+378,Uatubala,75
+379,Uaturau de Baixo,75
+380,Uaturau de Cima,75
+381,Atelari,76
+382,Auraba,76
+383,Lauadae,76
+384,Liarafa,76
+385,Loilari,76
+386,Nelu Uai,76
+387,Samagata,76
+388,Siguilaba,76
+389,Sirimana,76
+390,Uatalofo,76
+391,Buibata,77
+392,Larimuta,77
+393,Larifano,77
+394,Libagua,77
+395,Tirilolo,77
+396,Borulau,78
+397,Buscaulari,78
+398,Lalulai,78
+399,Loilaco,78
+400,Uasilua,78
+401,Desagua,79
+402,Lalulai,79
+403,Lualari,79
+404,Sae Uata Issi,79
+405,Samalari,79
+406,Sorugua,79
+407,Ueru-mata,79
+408,Bubuloma,80
+409,Lari-Ledana,80
+410,Lari-Sula,80
+411,Rali-Tau,80
+412,Lau hare,80
+413,Riadae,80
+414,Saelari,80
+415,Samalolo,80
+416,Terubala,80
+417,Abuti,81
+418,Alasafa,81
+419,Auraba,81
+420,Beliuali,81
+421,Ia Sula,81
+422,Naha-Afa,81
+423,One-Bu`o,81
+424,Samagata,81
+425,Selegua,81
+426,Sire-Bu`u,81
+427,Ulabuti,81
+428,Assa-Nuno,82
+429,Bole Ha,82
+430,Butufalo,82
+431,Fatiliri,82
+432,Heu-Uai,82
+433,Laicua,82
+434,Bulubai,83
+435,Caicasalari,83
+436,Iti-Daho,83
+437,Samaguia,83
+438,Abo Cairedo,84
+439,Abo-Da`e-Mena,84
+440,Abo-Lir,84
+441,Abo-Matebian,84
+442,Assa-Loqui,85
+443,Caranu,85
+444,Mumana,85
+445,Telaha,85
+446,Boralai,86
+447,Uligata,86
+448,Vecubuti,86
+449,Butileo,87
+450,Laua-liu,87
+451,Saraida,87
+452,Lialura,88
+453,Osso-Messa,88
+454,Eu-Afa,89
+455,Fae-Ua,89
+456,Laculela,89
+457,Saebere,89
+458,Uadaboru,89
+459,Lacodala,90
+460,Mucububo,90
+461,Ua-Ule,90
+462,Dara-Oma,91
+463,Lego,91
+464,Saua-Cassa,91
+465,Ulu-Soro,91
+466,Baticasa,92
+467,Uaidaba,92
+468,Uata -Liu,92
+469,Dauaduca,93
+470,Dessa,93
+471,Maluro,93
+472,Ossoliro,93
+473,Lau-Mana,94
+474,Lebenei,94
+475,Manome,94
+476,Ruta,94
+477,Uaidora,94
+478,Bocilai,95
+479,Defadae,95
+480,Macalira,95
+481,Loilubo-Uagua,96
+482,Namanei,96
+483,Samafalo,96
+484,Ua - Robo,96
+485,Cirilaco,97
+486,Daicou,97
+487,Loirae,97
+488,Ua-Sufa,97
+489,Caranu,98
+490,Gamana,98
+491,Gugulai,98
+492,Sialimo,98
+493,Bahamori,99
+494,Caicua,99
+495,Caitaranau,100
+496,Nunoti,100
+497,Uaidau,100
+498,Caidenulale,101
+499,Hoineuai,101
+500,Lolinuno,101
+501,Uaicnassa,101
+502,Uma Ana Ico,101
+503,Bahamori,102
+504,Haunau,102
+505,Ostico,102
+506,Lari,103
+507,Mota,103
+508,Bahalale,104
+509,Naulale,104
+510,UaiharaboÃ²,104
+511,Betulale,105
+512,Lor,105
+513,Oralan,105
+514,Raha,105
+515,Uaibobo,106
+516,Uaicana,106
+517,Uataula,106
+518,Uatubela  Oli,106
+519,Uma Ana Ico,106
+520,Caimale-Ho`o,107
+521,Cumu-Oli,107
+522,Laco-Uma,107
+523,Lia-Oli,107
+524,Neo-Hoâ€™o,107
+525,Uai-Toqui,107
+526,Bahadato,108
+527,Osso-Uaque,108
+528,Uaitobono,108
+529,Uatulia-Ana,108
+530,Aca Uatu,109
+531,Luli Bau,109
+532,Ualae,109
+533,Uatu Missa,109
+534,Caihurulale de Baixo,110
+535,Caihurulale de Cima,110
+536,Caubai,110
+537,Luha Oli,110
+538,Lia Bala,111
+539,Ossogori,111
+540,Uai-Tali-Bu`u,111
+541,Uatu Uasa,111
+542,Betunau,112
+543,Quele-Boro-Uai,112
+544,Uai-te,112
+545,Uatu-Nau,112
+546,Caihula,113
+547,Nuno Doco,113
+548,Osso-Gui-Gui,113
+549,Venilale,113
+550,Helesu,114
+551,Saburapo,114
+552,Fatubesi,114
+553,Made Bau,114
+554,Lolo Colo,114
+555,Boloi,114
+556,Aidabaslala,115
+557,Biamarae,115
+558,Aidaba leten,115
+559,Limanaro,116
+560,Faturase,116
+561,Rairobo,116
+562,Vilamaria ,116
+563,Aidaba Leten,117
+564,Biacou,117
+565,Miguir,117
+566,Harame,117
+567,Sulilaran,117
+568,Tasi Mean,117
+569,Tutubaba,117
+570,Colimau,118
+571,Loâ€™odasi,118
+572,Beamoas,118
+573,Atublogo,118
+574,Tegoabe,118
+575,Soilesu,119
+576,Aiaras,119
+577,Oepo,120
+578,Tapo Taz,120
+579,Uduai,121
+580,Tasi Balu,121
+581,Nunubuti,121
+582,Atumenaro,121
+583,Carabau ,121
+584,Aimeta,122
+585,Oboe,122
+586,Ilat Laun,123
+587,Purugua,123
+588,Tunero,123
+589,Odelgomo,124
+590,Mazop,124
+591,Aisalgusun,124
+592,Laho,124
+593,Aiasa,124
+594,Oalgomo,124
+595,Tuluata,125
+596,Lesigatal,125
+597,Lactil,125
+598,Atuaben,126
+599,Talite,126
+600,Mabelis,127
+601,Holbese,127
+602,Leber Taz,127
+603,Bucuk,127
+604,Holsa Taz,127
+605,Tazgolo,128
+606,Heliquei,128
+607,Galitaz,128
+608,Olo-Olo,128
+609,Louba Leten,129
+610,Zobelis,129
+611,Gumer,129
+612,Sordoli,129
+613,Lica Ubu,130
+614,Maleubu,130
+615,Hatu-Udu,130
+616,Nunupa,130
+617,Atulara,130
+618,Taimea,131
+619,Malilait,131
+620,Malilu,131
+621,Omelai,132
+622,Molop Taz,132
+623,Lonlolo,132
+624,Leobalu,132
+625,Sibuni,133
+626,Mapeop,133
+627,Holmesel,133
+628,Atupae,134
+629,Bugas,134
+630,Tebabui,134
+631,Mologuen,135
+632,Oeleo Taz,135
+633,Maliana,136
+634,Genuhaâ€™an,136
+635,Galusapulu,136
+636,Aculaka,136
+637,Lahomea,136
+638,Raifun Foho,137
+639,Raifun Villa,137
+640,Nunutana,137
+641,Moleana,138
+642,Uat,138
+643,Daitete,138
+644,Timatan,138
+645,Ritabou,138
+646,Riti-Udo,138
+647,Samelaun,138
+648,Diruaben,138
+649,Maâ€™Ahui,138
+650,Maganutu,138
+651,Halecou,138
+652,Corluli,138
+653,Anahun,139
+654,Genuhaâ€™an,139
+655,Raimaten,139
+656,Rocon,139
+657,Taz,140
+658,Bilicou,140
+659,Solugolo,140
+660,Secar,140
+661,Loloa,140
+662,Oplegul,140
+663,Tunubibi,141
+664,Uluatin,141
+665,Manu Aman,141
+666,Pipgalag 1,141
+667,Pipgalag II,141
+668,Lepguen,141
+669,Taz Masak,142
+670,Cossal,142
+671,Mabiloa,142
+672,Oho Ana,143
+673,Daru Asa,143
+674,Lete Aitutu,143
+675,Mude,144
+676,Lia Bote,144
+677,Bere Leu,144
+678,Dau Lelo,144
+679,Sae Heu,145
+680,Cauloco Lete,145
+681,Ilat Bote,146
+682,Suriubu,146
+683,Malilia,146
+684,Atubuti,147
+685,Tuturema,147
+686,Bia Teho,147
+687,Nuapo,147
+688,Melemaga,148
+689,Tirimoso,148
+690,Bia Boro,148
+691,Lesupu,149
+692,Heda,149
+693,Tapo Meac,150
+694,Tatelori,150
+695,Lugululi,150
+696,Gildapil,151
+697,Atus,151
+698,Mabelis,152
+699,Mapelai,152
+700,Tasmin,153
+701,Piron,153
+702,Ozo,153
+703,Boutal,154
+704,Oelaca,154
+705,Gole,154
+706,Zoilpo,155
+707,Guda Taz,155
+708,Oceli,155
+709,Anon,155
+710,Mape,156
+711,Raimea,156
+712,Tepa,156
+713,Lupal Taz,157
+714,Silagolo,157
+715,Dilai,157
+716,Subalesu,158
+717,Palaka,158
+718,Caco,158
+719,Duaderok,159
+720,Faturui,159
+721,Raifatuk,159
+722,Bour,159
+723,Batugede,160
+724,Nubadak,160
+725,Lotan,160
+726,Lalis,161
+727,Manehat,161
+728,Futatas,161
+729,Railuli,161
+730,Amandato,162
+731,Atara,162
+732,Fatuk Laran,162
+733,Fatu Lulik,162
+734,Belola,162
+735,Balibo Villa,162
+736,Mohac,163
+737,Falowai,163
+738,Raiulun,163
+739,Ferik Katuas,163
+740,Aiasa,163
+741,Fatuisin ,164
+742,Manikin ,164
+743,Ailoc laran ,164
+744,Sanfuk,164
+745,Loro ,165
+746,Mane Ikun ,165
+747,Loâ€™o ,165
+748,Suca Bilan,165
+749,Acar Laran,165
+750,Roec,166
+751,Mucbelis ,166
+752,Bonuc ,166
+753,Meop,166
+754,Holba ,166
+755,Aidantuic ,167
+756,Beco/Tuilpo,167
+757,Bibiatan ,167
+758,Haemanu ,167
+759,Halik,167
+760,Holbolu ,167
+761,Leoualu,167
+762,Maucola ,167
+763,Teda ,167
+764,Tobur ,167
+765,Zuuac ,167
+766,Asumaten ,168
+767,Asurai ,168
+768,Loâ€™okeu,168
+769,Busacucun ,168
+770,Laconac Besic,168
+771,Laconac Babo,168
+772,Lontale ,168
+773,Tabaco Loâ€™ot,168
+774,Ahinarai ,168
+775,Loro ,169
+776,Uma Klaran,169
+777,Beilaco ,169
+778,Webaba ,169
+779,Biata ,170
+780,Colu ,170
+781,Fatuleto Knua,170
+782,Nalaop ,170
+783,Zobete ,170
+784,Daro ,171
+785,Mape Knua,171
+786,Polo ,171
+787,Basana ,172
+788,Bauro Ikun,172
+789,Galitaz ,172
+790,Kulu Oan,172
+791,Lae gatal,173
+792,Pelet ,173
+793,Ritiluli ,173
+794,Salasa ,173
+795,Somo Knua,173
+796,Tilis ,173
+797,Uluk Lolo,173
+798,Lale ,174
+799,Leogol ,174
+800,Obul Mil,174
+801,Zulo Taz,174
+802,Leudula,175
+803,Reasu ,175
+804,Aisal Leuc,176
+805,Baulolo ,176
+806,Biatuma ,176
+807,Horba ,176
+808,Lepo Knua,176
+809,Besac Uan,177
+810,Onularan ,177
+811,Sadahur ,177
+812,Coetau ,177
+813,Faularan ,177
+814,Caicoli ,177
+815,Aitaman ,177
+816,Wala ,178
+817,Wetaba ,178
+818,Baer ,178
+819,Fatuc Metan,178
+820,Foho Lulic,178
+821,Niquir ,178
+822,Maubesi ,178
+823,Bitis ,179
+824,Halimea ,179
+825,Tulaeduc ,179
+826,Ai Oan,179
+827,Salele Boot,179
+828,Kota Foun,179
+829,Coloama ,180
+830,Cauauman,180
+831,Tabolo ,180
+832,Loro Quida,181
+833,Loâ€™o hali,181
+834,Fatuk Bitin Klaran,181
+835,Fatuk Laran,181
+836,Sadahur ,181
+837,Kalobor ,182
+838,Kakaut ,182
+839,Fatuk Laran,182
+840,Aululik ,182
+841,Fatuk Kabuar Leten,183
+842,Fatuk Kabuar Kraik ,183
+843,Natardik ,183
+844,Aitos ,184
+845,Fatuk Lidun,184
+846,Hali Laran,184
+847,Nanu ,185
+848,Naliknai ,185
+849,Taducama ,185
+850,Macocon ,185
+851,Belulik Kraik,186
+852,Baleo Kiâ€™ik,186
+853,Clau halek,186
+854,Mane Kiâ€™ik,186
+855,Fatumea ,187
+856,Mota Ulun,187
+857,Lebo ,187
+858,Rae Oa,187
+859,Aitoun,188
+860,Beco,188
+861,Bedasi,188
+862,Fatuloro,189
+863,Holba,189
+864,Lia Nain,189
+865,Macous,189
+866,Hatun ,190
+867,Lela ,190
+868,Nainare ,190
+869,Mano Lor,190
+870,Leo Gore,190
+871,Fatuk Oan,190
+872,Busa daur,191
+873,Dais ,191
+874,Duâ€™ut,191
+875,Gajolo ,191
+876,Ila ,191
+877,Loloba ,191
+878,Loloa ,191
+879,Maulela ,192
+880,Foho Rua,192
+881,Ogues ,192
+882,Orun ,192
+883,Soga ,192
+884,Matai ,193
+885,Quiar ,193
+886,Lahorai ,193
+887,kunain,193
+888,Adara ,194
+889,Arlo,194
+890,Maquer ,194
+891,UsubemaÃ§o,194
+892,Ilicnamo,195
+893,Ilidua douro,195
+894,Pala,195
+895,Uaro-ana,195
+896,Anartuto,196
+897,Berau,196
+898,Bite,196
+899,Ili-timur,196
+900,Fatulela,197
+901,Macelihu,197
+902,Mau-laku,197
+903,Mau-meta,197
+904,Eclae,198
+905,Ilimanu,198
+906,Ilitecaraquia,198
+907,Fatu loda,199
+908,Lacoto,199
+909,Lorico,199
+910,Tancae,199
+911,Au-hun,200
+912,Becusi centro,200
+913,Becusi craic,200
+914,Berbido,200
+915,Caqueu laran,200
+916,Carau Mate,200
+917,Clac fuic,200
+918,Culau laletec,200
+919,Darlau,200
+920,Maucocomate,200
+921,Mota ulun,200
+922,Quituto,200
+923,Bidau mota claran,201
+924,Manu mata,201
+925,Sagrada familia,201
+926,Toko baru,201
+927,Aidac bihare,202
+928,Ailele hun,202
+929,Ailoc laran,202
+930,Bedois,202
+931,Buburlau,202
+932,Caisabe,202
+933,Fatuc Francisco,202
+934,Has laran,202
+935,Lases,202
+936,Lenuc hun,202
+937,Namalai,202
+938,Suco laran,202
+939,Terminal,202
+940,Funu hotu,203
+941,Caregatiru,203
+942,Loe laco,203
+943,Nato,203
+944,Sorumotu ba dame,203
+945,Tane muto,203
+946,Toko baru II ,203
+947,Acanuno,204
+948,Ailoc laran,204
+949,Hali dolar,204
+950,Moris foun,204
+951,Mota quic,204
+952,Sucaer laran,204
+953,17 de Abril,205
+954,Carungu lau,205
+955,Fatucama,205
+956,Carau Mate,206
+957,Culau Laletec,206
+958,Malboro,206
+959,Quituto ,206
+960,5 de outubro,207
+961,Andevil,207
+962,Avanca,207
+963,Bita-ba,207
+964,Buca fini,207
+965,Efaca,207
+966,Fatumeta,207
+967,Frecat,207
+968,Fuslam,207
+969,Haburas,207
+970,Hale mutin,207
+971,Laloran,207
+972,Lau-lora,207
+973,Licarapoma,207
+974,Lisbutac,207
+975,Manleu-ana Lidun,207
+976,Moris ba dame,207
+977,Mundo perdido,207
+978,Niken,207
+979,Rai nain,207
+980,Ramelau,207
+981,Ribeira maloa,207
+982,Rio de janeiro,207
+983,Ruin Naclecar,207
+984,SÃ£o jose,207
+985,T.a.t,207
+986,Tane timor,207
+987,Teki-teki,207
+988,Terus Nanis,207
+989,Timor cmanec,207
+990,We dalac,207
+991,Xamatama,207
+992,12 de outubro,208
+993,20 de setembro,208
+994,30 de agosto,208
+995,4 de setembro,208
+996,7 de dezembro,208
+997,Aimutin,208
+998,Anin fuic,208
+999,Badiac,208
+1000,Baya leste,208
+1001,Beto tasi,208
+1002,Fomento I,208
+1003,Fomento II,208
+1004,Fomento III,208
+1005,Golgota,208
+1006,Loro Matan b. T,208
+1007,Mane Mesac,208
+1008,Beto Leste,208
+1009,Mauc,208
+1010,Metin I,208
+1011,Metin II,208
+1012,Metin III,208
+1013,Metin IV,208
+1014,Moris foun,208
+1015,Naroman b.t,208
+1016,Posto Penal,208
+1017,Ramelau delta,208
+1018,Rosario,208
+1019,SÃ£o josÃ©,208
+1020,SÃ£o Miguel,208
+1021,Terra santa,208
+1022,Lemocari,208
+1023,Zero I,209
+1024,Zero II,209
+1025,Zero III,209
+1026,Zero IV,209
+1027,Zero V,209
+1028,Aninfuic ,210
+1029,(aitarac laran),210
+1030,Hamahon,210
+1031,Rai lacan,210
+1032,Wenunuc,211
+1033,Manuleu,211
+1034,Raimean ,211
+1035,Sahan ,211
+1036,Acadiru laran,212
+1037,Sabuli,212
+1038,Behauc,212
+1039,Behoquir ,212
+1040,Besahe ,213
+1041,Birahumatan,213
+1042,Has laran,213
+1043,Lebutun,213
+1044,MantelolÃ£o,213
+1045,Manularan ,213
+1046,12 de Novembro,214
+1047,25 de Abril,214
+1048,4 de Setembro,214
+1049,7 de Dezembro,214
+1050,Audian,214
+1051,Baheda,214
+1052,Donoge,214
+1053,Loke neon,214
+1054,Moris foun,214
+1055,Mura,214
+1056,Alcrin,215
+1057,Becoe,215
+1058,Deambata bessi,215
+1059,Deposito penal,215
+1060,Marabia,215
+1061,Metin,215
+1062,Monumento calma,215
+1063,Rai mean,215
+1064,Sare,215
+1065,Suhu rama,215
+1066,Temporal,215
+1067,Tuba Rai,215
+1068,Vale de lahane,215
+1069,Ailele hun,216
+1070,Baba liu rai leste,216
+1071,Baba liu rai oeste,216
+1072,Bemori central,216
+1073,Centro,216
+1074,Has laran,216
+1075,My friend,216
+1076,Bairo Central,217
+1077,Bairo dos Grilos,217
+1078,Bairo Formosa,217
+1079,Capela,218
+1080,Lecidere,218
+1081,Bedic,219
+1082,Culuhun de baixo,219
+1083,Nu`u badac,219
+1084,Bee dalan,220
+1085,Boa Morena,220
+1086,Halibur,220
+1087,Hura,220
+1088,Lirio,220
+1089,Manu Fuic,221
+1090,Rai nain,221
+1091,1 de setembro,222
+1092,Guideon,222
+1093,Lemorai,222
+1094,Mate moris,222
+1095,Mate Restu,222
+1096,Matua,222
+1097,Nopen,222
+1098,Terus nain,222
+1099,Virgolosa,222
+1100,Centro da Unidade,223
+1101,De 12 divino,223
+1102,Foho Rai boot,223
+1103,Sacoco,223
+1104,Tahu laran,223
+1105,Aldeia 03,224
+1106,Aldeia 05,224
+1107,Alto balide,224
+1108,Alto P.M,224
+1109,Baixo Balide,224
+1110,Baixo P.M.,224
+1111,Manu cocorec,224
+1112,Ainitas hun,225
+1113,Bedois,225
+1114,Bela vista,225
+1115,Care laran,225
+1116,Correio,225
+1117,Gomes araujo,225
+1118,Hospital militar,225
+1119,Mota ulun,225
+1120,Paiol,225
+1121,Rai cuac,225
+1122,Teka hudi laran,225
+1123,Casnafar,226
+1124,Coalau I,226
+1125,Coalau II,226
+1126,Fatunaba,226
+1127,Fila Beba Tua,226
+1128,Fuguira / Bauloc,226
+1129,Leilaus,226
+1130,Lemorana,226
+1131,Nahaec,226
+1132,Suca lau,226
+1133,Ai Rae,227
+1134,Batu Bala,227
+1135,Dadubere,227
+1136,Tapo Abe,227
+1137,Mania,227
+1138,U Abe,227
+1139,Ilat,228
+1140,Rae Lau,228
+1141,Coileki,228
+1142,Liabe,228
+1143,Rai-buti ,229
+1144,Colimali ,229
+1145,Atu-Dose,229
+1146,Lelo Bere,229
+1147,Lau Abe,229
+1148,Cai Lulic,229
+1149,Batu Manu,230
+1150,Batu Ero,230
+1151,Motu Bau,230
+1152,Batu`u,230
+1153,Bia Bote,231
+1154,Purugoa,231
+1155,Sirui,231
+1156,Soru Ati,232
+1157,Ailisiu,232
+1158,Malitada,232
+1159,Tapo Mea,232
+1160,Ai -abe,233
+1161,Tai Ubu,233
+1162,Ata Ubu,233
+1163,Nunu Mea,233
+1164,Leu Lara,234
+1165,Ahi Gara,234
+1166,Raelia,234
+1167,Rae Bou,234
+1168,Orbeto,234
+1169,Ole cata,234
+1170,Bia Buti,234
+1171,Bui Baru,234
+1172,Malabe ,235
+1173,Batumigi,235
+1174,Ilat-Cora,235
+1175,Bob Leta,235
+1176,Atubrao,236
+1177,Motoubu,236
+1178,Atulara,236
+1179,Obeto ,236
+1180,Suriubu ,236
+1181,Biliubu ,236
+1182,Lacoubu ,236
+1183,Ilat,237
+1184,Ai Rai,237
+1185,Atu Buti,237
+1186,Aliatu,237
+1187,Hatu Pae,237
+1188,Assio,237
+1189,Ilat,238
+1190,Soilacaudo,238
+1191,Cota Boot,238
+1192,Lihmo,239
+1193,Indau Lulik,239
+1194,Sara-Mata,239
+1195,Railakan,239
+1196,Moris Mesak,239
+1197,Culau Haburas,239
+1198,CoraÃ§Ã£o de Jesus,239
+1199,Hamrik-Metin,239
+1200,Tasaquina,239
+1201,Huitaso,239
+1202,Tatoli,239
+1203,Sinai,239
+1204,Boerhei,240
+1205,Hatali,240
+1206,Poeana,240
+1207,Dirlau,240
+1208,Ervilhat,241
+1209,Nona-Bite,241
+1210,Sari,241
+1211,Leguimea ,242
+1212,Sinilelo ,242
+1213,Tidir ,242
+1214,Titihar ,242
+1215,Hatuleta ,242
+1216,Poehei ,242
+1217,Railori,243
+1218,Apido,243
+1219,Tatabauria,243
+1220,Hotino,243
+1221,Nunupu,244
+1222,Kotaheu,244
+1223,Sakoko,244
+1224,Hatuposi,244
+1225,Eroho,244
+1226,Moris Foun,245
+1227,Loumo,245
+1228,Rai Maran,245
+1229,Nazare,245
+1230,Mate Resto,245
+1231,Timlele Buras,245
+1232,Samatrae,246
+1233,Biluli,246
+1234,Poetete Vila,246
+1235,Poepun,246
+1236,Tidibesi,246
+1237,Loblala,246
+1238,Taclela,246
+1239,Lequici,246
+1240,Renatu,246
+1241,Urluli,246
+1242,Urletoho,246
+1243,Gueguemara,246
+1244,Sosoher ,247
+1245,Manguerro,247
+1246,Gomehei,247
+1247,Raibliri,247
+1248,Hatlour,247
+1249,Bura,248
+1250,Nunu-Sua,248
+1251,Lima Mesak,248
+1252,Liborty,248
+1253,Moris Foun,248
+1254,Betupu,249
+1255,Lei Rema,249
+1256,Santa Cruz,249
+1257,Tata,249
+1258,Dirhatilau,250
+1259,Poe Leten,250
+1260,Norema,250
+1261,Sare,250
+1262,Rai-Mate,250
+1263,Bermos Lau,250
+1264,Hau-Hei,251
+1265,Manu Cate,251
+1266,Ai hata diu,251
+1267,Manu lete,251
+1268,Tei uru,251
+1269,Rai Goa,251
+1270,Cleate Rema,251
+1271,PeregrinaÃ§Ã£o,252
+1272,SÃ£o Francisco,252
+1273,Matanoba,252
+1274,Sab-Soi,252
+1275,Lebumeo,252
+1276,Aculau,252
+1277,Fatubolu,253
+1278,Aitemoa,253
+1279,Apirado,253
+1280,Poirema,253
+1281,Simohei,254
+1282,Hohopu,254
+1283,Hatu Batu,254
+1284,Aimerulo,254
+1285,HatuPa,255
+1286,Gaelema,255
+1287,Laoraehou,255
+1288,Naomanaro,255
+1289,Tidibessi,255
+1290,Tataeulo,255
+1291,Brogbou,256
+1292,Leodato,256
+1293,Hatu Pae,257
+1294,Gnutur,257
+1295,Laquiama,257
+1296,Airleu,258
+1297,Leborema,258
+1298,Caisoro,258
+1299,Gruto,258
+1300,Bau Ana,259
+1301,Hatete,259
+1302,Otete,259
+1303,Qucara,259
+1304,Luglaulau,259
+1305,Petalara,260
+1306,Rai Luli,260
+1307,Manu-Hato,261
+1308,Hatlailete,261
+1309,Cai tur loa,261
+1310,Raimean,261
+1311,Dos Magar,261
+1312,Lau Lema,261
+1313,Manturai ,262
+1314,Colo-Coli,262
+1315,Mausormata ,262
+1316,Mancoliria ,262
+1317,Hatulete ,262
+1318,Baulisuria ,262
+1319,Leburema ,262
+1320,Hatugeo ,262
+1321,Hatuducei ,262
+1322,Merigui,263
+1323,Raebou,263
+1324,Fahiluha,263
+1325,Hohulo,263
+1326,Meringue ,263
+1327,Tunu Fahi,263
+1328,Lumutou,263
+1329,Duhoho ,263
+1330,Sabelo,264
+1331,Rotutu,264
+1332,Manusae,264
+1333,Laclo,264
+1334,Lebululi,264
+1335,Assui Craic,264
+1336,Assui Leten,264
+1337,Hatuhei,264
+1338,Lakau,264
+1339,Lebudo,264
+1340,Renomata,264
+1341,Rae-rema,264
+1342,Eratoi,264
+1343,Madede,265
+1344,Darudo,265
+1345,Goulala,265
+1346,Olopana,265
+1347,Lequisala,265
+1348,Taurema,265
+1349,Goulolo,266
+1350,Cailiti,266
+1351,Goalala,266
+1352,Beturema,266
+1353,Haupu,267
+1354,Beturema,267
+1355,Hau Leun,267
+1356,Riamori,267
+1357,Duhoho,267
+1358,Lutlala,267
+1359,Cairia,267
+1360,Assi,267
+1361,Hautoho,267
+1362,Raifusa,267
+1363,Manukati Leten,267
+1364,Riatoni,267
+1365,Riaheu,268
+1366,HundÃ¡ ,268
+1367,Rialau ,268
+1368,Cailiti ,268
+1369,Sauria ,268
+1370,Hatugau ,268
+1371,Hatugeo,269
+1372,Quirlelo,269
+1373,Limluhi,269
+1374,Raibou Ainapa,269
+1375,Grotu,269
+1376,Alosai,269
+1377,Leubasa,269
+1378,Roulo,269
+1379,Liabe ,269
+1380,Raebou Sloy,269
+1381,Lebudo ,270
+1382,Bohe-Mata ,270
+1383,Palimano ,271
+1384,Caitarahei,271
+1385,Colaco,272
+1386,Mau-Ane,272
+1387,Tarmousoru,272
+1388,Titi-Buti,272
+1389,Camalpun,273
+1390,Raiudo,273
+1391,Camalraihei,273
+1392,Hi,273
+1393,Sabrequeque,274
+1394,Riamori,274
+1395,Fatu Cado,274
+1396,Cucua,274
+1397,Manuponihei,275
+1398,Darema,275
+1399,Colhuinamo,275
+1400,Tunulero,275
+1401,Tuilesu,275
+1402,Aiurlala,276
+1403,Eraulu,276
+1404,Leburema,276
+1405,Datoleo ,277
+1406,Laqiu Eco,277
+1407,Caisahe,278
+1408,Marobo,278
+1409,Tahobate,278
+1410,Leilor,279
+1411,Lalumato,279
+1412,Marafal,279
+1413,Heitali,279
+1414,Caidavalarin,280
+1415,Larimi,280
+1416,Liufalun,280
+1417,Maluhira,280
+1418,Titiravein,280
+1419,Tirilolo,281
+1420,Tatalalarin,281
+1421,Etevata,281
+1422,Acadirilo,282
+1423,Vataomar,282
+1424,Rumutao,282
+1425,Iliomar,283
+1426,Vatamatar,283
+1427,Ossohira,283
+1428,Ara-Ara,283
+1429,Caentao,283
+1430,Acara,284
+1431,Lihina,284
+1432,Madarira,284
+1433,Bouquila,284
+1434,Caidabo,284
+1435,Poros,285
+1436,Loiquero,285
+1437,Porlamano,285
+1438,Pitileti,286
+1439,Loro,286
+1440,Vero,286
+1441,Tchailoro,286
+1442,Luarai,287
+1443,Bauro,287
+1444,Iralafai,287
+1445,Sepelata,287
+1446,Somotcho,287
+1447,Tcharano,288
+1448,Solepara,288
+1449,Laiara,288
+1450,Paihira,288
+1451,Lilapuhu,289
+1452,Tchenuloro,289
+1453,Larinatcha,289
+1454,Reissoro,289
+1455,Vailana,290
+1456,Horolata,290
+1457,Maluro,290
+1458,Otchotchao,290
+1459,Tchai,290
+1460,Titilari,290
+1461,HaÃ­tapuca,291
+1462,Nuhalat,291
+1463,Ililapa,291
+1464,Pehefito,292
+1465,Muapitine,292
+1466,Lupuloho,292
+1467,Vailoro,292
+1468,Malahara,292
+1469,RaÃ§a,293
+1470,Maulo`o,293
+1471,Tchailoro,293
+1472,Tchaivatcha,294
+1473,Nairete,294
+1474,Omucano,294
+1475,Louro,294
+1476,Sorulua,294
+1477,Foema`a,294
+1478,Nanacuro,294
+1479,Assalaino,295
+1480,30 de Agusto,295
+1481,Nacroman,295
+1482,Bemoris,295
+1483,Lereloho,295
+1484,Ira-Ara,295
+1485,Titilari,295
+1486,Central,295
+1487,Tchauluturo,295
+1488,Culuhun,295
+1489,Lospala,295
+1490,Leuro,296
+1491,Tcharano,296
+1492,Souro Moco,296
+1493,Luturula,296
+1494,Dalari,297
+1495,Zefalio,297
+1496,Afaia,298
+1497,Sarelari,298
+1498,Ussufasso,298
+1499,Buanomar,299
+1500,Etanise,299
+1501,Ouroma,299
+1502,Boruvali,300
+1503,Borugae,300
+1504,Oneraba,300
+1505,Amahira,301
+1506,Vatalarino,301
+1507,Alahira,301
+1508,Abere,301
+1509,HaÃ­larino,301
+1510,Luto,302
+1511,Afanami,302
+1512,Soba,302
+1513,Luturo,302
+1514,Liarafa,302
+1515,Malailada,303
+1516,Laculomano,303
+1517,Irapala,303
+1518,Luadao,303
+1519,Tamaro,303
+1520,Vailovaia,304
+1521,Muapusso,304
+1522,Lohomato,304
+1523,Etepiti,304
+1524,Pitileti,304
+1525,Ira-Ono,304
+1526,Aelafa,305
+1527,Anarua,305
+1528,Macalodo,305
+1529,Nassuloi,305
+1530,Sagueli,305
+1531,Samaira,305
+1532,Uanambere,305
+1533,Vassatoi,305
+1534,Barlio,306
+1535,Borubato,306
+1536,Vaniria,306
+1537,Samalari,307
+1538,Titilari,307
+1539,Daulututro,308
+1540,Mauvedara,308
+1541,Narunteino,308
+1542,Paiahara,308
+1543,Soleresi ,308
+1544,Codo,309
+1545,Queduloro,309
+1546,Oirata,309
+1547,Lereado,309
+1548,Puno,310
+1549,Caporo,310
+1550,Levono,310
+1551,Iratchao,310
+1552,Moro,311
+1553,Ira-Ara,311
+1554,Iparira,311
+1555,Soiquili,311
+1556,Laiara,311
+1557,Ra`ano,312
+1558,Adavari,312
+1559,Poruvari,312
+1560,Tuhilo Kraik,313
+1561,Tuhilo Leten,313
+1562,Fatuneso,313
+1563,Metir,314
+1564,Bazartete,314
+1565,Leguimea,314
+1566,Durbasa,314
+1567,Caimegulo,315
+1568,Pissu Lete,315
+1569,Rau-Cassa,315
+1570,Camalehou,315
+1571,Pissu-Kraik,315
+1572,Urema,316
+1573,Urluli,316
+1574,Bukurema,316
+1575,Hatu Hou,316
+1576,Baura,316
+1577,Ergoa,316
+1578,Cutulau,316
+1579,Railuli,316
+1580,Fatuneiro,316
+1581,Manulete,316
+1582,Kaimegohou,317
+1583,Mau Metalau,317
+1584,Darmu Dapu,317
+1585,Nartutu,317
+1586,Metiluli,318
+1587,Asorlema,318
+1588,Caileulema,318
+1589,Mota-Ikun,319
+1590,Manu Luto,319
+1591,Claso,319
+1592,Turleu,320
+1593,Lihbaulelo,320
+1594,Fatunia,320
+1595,Mau - Soi,320
+1596,Essirat,321
+1597,Mane Mori,321
+1598,Fatu Besi Lolo,321
+1599,Mane Manu,321
+1600,Ermeta,321
+1601,Neran,321
+1602,Terlau,321
+1603,Teti Sari,321
+1604,Naumer,321
+1605,Sisloelema,322
+1606,Hatumatilo,322
+1607,Quirilelo,322
+1608,Caicasico,322
+1609,Kaileli,323
+1610,Manupatia,323
+1611,Raru Lema,323
+1612,Lebu-Ae,323
+1613,Quiri-Lelo,324
+1614,Laclo-Lema,324
+1615,Leopa,324
+1616,Cabulimo,324
+1617,Kamalehohoro,324
+1618,Camalelara,324
+1619,Hekar,324
+1620,Lebuhei,324
+1621,Lica-Ico,324
+1622,Puquelara,324
+1623,Tau-Talo,325
+1624,Le Busalara,325
+1625,Caicoletohoho,325
+1626,Hatarlema,325
+1627,Hatuquessi-Lete,325
+1628,Caidico,325
+1629,Nunu Brihati,325
+1630,Nunuhou,325
+1631,Hatumasi,326
+1632,Caimegoluli,326
+1633,Tolema,326
+1634,Lepa,326
+1635,Manati,326
+1636,Manucolo-Hata,327
+1637,Soatala,327
+1638,Kotalara,327
+1639,Hatululi,327
+1640,Lebuana,328
+1641,Natarae,328
+1642,Metagou,328
+1643,Hune-Hei,328
+1644,Cai-Casa,329
+1645,Dair,329
+1646,Erito,329
+1647,Lautecas,329
+1648,Lau-Vou,329
+1649,Lebulugor,329
+1650,Palistala,329
+1651,Vatumori,329
+1652,Puqulete,329
+1653,Raenaba,329
+1654,Lissa-lara,329
+1655,Irlelo,330
+1656,Mau-Unu,330
+1657,Vatu-Vei,330
+1658,Kai Kasa-Vou,330
+1659,Pande Vou,330
+1660,Bau-Talo,331
+1661,Nunulisa,331
+1662,Glai,331
+1663,Cai-Casa,331
+1664,Daru Lema,331
+1665,Lebua`e,331
+1666,Manuquibia,331
+1667,Lissa Lara,332
+1668,Baiquini Lau,332
+1669,Darolema,332
+1670,Nunu Lete,332
+1671,Vatugili,332
+1672,Sabulau,333
+1673,Uaupu,333
+1674,Raeglelu,333
+1675,Kaibair,333
+1676,Totumolobu,333
+1677,Raime,334
+1678,Gariana,334
+1679,Mau-Ubu,334
+1680,Lissa Lara,334
+1681,Manu-Quibia,334
+1682,Bouravei,334
+1683,Vatu-Nau,334
+1684,Lebucailiti,334
+1685,Lica-Ico,334
+1686,Samanaro,334
+1687,Morae,335
+1688,Vila,335
+1689,Pametapu,335
+1690,Lebumeta,335
+1691,Dalesuati,335
+1692,Darulara,335
+1693,Nunuana,335
+1694,I`un,336
+1695,Belebatu,336
+1696,Soraha,337
+1697,Ma`abat,337
+1698,Sau,338
+1699,Obratu,338
+1700,Bi`uac,339
+1701,Rembor,339
+1702,Uma-Sau,339
+1703,Carlilo,339
+1704,Ilihuli,340
+1705,Lun,340
+1706,Tuquetin,341
+1707,Ranac,341
+1708,Caunua,341
+1709,At-Hoc,341
+1710,Uebani,341
+1711,Futumanuk,342
+1712,Laceno,342
+1713,Calohan,342
+1714,Maneatun,342
+1715,Lafu-Lao,342
+1716,Amamun,342
+1717,Lawadu,343
+1718,Maucucurian,343
+1719,Bamatac,343
+1720,Fahilihun,343
+1721,Naule-Eu,344
+1722,Fatulau,344
+1723,Pualaca,344
+1724,Aimaulin,344
+1725,Orlalan,344
+1726,"Le,i",344
+1727,Divic-Un,344
+1728,Torilala,344
+1729,Tanusa,345
+1730,Waidarek,345
+1731,Ruhetun,345
+1732,Fatu`uk,345
+1733,Sasahi,346
+1734,Lisuata,346
+1735,Laramera,346
+1736,Wer-Ulun,347
+1737,Are-Anis,347
+1738,Balulis,347
+1739,Fatuha,347
+1740,Nacaleo,348
+1741,Rea-Dodoc,348
+1742,Taha-Gamu,348
+1743,Hatu Coman,348
+1744,Labubu,348
+1745,Ilimano,349
+1746,Condar,349
+1747,Hahi - Hoho,349
+1748,Raibutk Eon,349
+1749,Anicolaun ,350
+1750,Hatu Ermera,350
+1751,Hatanaun Miri,350
+1752,Huhun,350
+1753,Uma Naruc,351
+1754,Bua,351
+1755,Hahi-Lacor,351
+1756,Uma Surat,351
+1757,Hatu-Ruin,352
+1758,Bahadic,352
+1759,Rea-Hatu,352
+1760,Licore,352
+1761,Uma Rentau,353
+1762,Lenao,353
+1763,Uma Clalan,353
+1764,Ralan,354
+1765,Beboro,354
+1766,Uma Juc,354
+1767,Bia-Bae,355
+1768,Rai Mean,355
+1769,Wainuno,355
+1770,Hatucarao,355
+1771,Watusili,355
+1772,Rai-Bui ,355
+1773,Corohoco,355
+1774,Weu-Bani,356
+1775,Cau-Nua,356
+1776,Wecade,357
+1777,Bubur Laran,357
+1778,Aimeta Laran,358
+1779,Fehuk-Run,358
+1780,Ranak,359
+1781,Camedar,359
+1782,Danu Buahun,360
+1783,Isadan,360
+1784,Nu-Ahuk,360
+1785,Oe-Onu,361
+1786,Ue-Kandia,361
+1787,Uma Cerek Kraik,362
+1788,Samoro,362
+1789,Uma Querec Leten,362
+1790,Manu Fahi,363
+1791,Teras,363
+1792,Leo-Hat,364
+1793,Malus Hun,364
+1794,Manlala,365
+1795,Dauloroc,365
+1796,Lesuata,366
+1797,Sasahi,366
+1798,Bemetan,367
+1799,Selihasan,367
+1800,Sessurai,367
+1801,Leo-ai,367
+1802,Raifusa,367
+1803,Loro,367
+1804,Lalica,367
+1805,Lia-Nain,368
+1806,Uma-Luli,368
+1807,Lapuro,368
+1808,Searema,368
+1809,Uma-Liurai,368
+1810,Raimera,368
+1811,Turon,368
+1812,Nunu-Fu,368
+1813,Daisua,369
+1814,Leco-Ai,369
+1815,Loti,369
+1816,Leco-Lau,369
+1817,Rai-tu,369
+1818,Coli Dassi,370
+1819,Dato Rae,370
+1820,Leo Dato,370
+1821,Anilumo,371
+1822,Blaro,371
+1823,Carbulau,371
+1824,Datina,371
+1825,Deunai,371
+1826,Fahiluhan,371
+1827,Falitehu,371
+1828,Fatuco,371
+1829,Hatu-Rae,371
+1830,Orema,371
+1831,Russo,371
+1832,Tirilolo,371
+1833,Urufu,371
+1834,Ailau,372
+1835,Batas,372
+1836,Bubulau,372
+1837,Dalun,372
+1838,Hastetuc,372
+1839,Roin,372
+1840,Sosemera,372
+1841,Ailuli,373
+1842,Cotalala,373
+1843,Ladiqui,373
+1844,Manico,373
+1845,Rai-Ubo,373
+1846,Rialau,373
+1847,Tomonamo,373
+1848,Bereteni,374
+1849,Foe-Hei,374
+1850,Leo-Faâ€™at,374
+1851,Hatu-Hei ,374
+1852,Sabou,374
+1853,Furacklau,375
+1854,Laclo,375
+1855,Beremana,376
+1856,Dalubo,376
+1857,Fahilebo,376
+1858,Busacoa,377
+1859,Fohua,377
+1860,Lemano,377
+1861,Raileten,377
+1862,Risso,377
+1863,Darufu,378
+1864,Ermori,378
+1865,Lutarmata,379
+1866,Leu-buti,379
+1867,Tarabula,379
+1868,Ailuli-Mau,380
+1869,Bitibo,380
+1870,Lebucoa,380
+1871,Namoluli,380
+1872,Bilimano,381
+1873,Fanolelo,381
+1874,Fohonaro,381
+1875,Marcoluli,381
+1876,Turiscailau,381
+1877,Titilawai,381
+1878,Aidila,382
+1879,Binani,382
+1880,Maubisse,382
+1881,Orcenaco,382
+1882,Fatuhei,383
+1883,Fohotu,383
+1884,Rimori,383
+1885,Orluli,383
+1886,Assumata,384
+1887,Cotalaulora,384
+1888,Faturedalau,384
+1889,Toilero,384
+1890,Fatulelo,385
+1891,Teberai,385
+1892,Orana,385
+1893,Raikesa,386
+1894,Leodato,386
+1895,Lacluan,387
+1896,Sarin,387
+1897,Weberec,387
+1898,Barialaran,388
+1899,Colocau,388
+1900,Kuluhun,388
+1901,Uma-Ferik,388
+1902,Ailora,389
+1903,Manus,389
+1904,Mahaclucin,389
+1905,Lurin,389
+1906,Caqeulaletec,389
+1907,Knua alas,390
+1908,Uma Mean,390
+1909,Tahubein,390
+1910,Beremanec,390
+1911,Debuwaen,390
+1912,Orlora,391
+1913,bubussusu,391
+1914,Lihu-Lau,391
+1915,Aituha,391
+1916,Bubulora,391
+1917,Sucaer Oan,392
+1918,Ailalec,392
+1919,Bubur-Laletec,392
+1920,Caicasa,392
+1921,Nalolo,393
+1922,Webicas,393
+1923,Saluquim,393
+1924,Manehat,393
+1925,Tiro,393
+1926,Ainesi,394
+1927,Daurata,394
+1928,Riamorin,394
+1929,Daramata,394
+1930,Cledic,395
+1931,Fatubesi,395
+1932,Fatuboe,395
+1933,Fatumutin,395
+1934,Fuquiran,395
+1935,Ai Looc,396
+1936,Cai ua,396
+1937,Crarec  Bocu,396
+1938,Hali Mean,396
+1939,Hali Oan,396
+1940,Acadiru Hun,397
+1941,Aidac Laran,397
+1942,Boruc,397
+1943,Rade Uman,397
+1944,Tula Oli,397
+1945,Aimeta Hun,398
+1946,Fatu Cado,398
+1947,Mau Ama,398
+1948,Micradec,398
+1949,Santo Antonio,398
+1950,Ai Suco Nuc,399
+1951,Crarec Naruc,399
+1952,Data Metan,399
+1953,Fahi Lain,399
+1954,Tali Oan,399
+1955,Abadere,400
+1956,Aha Buu,400
+1957,Asa Muta,400
+1958,Beli,400
+1959,Cota Nisi,400
+1960,Daralari,400
+1961,Lia Sidi,400
+1962,Roma,400
+1963,Buibela,401
+1964,Cailaque,401
+1965,Caitau,401
+1966,Daco-Ate,401
+1967,Lari,401
+1968,Lena,401
+1969,Lorosae,401
+1970,Osso-Caiua,401
+1971,Uaicai,401
+1972,Uato-Ita,401
+1973,Baha-o,402
+1974,Bahabuga,402
+1975,Balabasiba,402
+1976,Culudere,402
+1977,Matau,402
+1978,Mauboro,402
+1979,Uani Uma,402
+1980,Fohomano,403
+1981,Macadique,403
+1982,Railaa,403
+1983,Sana,403
+1984,Uma Quic,403
+1985,Betulari,404
+1986,Bobolaco,404
+1987,Bobulita,404
+1988,Borobai,404
+1989,Caidaua-Lari,404
+1990,Caidaualata,404
+1991,Comiuro,404
+1992,Coquilaco,404
+1993,Daralari,404
+1994,Digamasi,404
+1995,Edemumo,404
+1996,Lacarate,404
+1997,Lau-Uma,404
+1998,Liacaiua,404
+1999,Luroboro,404
+2000,Lutuguia,404
+2001,Macadique,404
+2002,Mata dalan,404
+2003,Namanei,404
+2004,Ossolari,404
+2005,Quetorai,404
+2006,Aele,405
+2007,Buca dalan Mesak,405
+2008,Calohhan Uatolo,405
+2009,Dl. Uanama,405
+2010,Iraler,405
+2011,Loco-Loco,405
+2012,Mauciac,405
+2013,Mauseloc,405
+2014,Tatilari,405
+2015,Uani Uma,405
+2016,Uasufa,405
+2017,Ulusu,405
+2018,Bete Cai Ana,406
+2019,Cai Leti Ana,406
+2020,Cai Tara Hu,406
+2021,Heni Uta,406
+2022,Liaro,406
+2023,Baha-Neo,407
+2024,Cai-Ua,407
+2025,Lia-Cuda,407
+2026,Liaruca,407
+2027,Selele,407
+2028,Cai Latu Lale,408
+2029,Lia Uai Oli,408
+2030,Samaliu,408
+2031,Wai-Heda,408
+2032,Wala-Wau,408
+2033,Darenau,409
+2034,Maurate,409
+2035,Railaa,409
+2036,Macabuu,409
+2037,Samarogo,409
+2038,Fatudere,410
+2039,Laisorule,410
+2040,Raimuti,410
+2041,Samalari,410
+2042,Uaibobo,410
+2043,Uato-Laua,410
+2044,Umabere,410
+2045,Umatamene,410
+2046,Basa-isi,411
+2047,Belas,411
+2048,Borala,411
+2049,Cai Uai Hoo,411
+2050,Liamida,411
+2051,Luga Buti,411
+2052,Uairio,411
+2053,Uma Ana Ico,411
+2054,Buanurac,412
+2055,Dauborobaha,412
+2056,Laritame,412
+2057,Leque-Buti,412
+2058,Ossogori,412
+2059,Uai-Lia,412
+2060,Dasarai,413
+2061,Dolibuti,413
+2062,Luhabere,413
+2063,Manulari,413
+2064,Uaitutumata,413
+2065,Uatumanutuco,413
+2066,Darenau,414
+2067,Leo,414
+2068,Mundailo,414
+2069,Samaliurai,414
+2070,Sogau,414
+2071,Uaitau,414
+2072,Uanise,414
+2073,Builo,415
+2074,Buareca,415
+2075,Lutu-Guia,415
+2076,Derulo,415
+2077,Cai Uailita,416
+2078,Daralari,416
+2079,Lacuhu,416
+2080,Lequiuala,416
+2081,Builacurae,417
+2082,Nelu-Uai,417
+2083,Tatadere,417
+2084,Uaimare,417
+2085,Beturia,418
+2086,Lacoloro Hoo,418
+2087,Macaqui,418
+2088,Macausa,418
+2089,Taradai,418
+2090,Taradiga,418
+2091,Uatodere,418
+2092,Caida Hoâ€™o,419
+2093,Cao oli Hoo,419
+2094,Mar rae,419
+2095,Tetumori,419
+2096,Uatubita,419
+2097,Assafadae,420
+2098,Bualale,420
+2099,Deni- Hare,420
+2100,Lau -Aba,420
+2101,Lia Buta,420
+2102,Ala-Oli,421
+2103,Boro-Bohae,421
+2104,Osso-Mali,421
+2105,Uatoliloli,421
+2106,Udu,421
+2107,Aidak,422
+2108,Aisahe,422
+2109,Camelitur,422
+2110,Caninuc,422
+2111,Welaco,422
+2112,Wetalitua,422
+2113,Aisahe,423
+2114,Amarleza,423
+2115,Balideoan,423
+2116,Fato Hosan,423
+2117,Hare Oan,423
+2118,Laco Uai,423
+2119,Mane Claran,423
+2120,Webae,423
+2121,Cabira Oan,424
+2122,Has Abut,424
+2123,Lamaclaran,424
+2124,Mamulac,424
+2125,Manehat,424
+2126,Sira Lari,424
+2127,Wessa,424
+2128,Aidilalita,425
+2129,Barabeto,425
+2130,Culale,425
+2131,Canlor,426
+2132,Iramer,426
+2133,Uma boot,426
+2134,Uma Lor,426
+2135,Loho Oan,427
+2136,Macalosso,427
+2137,Maluru,427
+2138,Lulei,428
+2139,Mea-Uai,428
+2140,Uaibubo,428
+2141,Uatulesu,428
+2142,Uma boo,428
+2143,Uma Liurai,428
+2144,Aidac Bein,429
+2145,Aina Uain,429
+2146,Bahabunac,429
+2147,Bahafou,429
+2148,Lua,429
+2149,Macadean,429
+2150,Maroman ,429
+2151,Raihun,429
+2152,Bosabein,430
+2153,Cailoi,430
+2154,Duducai,430
+2155,Fahi Berec,430
+2156,Fatuhadan,430
+2157,Halderai,430
+2158,Loho,430
+2159,Naeboruc,430
+2160,Uhacae,430
+2161,Bahauai,431
+2162,Baria,431
+2163,Cailoibere,431
+2164,Lialura,431
+2165,Retica,431
+2166,Macalico,431
+2167,Tutucui,431
+2168,Ucalale,431
+2169,Manan,432
+2170,Cuanobe,432
+2171,Neop  Metan,432
+2172,Hau Tepu,432
+2173,Citrana,433
+2174,Lamasi ,433
+2175,Mahata,434
+2176,Queno,434
+2177,Cuat Enes,434
+2178,Bebo,434
+2179,Cabana,435
+2180,Oelnanoe,435
+2181,Fuabano,435
+2182,Nitibe ,436
+2183,Cua Tuan,436
+2184,Quamna ,436
+2185,Fatunabobo ,436
+2186,Oenoah,437
+2187,Nonquican,437
+2188,Hoineno,437
+2189,Oebaha,437
+2190,Quibiselo,437
+2191,Nianapu,437
+2192,Saben,437
+2193,Usapicolen,437
+2194,Tumin,437
+2195,Nibin,438
+2196,Buqui,439
+2197,Pune,439
+2198,Sifin,439
+2199,Bihala,440
+2200,Fatubijae,440
+2201,Oesono,441
+2202,Oefo,441
+2203,Sanane,441
+2204,kutete,441
+2205,Lacufoan,441
+2206,Mahata,441
+2207,Ume-noah,442
+2208,Maunaben,442
+2209,Noeninen,442
+2210,Noapai,442
+2211,Noafafo,442
+2212,Padiae,443
+2213,Usapi bela,443
+2214,Banoco,443
+2215,Manuempena,443
+2216,Oemolo,444
+2217,Nefobai,444
+2218,Tulika,444
+2219,Noque,445
+2220,Tanae,445
+2221,Baque,445
+2222,Bonemese,445
+2223,Sacato,446
+2224,Bausiu,446
+2225,Hauboni,447
+2226,Ulas,447
+2227,Maquelab,447
+2228,Nemun,447
+2229,Passabe,448
+2230,Noetuna,448
+2231,Haemnanu,448
+2232,Malelat,449
+2233,Mate Moris,222
+2235,Dausaur,53
+2237,Aimarleu,53
+2239,Ramerlau,54
+2243,Nunumoku,53
+2245,Hutcho,53
