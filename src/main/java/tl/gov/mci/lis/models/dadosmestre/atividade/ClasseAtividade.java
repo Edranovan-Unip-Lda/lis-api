@@ -3,6 +3,7 @@ package tl.gov.mci.lis.models.dadosmestre.atividade;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.Categoria;
@@ -33,11 +34,11 @@ public class ClasseAtividade extends EntityDB {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String descricao;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Categoria tipo;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private NivelRisco tipoRisco;
 

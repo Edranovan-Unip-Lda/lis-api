@@ -3,6 +3,7 @@ package tl.gov.mci.lis.models.dadosmestre.atividade;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import tl.gov.mci.lis.enums.Categoria;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Setter
 public class GrupoAtividade extends EntityDB {
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Categoria tipo;
 
