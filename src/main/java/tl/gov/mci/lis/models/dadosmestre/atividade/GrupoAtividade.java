@@ -29,7 +29,7 @@ public class GrupoAtividade extends EntityDB {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String descricao;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private NivelRisco tipoRisco;
 
