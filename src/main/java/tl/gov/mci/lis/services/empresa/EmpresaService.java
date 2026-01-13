@@ -88,6 +88,12 @@ public class EmpresaService {
     @Transactional
     public Empresa create(Empresa obj, List<MultipartFile> files) {
         logger.info("Criando empresa: {}", obj);
+
+        // Create Username before uploading files
+        obj.getUtilizador().setUsername(
+                this.userServices.generateUniqueUsername(obj.getUtilizador().getEmail())
+        );
+
         // Upload the files to Minio
         obj.setDocumentos(minioService.uploadFiles(obj.getUtilizador().getUsername(), files));
         obj.getDocumentos().forEach(documento -> documento.setEmpresa(obj));

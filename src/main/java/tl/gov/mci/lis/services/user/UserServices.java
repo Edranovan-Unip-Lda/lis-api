@@ -42,6 +42,7 @@ import tl.gov.mci.lis.services.aplicante.AplicanteService;
 import tl.gov.mci.lis.services.cadastro.CertificadoService;
 import tl.gov.mci.lis.services.notificacao.NotificacaoService;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -69,6 +70,7 @@ public class UserServices {
     private final CertificadoService certificadoService;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final NotificacaoService notificacaoService;
+    private static final int MAX_ATTEMPTS = 10;
 
     @Transactional
     public User register(User obj) {
@@ -577,6 +579,42 @@ public class UserServices {
                     logger.error("Username {} not found", targetUsername);
                     return new ResourceNotFoundException("Utilizador com o nome " + targetUsername + " não encontrado");
                 });
+    }
+
+    public String generateUniqueUsername(String email) {
+        String base = normalizeEmailPrefix(email);
+
+        for (int i = 0; i < MAX_ATTEMPTS; i++) {
+            String candidate = base + randomSuffix();
+
+            if (!userRepository.existsByUsernameIgnoreCase(candidate)) {
+                return candidate;
+            }
+        }
+
+        // fallback: ultra-unique
+        return base + System.currentTimeMillis();
+    }
+
+    private String normalizeEmailPrefix(String email) {
+        if (email == null || !email.contains("@")) {
+            return "user";
+        }
+
+        return email.split("@")[0]
+                .toLowerCase()
+                .replaceAll("[^a-z0-9]", "");
+    }
+
+    private String randomSuffix() {
+        String chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder(4);
+        SecureRandom random = new SecureRandom();
+
+        for (int i = 0; i < 4; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 
 }
