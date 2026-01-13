@@ -27,6 +27,7 @@ import tl.gov.mci.lis.models.aplicante.HistoricoEstadoAplicante;
 import tl.gov.mci.lis.models.atividade.CertificadoLicencaAtividade;
 import tl.gov.mci.lis.models.cadastro.CertificadoInscricaoCadastro;
 import tl.gov.mci.lis.models.dadosmestre.Direcao;
+import tl.gov.mci.lis.models.documento.Documento;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.models.user.CustomUserDetails;
 import tl.gov.mci.lis.models.user.PasswordResetToken;
@@ -144,7 +145,7 @@ public class UserServices {
         }
 
         user.setOneTimePassword(oneTimePasswordService.generateOTP(username));
-        emailService.sendEmail(user, EmailTemplate.OTP);
+//        emailService.sendEmail(user, EmailTemplate.OTP);
 
         logger.info("Successfully login with credential: {}", username);
         return user;
@@ -307,8 +308,19 @@ public class UserServices {
                         );
                     }
 
-                    if (obj.getSignature() != null) {
-                        user.setSignature(obj.getSignature());
+                    // Handle signature update/replacement
+                    if (obj.getSignature() != null && obj.getSignature().getId() != null) {
+                        // Fetch the managed entity from DB using the ID
+                        Documento managedSignature = entityManager.find(Documento.class, obj.getSignature().getId());
+
+                        if (managedSignature != null) {
+                            user.setSignature(managedSignature);
+                        } else {
+                            throw new ResourceNotFoundException("Signature document with ID " + obj.getSignature().getId() + " not found");
+                        }
+                    } else if (obj.getSignature() == null) {
+                        // Remove signature if explicitly set to null
+                        user.setSignature(null);
                     }
 
                     user.setStatus(obj.getStatus());
