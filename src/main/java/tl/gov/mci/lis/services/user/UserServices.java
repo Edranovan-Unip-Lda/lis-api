@@ -311,16 +311,21 @@ public class UserServices {
                     }
 
                     // Handle signature update/replacement
-                    if (obj.getSignature() != null && obj.getSignature().getId() != null) {
-                        // Fetch the managed entity from DB using the ID
-                        Documento managedSignature = entityManager.find(Documento.class, obj.getSignature().getId());
+                    if (obj.getSignature() != null) {
+                        if (obj.getSignature().getId() != null) {
+                            // Document already exists in DB - fetch the managed entity
+                            Documento managedSignature = entityManager.find(Documento.class, obj.getSignature().getId());
 
-                        if (managedSignature != null) {
-                            user.setSignature(managedSignature);
+                            if (managedSignature != null) {
+                                user.setSignature(managedSignature);
+                            } else {
+                                throw new ResourceNotFoundException("Signature document with ID " + obj.getSignature().getId() + " not found");
+                            }
                         } else {
-                            throw new ResourceNotFoundException("Signature document with ID " + obj.getSignature().getId() + " not found");
+                            // New document (no ID yet) - let cascade handle the persistence
+                            user.setSignature(obj.getSignature());
                         }
-                    } else if (obj.getSignature() == null) {
+                    } else {
                         // Remove signature if explicitly set to null
                         user.setSignature(null);
                     }
