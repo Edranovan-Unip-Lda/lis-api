@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tl.gov.mci.lis.dtos.mappers.CertificadoMapper;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.RecaptchaAction;
 import tl.gov.mci.lis.exceptions.ResourceNotFoundException;
 import tl.gov.mci.lis.services.cadastro.CertificadoService;
+import tl.gov.mci.lis.services.recaptcha.RecaptchaService;
 
 @Slf4j
 @RestController
@@ -16,7 +17,7 @@ import tl.gov.mci.lis.services.cadastro.CertificadoService;
 @RequiredArgsConstructor
 public class CertificadoController {
     private final CertificadoService certificadoService;
-    private final CertificadoMapper certificadoMapper;
+    private final RecaptchaService recaptchaService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCertificado(
@@ -41,9 +42,11 @@ public class CertificadoController {
 
     @GetMapping("/search")
     public ResponseEntity<?> getCertificadoByAplicanteNumero(
-            @RequestParam("numero") String numero
+            @RequestParam("numero") String numero,
+            @RequestParam("recaptchaToken") String recaptchaToken
     ) {
         log.info("Buscando certificado pelo numero do aplicante: {}", numero);
+        recaptchaService.validateOrThrow(recaptchaToken, RecaptchaAction.CERTIFICADO_SEARCH.name(), null);
         return ResponseEntity.ok(
                 certificadoService.findByAplicanteNumero(numero)
                         .orElseThrow(() -> new ResourceNotFoundException("Certificado nao encontrado para o numero: " + numero))

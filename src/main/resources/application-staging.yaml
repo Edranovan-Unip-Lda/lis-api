@@ -87,7 +87,7 @@ minio:
   region: tls-dili-01
 
 recaptcha:
-  secret: 6Ld3TEssAAAAAHBFdG_4bJwQU7fMWv1vgzGTb9MA
+  secret: 6LdxdEssAAAAAGD-Kr6IovWU7KJeUKwXo6l-oeUK
   min-score: 0.5
   expected-hostname: mcitradelicense.netlify.app
   enabled: true
