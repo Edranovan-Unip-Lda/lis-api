@@ -30,6 +30,13 @@ public interface CertificadoInscricaoCadastroRepository extends JpaRepository<Ce
     Optional<CertificadoInscricaoCadastro> findByIdAndAplicanteIdAndCategoria(Long id, Categoria categoria);
 
     @Query("""
+            SELECT cert FROM CertificadoInscricaoCadastro cert
+                        WHERE cert.pedidoInscricaoCadastro.aplicante.numero = :numero
+                        AND cert.pedidoInscricaoCadastro.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
+            """)
+    Optional<CertificadoInscricaoCadastro> findByAplicanteNumero(@Param("numero") String numero);
+
+    @Query("""
              SELECT new tl.gov.mci.lis.dtos.cadastro.CertificadoInscricaoCadastroListDto(
                 cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
                  cert.sociedadeComercial, cert.numeroRegistoComercial, cert.atividade,

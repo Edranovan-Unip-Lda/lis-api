@@ -38,4 +38,15 @@ public class CertificadoController {
             return ResponseEntity.badRequest().body("Parametros invalidos");
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getCertificadoByAplicanteNumero(
+            @RequestParam("numero") String numero
+    ) {
+        log.info("Buscando certificado pelo numero do aplicante: {}", numero);
+        return ResponseEntity.ok(
+                certificadoService.findByAplicanteNumero(numero)
+                        .orElseThrow(() -> new ResourceNotFoundException("Certificado nao encontrado para o numero: " + numero))
+        );
+    }
 }

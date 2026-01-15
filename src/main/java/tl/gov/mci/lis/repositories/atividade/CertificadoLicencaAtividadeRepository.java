@@ -31,6 +31,13 @@ public interface CertificadoLicencaAtividadeRepository extends JpaRepository<Cer
     Optional<CertificadoLicencaAtividade> findByIdAndAplicanteIdAndCategoria(Long id, Categoria categoria);
 
     @Query("""
+            SELECT cert FROM CertificadoLicencaAtividade cert
+                        WHERE cert.pedidoLicencaAtividade.aplicante.numero = :numero
+                        AND cert.pedidoLicencaAtividade.aplicante.estado = tl.gov.mci.lis.enums.AplicanteStatus.APROVADO
+            """)
+    Optional<CertificadoLicencaAtividade> findByAplicanteNumero(@Param("numero") String numero);
+
+    @Query("""
             SELECT new tl.gov.mci.lis.dtos.atividade.CertificadoLicencaAtividadeListDto(
                 cert.id, cert.isDeleted, cert.createdAt, cert.updatedAt, cert.createdBy, cert.updatedBy,
                 cert.sociedadeComercial, cert.numeroRegistoComercial, cert.nif, cert.nivelRisco,

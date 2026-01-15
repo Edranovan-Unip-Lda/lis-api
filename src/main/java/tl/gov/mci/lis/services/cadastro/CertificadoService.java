@@ -69,6 +69,31 @@ public class CertificadoService {
         }
     }
 
+    public Optional<?> findByAplicanteNumero(String numero) {
+        logger.info("Buscando certificado pelo numero do aplicante: {}", numero);
+
+        // Try to find in CertificadoInscricaoCadastro first
+        Optional<?> certificadoCadastro = certificadoInscricaoCadastroRepository.findByAplicanteNumero(numero)
+                .map(certificadoMapper::toDto1);
+
+        if (certificadoCadastro.isPresent()) {
+            logger.info("Certificado de inscricao cadastro encontrado para numero: {}", numero);
+            return certificadoCadastro;
+        }
+
+        // If not found, try CertificadoLicencaAtividade
+        Optional<?> certificadoAtividade = certificadoLicencaAtividadeRepository.findByAplicanteNumero(numero)
+                .map(certificadoMapper::toDto1);
+
+        if (certificadoAtividade.isPresent()) {
+            logger.info("Certificado licenca atividade encontrado para numero: {}", numero);
+            return certificadoAtividade;
+        }
+
+        logger.info("Nenhum certificado encontrado para numero: {}", numero);
+        return Optional.empty();
+    }
+
     @Transactional(readOnly = true)
     public Page<?> findPageApprovedCertificados(AplicanteType aplicanteType, Categoria categoria, int page, int size) {
         logger.info("Buscando certificados de inscricao pelo categoria: {}", categoria);
