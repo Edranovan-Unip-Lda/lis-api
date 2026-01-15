@@ -49,6 +49,7 @@ public class EmpresaRequestDto implements Serializable {
     TipoEmpresa tipoEmpresa;
     Double longitude;
     Double latitude;
+    String recaptchaToken;
 
     /**
      * DTO for {@link tl.gov.mci.lis.models.user.User}

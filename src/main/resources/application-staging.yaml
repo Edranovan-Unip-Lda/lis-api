@@ -73,11 +73,11 @@ sentry:
     minimum-breadcrumb-level: info
   exception-resolver-order: -2147483647
   ignored-exceptions-for-type:
-        - tl.gov.mci.lis.exceptions.ResourceNotFoundException
-        - tl.gov.mci.lis.exceptions.ForbiddenException
-        - tl.gov.mci.lis.exceptions.AlreadyExistException
-        - tl.gov.mci.lis.exceptions.FileDownloadUploadException
-        - tl.gov.mci.lis.exceptions.BadRequestException
+    - tl.gov.mci.lis.exceptions.ResourceNotFoundException
+    - tl.gov.mci.lis.exceptions.ForbiddenException
+    - tl.gov.mci.lis.exceptions.AlreadyExistException
+    - tl.gov.mci.lis.exceptions.FileDownloadUploadException
+    - tl.gov.mci.lis.exceptions.BadRequestException
 
 minio:
   url: https://s3-api.minio.apps.gov.tl/
@@ -85,6 +85,12 @@ minio:
   secretKey: xbPUvoaMSp8f83XLABkza35f5FSheJD4ySo4Nr2V
   bucket: mci-lis
   region: tls-dili-01
+
+recaptcha:
+  secret: 6Ld3TEssAAAAAHBFdG_4bJwQU7fMWv1vgzGTb9MA
+  min-score: 0.5
+  expected-hostname: mcitradelicense.netlify.app
+  enabled: true
 
 management:
   endpoints:

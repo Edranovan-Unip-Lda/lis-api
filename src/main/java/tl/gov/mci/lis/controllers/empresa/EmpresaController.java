@@ -1,5 +1,6 @@
 package tl.gov.mci.lis.controllers.empresa;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,10 @@ import tl.gov.mci.lis.dtos.mappers.AplicanteMapper;
 import tl.gov.mci.lis.dtos.mappers.EmpresaMapper;
 import tl.gov.mci.lis.enums.AplicanteType;
 import tl.gov.mci.lis.enums.Categoria;
+import tl.gov.mci.lis.enums.RecaptchaAction;
 import tl.gov.mci.lis.models.empresa.Empresa;
 import tl.gov.mci.lis.services.empresa.EmpresaService;
+import tl.gov.mci.lis.services.recaptcha.RecaptchaService;
 
 import java.util.List;
 
@@ -29,12 +32,17 @@ public class EmpresaController {
     private final EmpresaService empresaService;
     private final EmpresaMapper empresaMapper;
     private final AplicanteMapper aplicanteMapper;
+    private final RecaptchaService recaptchaService;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<EmpresaDto> createEmpresa(
             @Valid @RequestPart("data") EmpresaRequestDto obj,
-            @RequestPart(value = "files", required = false) List<MultipartFile> files
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            HttpServletRequest request
     ) {
+        String remoteIp = extractClientIp(request);
+        recaptchaService.validateOrThrow(obj.getRecaptchaToken(), RecaptchaAction.REGISTER_EMPRESA.name(), remoteIp);
+
         return new ResponseEntity<>(
                 empresaMapper.toDto(empresaService.create(
                         empresaMapper.toEntity(obj), files
@@ -103,5 +111,13 @@ public class EmpresaController {
             @RequestParam(value = "size", defaultValue = "50") int size
     ) {
         return ResponseEntity.ok(empresaService.getCertificatesPage(empresaId, categoria, aplicanteType, page, size));
+    }
+
+    private String extractClientIp(HttpServletRequest request) {
+        String xff = request.getHeader("X-Forwarded-For");
+        if (xff != null && !xff.isBlank()) {
+            return xff.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 }

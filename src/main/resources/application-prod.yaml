@@ -80,6 +80,13 @@ minio:
   secretKey: 2WVEyRSKiUsF
   bucket: mci-lis
   region: us-east-1
+
+recaptcha:
+  secret: 6Ld3TEssAAAAAHBFdG_4bJwQU7fMWv1vgzGTb9MA
+  min-score: 0.5
+  expected-hostname: lic.mci.gov.tl
+  enabled: true
+
 management:
   endpoints:
     web:

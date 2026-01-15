@@ -13,16 +13,16 @@ spring:
       name: administrator
       password: administrator
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:db/changelog/changelog-master.yaml
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/lic_dbms
+    url: jdbc:postgresql://localhost:5432/lic_dbms_liquibase
     username: geovanniovinhas
     password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -89,6 +89,13 @@ sentry:
     - tl.gov.mci.lis.exceptions.AlreadyExistException
     - tl.gov.mci.lis.exceptions.FileDownloadUploadException
     - tl.gov.mci.lis.exceptions.BadRequestException
+
+recaptcha:
+  secret: 6LfObEssAAAAAMJ7Idhoi5_fDL05ZgY8flWvYv_x
+#  secret: 6Ld3TEssAAAAAHBFdG_4bJwQU7fMWv1vgzGTb9MA for testing and production
+  min-score: 0.5
+  expected-hostname: localhost
+  enabled: true
 
 management:
   endpoints:
